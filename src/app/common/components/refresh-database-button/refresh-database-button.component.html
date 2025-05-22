@@ -1,0 +1,10 @@
+<p-toast></p-toast>
+<p-button
+  *ngIf="!isInIndex"
+  icon="pi pi-refresh"
+  [rounded]="true"
+  [text]="true"
+  [raised]="true"
+  [label]="'BUTTON.PUBLISH_TO_DB' | translate"
+  (onClick)="refreshDatabase()"
+></p-button>

@@ -1,0 +1,367 @@
+<div class="flex flex-col gap-5">
+  <div class="flex items-center justify-between gap-2.5">
+    <span
+      class="pi pi-objects-column"
+      style="color: var(--p-primary-color)"
+    ></span>
+    <h5 class="flex-grow m-0" style="color: var(--p-primary-color)">
+      {{ "PATHS.PARAMETERS.HEADERS" | translate }}
+    </h5>
+    <p-button
+      [rounded]="true"
+      [text]="true"
+      [raised]="true"
+      label="{{ 'PATHS.PARAMETERS.ADD' | translate }}"
+      icon="pi pi-plus"
+      (onClick)="addParameter('header')"
+      class="whitespace-nowrap"
+    />
+  </div>
+
+  <p-message
+    *ngIf="headerParams.length === 0"
+    icon="pi pi-info"
+    severity="info"
+    text="{{ 'PATHS.PARAMETERS.MESSAGES.NO_HEADERS' | translate }}"
+    class="mt-2.5"
+  />
+
+  <div class="flex flex-col gap-1.5">
+    <div
+      *ngFor="let headerParam of headerParams; let i = index"
+      class="flex items-center gap-2 w-full py-1.5"
+    >
+      <p-floatlabel
+        variant="on"
+        class="min-w-[150px] max-w-[200px] w-full text-[13px]"
+      >
+        <input
+          type="text"
+          pInputText
+          [(ngModel)]="headerParam.name"
+          (ngModelChange)="debouncedEmitUpdate()"
+        /><label for="keyInput">{{ "PATHS.NAME" | translate }}</label>
+      </p-floatlabel>
+
+      <p-select
+        *ngIf="specVersion === '2.0'"
+        [options]="types"
+        [(ngModel)]="headerParam.type"
+        optionLabel="name"
+        optionValue="name"
+        placeholder="Type"
+        class="min-w-[150px] max-w-[200px] w-full text-[13px]"
+        (ngModelChange)="emitParametersUpdate()"
+      ></p-select>
+      <p-select
+        *ngIf="specVersion === '3.0.0' || specVersion === '3.1.0'"
+        [options]="types"
+        [(ngModel)]="headerParam.schema.type"
+        optionLabel="name"
+        optionValue="name"
+        placeholder="Type"
+        class="min-w-[150px] max-w-[200px] w-full text-[13px]"
+        (ngModelChange)="emitParametersUpdate()"
+      ></p-select>
+
+      <p-floatlabel variant="on" class="flex-1 min-w-[200px] text-[13px]">
+        <input
+          type="text"
+          pInputText
+          [(ngModel)]="headerParam.description"
+          class="flex-1 min-w-[200px] text-[13px]"
+          (ngModelChange)="debouncedEmitUpdate()"
+        /><label for="keyInput">{{ "PATHS.DESCRIPTION" | translate }}</label>
+      </p-floatlabel>
+
+      <div class="flex items-center gap-1 ml-1.5">
+        <p-button
+          icon="pi pi-link"
+          class="icon-btn"
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+        ></p-button>
+        <p-button
+          icon="pi pi-info-circle"
+          class="icon-btn"
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+          pTooltip="{{ 'PATHS.PARAMETERS.REQUIRED' | translate }}"
+          tooltipPosition="top"
+          (click)="requiredToggle(headerParam)"
+          [severity]="headerParam.required ? 'danger' : undefined"
+        ></p-button>
+        <p-button
+          icon="pi pi-list"
+          class="icon-btn"
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+          (click)="toggleChildOverlay($event, popover)"
+        ></p-button>
+        <p-button
+          icon="pi pi-trash"
+          class="icon-btn"
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+          severity="danger"
+          (onClick)="remove(headerParam)"
+        ></p-button>
+      </div>
+
+      <app-type-details-popcover
+        #popover
+        [param]="headerParam"
+        [specVersion]="specVersion"
+        (paramChange)="onPopoverClosed($event, i, 'header')"
+        (paramUpdateOnClose)="onPopoverClosed($event, i, 'header')"
+      ></app-type-details-popcover>
+    </div>
+  </div>
+  <p-divider></p-divider>
+
+  <div class="flex items-center justify-between gap-2.5">
+    <span class="pi pi-filter" style="color: var(--p-primary-color)"></span>
+    <h5 class="flex-grow m-0" style="color: var(--p-primary-color)">
+      {{ "PATHS.PARAMETERS.QUERY_PARAMETERS" | translate }}
+    </h5>
+    <p-button
+      [rounded]="true"
+      [text]="true"
+      [raised]="true"
+      label="{{ 'PATHS.PARAMETERS.ADD' | translate }}"
+      icon="pi pi-plus"
+      (onClick)="addParameter('query')"
+      class="whitespace-nowrap"
+    />
+  </div>
+
+  <p-message
+    *ngIf="queryParams.length === 0"
+    icon="pi pi-info"
+    severity="info"
+    text="{{ 'PATHS.PARAMETERS.MESSAGES.NO_QUERY_PARAMS' | translate }}"
+    class="h-full"
+  />
+
+  <div class="flex flex-col gap-1.5">
+    <div
+      *ngFor="let queryParam of queryParams; let i = index"
+      class="flex items-center gap-2 w-full py-1.5"
+    >
+      <p-floatlabel
+        variant="on"
+        class="min-w-[150px] max-w-[200px] w-full text-[13px]"
+      >
+        <input
+          type="text"
+          pInputText
+          [(ngModel)]="queryParam.name"
+          (ngModelChange)="debouncedEmitUpdate()"
+        /><label for="keyInput">{{ "PATHS.NAME" | translate }}</label>
+      </p-floatlabel>
+
+      <p-select
+        *ngIf="specVersion === '2.0'"
+        [options]="types"
+        [(ngModel)]="queryParam.type"
+        optionLabel="name"
+        optionValue="name"
+        placeholder="Type"
+        class="min-w-[150px] max-w-[200px] w-full text-[13px]"
+        (ngModelChange)="emitParametersUpdate()"
+      ></p-select>
+
+      <p-select
+        *ngIf="
+          specVersion === '3.0.0' ||
+          specVersion === '3.1.0' ||
+          specVersion === '3.0'
+        "
+        [options]="types"
+        [(ngModel)]="queryParam.schema.type"
+        optionLabel="name"
+        optionValue="name"
+        placeholder="Type"
+        class="min-w-[150px] max-w-[200px] w-full text-[13px]"
+        (ngModelChange)="emitParametersUpdate()"
+      ></p-select>
+
+      <p-floatlabel variant="on" class="flex-1 min-w-[200px] text-[13px]">
+        <input
+          type="text"
+          pInputText
+          [(ngModel)]="queryParam.description"
+          class="flex-1 min-w-[200px] text-[13px]"
+          (ngModelChange)="debouncedEmitUpdate()"
+        /><label for="keyInput">{{ "PATHS.DESCRIPTION" | translate }}</label>
+      </p-floatlabel>
+      <div class="flex items-center gap-1 ml-1.5">
+        <p-button
+          icon="pi pi-link"
+          class="icon-btn"
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+        ></p-button>
+        <p-button
+          icon="pi pi-info-circle"
+          class="icon-btn"
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+          pTooltip="{{ 'PATHS.PARAMETERS.REQUIRED' | translate }}"
+          tooltipPosition="top"
+          (click)="requiredToggle(queryParam)"
+          [severity]="queryParam.required ? 'danger' : undefined"
+        ></p-button>
+        <p-button
+          icon="pi pi-list"
+          class="icon-btn"
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+          (click)="toggleChildOverlay($event, popover)"
+        ></p-button>
+        <p-button
+          icon="pi pi-trash"
+          class="icon-btn"
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+          severity="danger"
+          (onClick)="remove(queryParam)"
+        ></p-button>
+      </div>
+
+      <app-type-details-popcover
+        #popover
+        [param]="queryParam"
+        [specVersion]="specVersion"
+        (paramChange)="onPopoverClosed($event, i, 'query')"
+        (paramUpdateOnClose)="onPopoverClosed($event, i, 'query')"
+      ></app-type-details-popcover>
+    </div>
+  </div>
+
+  <p-divider *ngIf="specVersion !== '2.0'" />
+
+  <div
+    class="flex items-center justify-between gap-2.5"
+    *ngIf="specVersion !== '2.0'"
+  >
+    <mat-icon
+      aria-hidden="false"
+      fontIcon="cookie"
+      style="color: var(--p-primary-color)"
+    ></mat-icon>
+    <h5 class="flex-grow m-0" style="color: var(--p-primary-color)">
+      {{ "PATHS.PARAMETERS.COOKIES" | translate }}
+    </h5>
+    <p-button
+      [rounded]="true"
+      [text]="true"
+      [raised]="true"
+      label="{{ 'PATHS.PARAMETERS.ADD' | translate }}"
+      icon="pi pi-plus"
+      (onClick)="addParameter('cookie')"
+      class="whitespace-nowrap"
+    />
+  </div>
+
+  <p-message
+    *ngIf="cookieParams.length === 0 && specVersion !== '2.0'"
+    icon="pi pi-info"
+    severity="info"
+    text="{{ 'PATHS.PARAMETERS.MESSAGES.NO_COOKIES' | translate }}"
+    class="h-full"
+  />
+
+  <div class="flex flex-col gap-1.5">
+    <div
+      *ngFor="let cookieParam of cookieParams; let i = index"
+      class="flex items-center gap-2 w-full py-1.5"
+    >
+      <p-floatlabel
+        variant="on"
+        class="min-w-[150px] max-w-[200px] w-full text-[13px]"
+      >
+        <input
+          type="text"
+          pInputText
+          [(ngModel)]="cookieParam.name"
+          (ngModelChange)="debouncedEmitUpdate()"
+        /><label for="keyInput">{{ "PATHS.NAME" | translate }}</label>
+      </p-floatlabel>
+
+      <p-select
+        [options]="types"
+        [(ngModel)]="cookieParam.schema.type"
+        optionLabel="name"
+        optionValue="name"
+        placeholder="Type"
+        class="min-w-[150px] max-w-[200px] w-full text-[13px]"
+        (ngModelChange)="emitParametersUpdate()"
+      ></p-select>
+
+      <p-floatlabel variant="on" class="flex-1 min-w-[200px] text-[13px]">
+        <input
+          type="text"
+          pInputText
+          [(ngModel)]="cookieParam.description"
+          class="flex-1 min-w-[200px] text-[13px]"
+          (ngModelChange)="debouncedEmitUpdate()"
+        /><label for="keyInput">{{ "PATHS.DESCRIPTION" | translate }}</label>
+      </p-floatlabel>
+
+      <div class="flex items-center gap-1 ml-1.5">
+        <p-button
+          icon="pi pi-link"
+          class="icon-btn"
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+        ></p-button>
+        <p-button
+          icon="pi pi-info-circle"
+          class="icon-btn"
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+          pTooltip="{{ 'PATHS.PARAMETERS.REQUIRED' | translate }}"
+          tooltipPosition="top"
+          [severity]="cookieParam.required ? 'danger' : undefined"
+          (click)="requiredToggle(cookieParam)"
+        ></p-button>
+        <p-button
+          icon="pi pi-list"
+          class="icon-btn"
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+          (click)="toggleChildOverlay($event, popover)"
+        ></p-button>
+        <p-button
+          icon="pi pi-trash"
+          class="icon-btn"
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+          severity="danger"
+          (onClick)="remove(cookieParam)"
+        ></p-button>
+      </div>
+
+      <app-type-details-popcover
+        #popover
+        [param]="cookieParam"
+        [specVersion]="specVersion"
+        (paramChange)="onPopoverClosed($event, i, 'cookie')"
+        (paramUpdateOnClose)="onPopoverClosed($event, i, 'cookie')"
+      ></app-type-details-popcover>
+    </div>
+  </div>
+</div>

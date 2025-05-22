@@ -1,0 +1,383 @@
+{
+  "SEARCH": "Search",
+  "LOG_OUT": "Log out",
+  "DESCRIPTION": "Description",
+  "FILTER": "Filter",
+  "BUTTON": {
+    "PUBLISH_TO_DB": "Publish to database"
+  },
+  "TOAST": {
+    "WARNING": "Warning",
+    "SUCCESS": "Success",
+    "ERROR": "Error",
+    "PATH_EXISTS": "A path with this key already exists",
+    "PATH_EMPTY": "Path name cannot be empty",
+    "METHOD_ALREADY_EXISTS": "Method already exists for path",
+    "MODEL_ADDED": "Model has been successfully added.",
+    "PATH_ADDED": "Path has been successfully added.",
+    "METHOD_ADDED": "Method has been successfully added.",
+    "RENAME": {
+      "INVALID_KEYS": "Old name or new name is invalid.",
+      "OLD_KEY_NOT_FOUND": "Reference with key '{{key}}' does not exist.",
+      "NEW_KEY_EXISTS": "Reference with key '{{key}}' already exists.",
+      "SUCCESS": "Reference '{{oldKey}}' successfully renamed to '{{newKey}}'."
+    },
+    "REFRESH_DB": {
+      "SUMMARY": "Database updated",
+      "DETAIL": "Swagger specification was pushed to the database.",
+      "NO_ID_SUMMARY": "Update failed",
+      "NO_ID_DETAIL": "Could not find the Swagger spec ID to update."
+    }
+  },
+
+  "NO_REFERENCE": {
+    "TITLE": "No OpenAPI reference selected",
+    "DESCRIPTION": "You can import an existing Swagger/OpenAPI file or create a new one.",
+    "FEATURES": {
+      "IMPORT": "Import YAML or JSON files using the import button.",
+      "DEFAULT_STRUCTURE": "New specs are created with a default structure (v3.1 or v3.0).",
+      "EDIT_SIDEBAR": "Edit paths and models using the sidebar once a spec is loaded.",
+      "RIGHT_CLICK": "Right-click any item in the sidebar to see additional actions."
+    }
+  },
+  "EXPORT_DIALOG": {
+    "HEADER": "Export",
+    "FORMAT": "Format",
+    "JSON": "JSON",
+    "YAML": "YAML",
+    "CANCEL": "Cancel",
+    "SAVE_TO_FILE": "Save to file",
+    "SET_TITLE": "Set OpenAPI Title",
+    "TITLE_LABEL": "Title",
+    "TITLE_PLACEHOLDER": "Enter OpenAPI Title",
+    "CREATE": "Create"
+  },
+  "SIDEBAR": {
+    "REFERENCES": {
+      "LABEL": "References",
+      "RIGHTMENU": {
+        "ADDOPENAPI": "Add OpenAPI",
+        "NEWMODEL": "New Model",
+        "IMPORT": "Import",
+        "EXPORT": "Export",
+        "COPY_PATH": "Copy Path",
+        "COPY_RELATIVE_PATH": "Copy Relative Path",
+        "RENAME": "Rename",
+        "DELETE": "Delete",
+        "DUPLICATE": "Duplicate"
+      }
+    },
+    "OVERVIEW_BUTTON": "API Overview",
+    "PATHS": {
+      "LABEL": "Paths",
+      "RIGHTMENU": {
+        "NEW_PATH": "New Path",
+        "COPY_PATH": "Copy Path",
+        "COPY_RELATIVE_PATH": "Copy Relative Path",
+        "NEW_OPERATION": "New Operation",
+        "RENAME_PATH": "Rename Path",
+        "DELETE_PATH": "Delete Path"
+      },
+      "ADD_PATH": "Add Path",
+      "MODIFY_PATH": "Modify Path",
+      "ENTER_NEW_PATH_NAME": "Enter new path name",
+      "RENAME_ENDPOINT": "Rename Endpoint",
+      "NEW_METHOD": "New Method",
+      "ENTER_NEW_METHOD_NAME": "Enter new method name (e.g., get, post)",
+      "TOAST": {
+        "MISSING": "Please enter a valid path name.",
+        "NOT_FOUND": "Original path not found. Cannot rename.",
+        "EXISTS": "A path with the new name already exists.",
+        "SUCCESS": "Path renamed successfully."
+      },
+      "TOAST_RENAME_ENDPOINT": {
+        "INVALID_INPUT": "Érvénytelen útvonal, metódus vagy összegzés. Kérjük, ellenőrizze a bemenetet.",
+        "METHOD_NOT_FOUND": "A megadott metódus nem található az adott útvonalhoz.",
+        "SWAGGER_FETCH_FAILED": "Nem sikerült lekérni a Swagger specifikációt.",
+        "SUCCESS": "Az végpont összegzése sikeresen frissítve."
+      },
+      "CONFIRM_DELETE": {
+        "MESSAGE": "Are you sure you want to delete the path \"{{path}}\"?",
+        "HEADER": "Confirm Deletion",
+        "ACCEPT": "Yes",
+        "REJECT": "No",
+        "SUCCESS_SUMMARY": "Deleted",
+        "SUCCESS_DETAIL": "Path was successfully deleted."
+      },
+      "CONFIRM_DELETE_ENDPOINT": {
+        "MESSAGE": "Are you sure you want to delete the endpoint \"{{method}}\" from path \"{{path}}\"?",
+        "HEADER": "Confirm Deletion",
+        "ACCEPT": "Delete",
+        "REJECT": "Cancel",
+        "SUCCESS_SUMMARY": "Deleted",
+        "SUCCESS_DETAIL": "Endpoint was successfully deleted."
+      },
+      "CONFIRM_DELETE_CONTENT_TYPE": {
+        "MESSAGE": "Are you sure you want to delete the content type '{{contentType}}'?",
+        "HEADER": "Confirm Deletion",
+        "ACCEPT": "Delete",
+        "REJECT": "Cancel",
+        "SUCCESS_SUMMARY": "Deleted",
+        "SUCCESS_DETAIL": "Content type '{{contentType}}' was successfully deleted."
+      }
+    },
+    "MODELS": {
+      "LABEL": "Models",
+      "SUMMARY": "Summary",
+      "RIGHTMENU": {
+        "NEW_MODEL": "New Model",
+        "COPY_PATH": "Copy Path",
+        "COPY_RELATIVE_PATH": "Copy Relative Path"
+      },
+      "CONFIRM_DELETE": {
+        "MESSAGE": "Are you sure you want to delete the model '{{model}}'?",
+        "HEADER": "Confirm Deletion",
+        "ACCEPT": "Delete",
+        "REJECT": "Cancel",
+        "SUCCESS_SUMMARY": "Deleted",
+        "SUCCESS_DETAIL": "Model was successfully deleted.",
+        "NO_MODEL_SELECTED": "No model selected to delete."
+      },
+      "ADD_MODEL": "Add Model",
+      "ENTER_NEW_MODEL_NAME": "Enter new model name",
+      "RENAME_MODEL": "Rename Model",
+      "NEW_MODEL_NAME": "New Model Name"
+    },
+    "COMMON": {
+      "CANCEL": "Cancel",
+      "SAVE": "Save"
+    }
+  },
+  "SCHEME_OVERLAY": {
+    "MARK_AS_EXAMPLE": "Mark as example",
+    "MARK_AS_DEFAULT": "Mark as default",
+    "SELECT_TYPE": "Select type",
+    "SELECT_MULTIPLE_TYPES": "Select multiple types",
+    "MULTISELECT": "Multiselect",
+    "NOT_MULTISELECT": "Not Multiselect",
+    "PROPERTIES": "Properties",
+    "MIN_PROPERTIES": "Minimum Properties",
+    "MAX_PROPERTIES": "Maximum Properties",
+    "TYPE": "Type",
+    "COMPONENTS": "Components",
+    "COMBINE_SCHEMAS": "Combine Schemas",
+    "COMBINE_SELECT_OPTION": "Select an option below to combine your schemas",
+    "SELECT_COMBINE_TYPE": "Select combine type",
+    "ALLOW_ADDITIONAL_PROPERTIES": "Allow additional properties",
+    "DEPRECATED": "Deprecated",
+    "NULLABLE": "Nullable",
+    "NOT_NULLABLE": "Not nullable",
+    "BEHAVIOR": "Behavior",
+    "READ_WRITE": "Read/Write",
+    "MIN_ITEMS": "Minimum items",
+    "MAX_ITEMS": "Maximum items",
+    "UNIQUE_ITEMS": "Unique items",
+    "FORMAT": "Format",
+    "SELECT_INTEGER_FORMAT": "Select integer format",
+    "DEFAULT": "Default",
+    "DEFAULT_INTEGER": "Default integer value",
+    "EXAMPLE": "Example",
+    "EXAMPLE_INTEGER": "Example integer",
+    "MINIMUM": "Minimum",
+    "MAXIMUM": "Maximum",
+    "MULTIPLE_OF": "Multiple Of",
+    "EXCLUSIVE_MIN": "Exclusive Min",
+    "EXCLUSIVE_MAX": "Exclusive Max",
+    "DEFAULT_NUMBER": "Default number",
+    "EXAMPLE_NUMBER": "Example number",
+    "DEFAULT_STRING": "Default string value",
+    "EXAMPLE_STRING": "Example string value",
+    "PATTERN": "Pattern",
+    "MIN_LENGTH": "Minimum length",
+    "MAX_LENGTH": "Maximum length",
+    "DEFAULT_BOOLEAN": "Default Boolean",
+    "SELECT_BOOLEAN_VALUE": "Select a value",
+    "ENUM": "Enum",
+    "ENTER_ENUM_VALUE": "Enter value",
+    "OPTIONS": "Options",
+    "REMOVE_VALUE": "Remove value",
+    "REMOVE_THIS_VALUE": "Remove this value",
+    "ADD": "Add",
+    "DICTIONARY": "Dictionary"
+  },
+  "SCHEMA_TABS": {
+    "NAME": "Name",
+    "TYPE": "Type",
+    "REQUIRED": "Required field",
+    "GO_TO_REFERENCE": "Go to reference"
+  },
+  "REFERENCE": {
+    "TITLE": "Title",
+    "VERSION": "Version",
+    "INTERNAL": "INTERNAL",
+    "SELECT_AVALUE": "Select a value",
+    "NEW_ENUM_VALUE": "New enum value",
+    "VARIABLES": "Variables",
+    "ALLOWED_VALUES": "Allowed values",
+    "SECURITY": "Security",
+    "SUMMARY": "Summary",
+    "OPTIONAL_GLOBAL_SECURITY": "Optional Global Security",
+    "DESCRIPTION": "Description",
+    "CONTACT": "Contact",
+    "CONTACT_NAME": "Contact Name",
+    "CONTACT_URL": "Contact URL",
+    "CONTACT_EMAIL": "Contact Email",
+    "TERMS": "Terms of Service URL",
+    "LICENSE": "License",
+    "LICENSE_NAME": "License Name",
+    "LICENSE_TYPE": "Choose License Type",
+    "LICENSE_URL": "License URL",
+    "EXTENSIONS": "X-Extensions",
+    "SERVERS": "Servers",
+    "SECURITY_SCHEMES": "Security Schemes",
+    "GLOBAL_SECURITY": "Global Security",
+    "ADD_BUTTON": "Add",
+    "KEY": "Key",
+    "NAME": "Name",
+    "OPENID_CONNECT_URL": "OpenID Connect URL",
+    "SERVER_VARIABLES": "Server Variables",
+    "REFRESH_URL": "Refresh URL",
+    "AUTHORIZATION_URL": "Authorization URL",
+    "TOKEN_URL": "Token URL",
+    "SCOPES": "Scopes"
+  },
+  "SCHEMAS": {
+    "TOAST": {
+      "TITLE_UPDATED": "The schema title has been updated successfully.",
+      "DESCRIPTION_UPDATED": "The schema description has been updated successfully.",
+      "SUMMARY_UPDATED": "Summary updated successfully.",
+      "OPERATIONID_UPDATED": "Operation ID updated successfully."
+    },
+    "PLACEHOLDER": {
+      "TITLE": "Schema Title",
+      "DESCRIPTION": "No description available",
+      "CLICK_TO_ADD": "Click to add a title",
+      "CLICK_TO_ADD_DESCRIPTION": "Click to add a description"
+    },
+    "TABS": {
+      "SCHEMA": "Schema",
+      "EXAMPLES": "Examples",
+      "EXTENSIONS": "Extensions"
+    },
+    "EXAMPLES": {
+      "ADD": "Add Example",
+      "COPY": "Copy Example",
+      "DELETE": "Delete Example",
+      "EDIT": "Edit Example"
+    },
+    "EXTENSIONS": {
+      "ADD": "Add Extension",
+      "COPY": "Copy Extension",
+      "DELETE": "Delete Extension",
+      "EDIT": "Edit Extension Description",
+      "LABEL": "Extension Name",
+      "PLACEHOLDER": {
+        "CLICK_TO_ADD_DESCRIPTION": "Click to add a description"
+      }
+    }
+  },
+  "PATHS": {
+    "SUMMARY": "Summary",
+    "OPERATION_ID": "Operation ID",
+    "DESCRIPTION": "Description",
+    "NAME": "Name",
+    "TABS": {
+      "GENERAL": "General",
+      "PARAMETERS": "Parameters",
+      "REQUEST": "Request",
+      "RESPONSES": "Responses"
+    },
+    "PLACEHOLDERS": {
+      "SUMMARY": "Enter summary...",
+      "DESCRIPTION": "Enter description...",
+      "RESPONSE_MESSAGE": "Response message...",
+      "OPERATION_ID": "Enter operation ID..."
+    },
+    "MESSAGES": {
+      "PARAMETERS_CONTENT": "Parameters content goes here...",
+      "NO_BODY_CONTENT": "No body content",
+      "NO_HEADERS_DEFINED": "No headers defined",
+      "NEW_RESPONSE_DESCRIPTION": "New response description",
+      "RESPONSE_ADDED": "Response Added",
+      "RESPONSE_CODE_ADDED": "Response with code {{responseCode}} has been successfully added.",
+      "RESPONSE_DELETED": "Response Deleted",
+      "RESPONSE_CODE_DELETED": "Response with code {{responseCode}} has been successfully deleted."
+    },
+    "RESPONSES": {
+      "MESSAGES": {
+        "NO_BODY_CONTENT": "No body content"
+      }
+    },
+    "PARAMETERS": {
+      "HEADERS": "Headers",
+      "QUERY_PARAMETERS": "Query Parameters",
+      "COOKIES": "Cookies",
+      "ADD": "Add",
+      "REQUIRED": "Required",
+      "POPUP": {
+        "ADD": "Add",
+        "PARAMETER_PROPERTIES": "Parameter Properties",
+        "STYLE": "Style",
+        "SELECT_STYLE": "Select style",
+        "DEPRECATED": "Deprecated",
+        "SCHEMA_PROPERTIES": "Schema Properties",
+        "FORMAT": "Format",
+        "FORMAT_PLACEHOLDER": "float",
+        "DEFAULT": "Default",
+        "DEFAULT_PLACEHOLDER": "Enter default value here",
+        "ENUM": "Enum",
+        "EXAMPLE": "Example",
+        "EXAMPLE_PLACEHOLDER": "example",
+        "NUMBER_PROPERTIES": "Number Properties",
+        "MINIMUM": "Minimum",
+        "MAXIMUM": "Maximum",
+        "EXCLUSIVE_MIN": "Exclusive Min",
+        "EXCLUSIVE_MAX": "Exclusive Max",
+        "MULTIPLE_OF": "Multiple Of",
+        "ENUM_PLACEHOLDER": "Type a value and press Enter",
+        "ARRAY_PROPERTIES": "Array Properties",
+        "UNIQUE_ITEMS": "Unique Items",
+        "MIN_ITEMS": "Minimum Items",
+        "MAX_ITEMS": "Maximum Items",
+        "EXPLODE": "Explode",
+        "ALLOW_EMPTY_VALUE": "Allow Empty Value",
+        "ALLOW_RESERVED": "Allow Reserved",
+        "STRING_PROPERTIES": "String Properties",
+        "PATTERN": "Pattern",
+        "MIN_LENGTH": "Minimum Length",
+        "MAX_LENGTH": "Maximum Length"
+      },
+      "MESSAGES": {
+        "NO_HEADERS": "No headers defined.",
+        "NO_QUERY_PARAMS": "No query parameters defined.",
+        "NO_COOKIES": "No cookies defined."
+      }
+    },
+    "BUTTONS": {
+      "ADD_RESPONSE": "Add Response"
+    },
+    "LABELS": {
+      "RESPONSE": "Response",
+      "HEADERS": "Headers",
+      "BODY": "Body"
+    },
+    "PROMPTS": {
+      "ENTER_RESPONSE_CODE": "Enter the new response code (e.g., 201, 404):",
+      "CONFIRM_DELETE": "Are you sure you want to delete the response with code {{responseCode}}?"
+    },
+    "ERRORS": {
+      "RESPONSE_EXISTS": "Duplicate Response Code",
+      "RESPONSE_CODE_EXISTS": "Response code {{responseCode}} already exists.",
+      "INVALID_RESPONSE_CODE": "Invalid Response Code",
+      "ENTER_VALID_CODE": "Please enter a valid numeric response code."
+    },
+    "WARNINGS": {
+      "PATH_WARNING_TITLE": "Missing API Path",
+      "API_PATH_NOT_FOUND": "API path '{{apiPath}}' not found. Creating it.",
+      "METHOD_WARNING_TITLE": "Missing API Method",
+      "METHOD_NOT_FOUND": "Method '{{method}}' not found. Creating it.",
+      "PATH_UPDATED_TITLE": "API Path Updated",
+      "PATH_UPDATED": "The API path '{{apiPath}}' has been successfully updated."
+    }
+  }
+}

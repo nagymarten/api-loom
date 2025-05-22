@@ -1,0 +1,934 @@
+<div class="flex flex-col gap-6 w-full">
+  <div class="flex flex-wrap items-start justify-between gap-4">
+    <div class="flex items-center gap-3 mt-4">
+      <p-floatlabel>
+        <input
+          pInputText
+          id="version"
+          [(ngModel)]="version"
+          class="w-full"
+          (blur)="onReferenceChange($event)"
+          (keydown.enter)="onReferenceChange($event)"
+        />
+        <label for="version">{{ "REFERENCE.VERSION" | translate }}</label>
+      </p-floatlabel>
+
+      <p-floatlabel>
+        <input
+          pInputText
+          id="title"
+          [(ngModel)]="title"
+          class="w-full"
+          (blur)="onReferenceChange($event)"
+          (keydown.enter)="onReferenceChange($event)"
+        />
+        <label for="title">{{ "REFERENCE.TITLE" | translate }}</label>
+      </p-floatlabel>
+    </div>
+
+    <div class="flex items-center gap-2 mt-4">
+      <p-toggleswitch
+        [(ngModel)]="checkedInternal"
+        (onChange)="onReferenceChange($event)"
+      ></p-toggleswitch>
+      <span class="text-sm font-medium" style="color: var(--p-primary-color)">{{
+        "REFERENCE.INTERNAL" | translate
+      }}</span>
+    </div>
+  </div>
+
+  <div class="mt-6">
+    <p-floatlabel>
+      <input
+        pInputText
+        id="summary"
+        [(ngModel)]="summary"
+        class="w-full"
+        (blur)="onReferenceChange($event)"
+        (keydown.enter)="onReferenceChange($event)"
+      />
+      <label for="summary">{{ "REFERENCE.SUMMARY" | translate }}</label>
+    </p-floatlabel>
+  </div>
+
+  <div class="mt-4">
+    <p-floatlabel>
+      <textarea
+        pTextarea
+        id="description"
+        [(ngModel)]="description"
+        rows="6"
+        style="resize: none"
+        class="w-full"
+        (blur)="onReferenceChange($event)"
+        (keydown.enter)="onReferenceChange($event)"
+      ></textarea>
+      <label for="description">{{ "REFERENCE.DESCRIPTION" | translate }}</label>
+    </p-floatlabel>
+  </div>
+
+  <p-divider />
+  <div class="flex items-center justify-between py-4">
+    <div class="flex items-center gap-2" style="color: var(--p-primary-color)">
+      <i class="pi pi-server text-2xl" style="font-size: 2rem"></i>
+      <span class="text-lg font-bold">{{
+        "REFERENCE.SERVERS" | translate
+      }}</span>
+    </div>
+    <p-button
+      label="{{ 'REFERENCE.ADD_BUTTON' | translate }}"
+      icon="pi pi-plus"
+      [rounded]="true"
+      [text]="true"
+      [raised]="true"
+      (onClick)="addServer()"
+    ></p-button>
+  </div>
+
+  <div
+    *ngFor="let server of servers; let i = index"
+    class="flex flex-col gap-2 p-3 rounded-md bg-surface-50 dark:bg-surface-800 mb-4"
+  >
+    <div class="flex flex-col md:flex-row items-center gap-2">
+      <input
+        pInputText
+        [(ngModel)]="server.url"
+        placeholder="URL"
+        class="w-full md:w-1/3 text-sm px-3"
+        (blur)="onReferenceChange($event)"
+      />
+
+      <input
+        pInputText
+        [(ngModel)]="server.description"
+        placeholder="{{ 'REFERENCE.DESCRIPTION' | translate }}"
+        class="w-full md:w-1/3 text-sm px-3"
+        (blur)="onReferenceChange($event)"
+      />
+
+      <div class="flex flex-col md:flex-row items-center gap-2 md:ml-auto">
+        <p-button
+          label="{{ 'REFERENCE.SERVER_VARIABLES' | translate }}"
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+          severity="secondary"
+          [style]="{ color: 'var(--p-primary-color)' }"
+          (click)="toggleServerVariables(i)"
+        ></p-button>
+
+        <p-button
+          icon="pi pi-trash"
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+          severity="danger"
+          (click)="servers.splice(i, 1); onReferenceChange($event)"
+        />
+      </div>
+    </div>
+
+    <div
+      *ngIf="showVariablesMap.get(i)"
+      class="ml-6 border-surface-200 dark:border-surface-700 mt-2"
+    >
+      <div class="flex items-center gap-2 mb-2 pl-6">
+        <span class="text-sm font-medium text-color-secondary">{{
+          "REFERENCE.VARIABLES" | translate
+        }}</span>
+        <p-button
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+          icon="pi pi-plus"
+          (click)="addVariable(server)"
+        ></p-button>
+      </div>
+
+      <div
+        *ngFor="let key of getVariableKeys(server)"
+        class="grid grid-cols-[1fr_2fr_2fr_auto] gap-2 items-center mb-2 pl-9"
+      >
+        <input
+          pInputText
+          [(ngModel)]="editableVariableKeys[i][key]"
+          (blur)="
+            renameVariableKey(server, key, editableVariableKeys[i][key], i)
+          "
+          class="text-sm w-full"
+          placeholder="Variable name"
+        />
+
+        <!-- Description -->
+        <input
+          pInputText
+          [(ngModel)]="server.variables[key].description"
+          placeholder="{{ 'REFERENCE.DESCRIPTION' | translate }}"
+          class="w-full text-sm"
+          (blur)="onReferenceChange($event)"
+        />
+
+        <ng-container
+          *ngIf="server.variables[key].enum?.length; else defaultInput"
+        >
+          <p-select
+            [options]="getEnumOptions(server.variables[key].enum)"
+            [ngModel]="getVariableDefault(server, key)"
+            (ngModelChange)="setVariableDefault(server, key, $event)"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="{{ 'REFERENCE.SELECT_A_VALUE' | translate }}"
+            class="w-full text-sm"
+          ></p-select>
+        </ng-container>
+
+        <ng-template #defaultInput>
+          <input
+            pInputText
+            [(ngModel)]="server.variables[key].default"
+            placeholder="Default Value"
+            class="w-full text-sm"
+            (blur)="onReferenceChange($event)"
+          />
+        </ng-template>
+
+        <div class="flex gap-2 justify-end">
+          <p-button
+            icon="pi pi-bars"
+            [rounded]="true"
+            [text]="true"
+            [raised]="true"
+            (click)="op.toggle($event)"
+          ></p-button>
+          <p-popover #op (onHide)="onReferenceChange(null)">
+            <div class="text-sm font-medium mb-2">
+              {{ "REFERENCE.ALLOWED_VALUES" | translate }}
+            </div>
+
+            <div class="flex flex-col gap-2 mb-2 max-w-xs">
+              <div
+                *ngFor="
+                  let val of server.variables[key].enum;
+                  let j = index;
+                  trackBy: trackByIndex
+                "
+                class="flex gap-2 items-center"
+              >
+                <input
+                  pInputText
+                  [(ngModel)]="server.variables[key].enum[j]"
+                  class="w-full"
+                  placeholder="{{ 'REFERENCE.NEW_ENUM_VALUE' | translate }}"
+                />
+                <p-button
+                  icon="pi pi-trash"
+                  [rounded]="true"
+                  [text]="true"
+                  [raised]="true"
+                  severity="danger"
+                  (click)="
+                    server.variables[key].enum.splice(j, 1);
+                    onReferenceChange(null)
+                  "
+                ></p-button>
+              </div>
+
+              <p-divider />
+
+              <p-button
+                [rounded]="true"
+                [text]="true"
+                [raised]="true"
+                icon="pi pi-plus"
+                label="{{ 'REFERENCE.ADD_BUTTON' | translate }}"
+                class="p-p-button-sm w-full"
+                (click)="addEnumValue(server, key)"
+              ></p-button>
+            </div>
+          </p-popover>
+          <p-button
+            icon="pi pi-trash"
+            variant="text"
+            [rounded]="true"
+            [text]="true"
+            [raised]="true"
+            severity="danger"
+            (click)="deleteVariable(server, key)"
+          ></p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p-divider />
+
+  <div class="flex items-center justify-between py-4">
+    <div class="flex items-center gap-2" style="color: var(--p-primary-color)">
+      <i class="pi pi-shield text-2xl" style="font-size: 2rem"></i>
+      <span class="text-lg font-bold">{{
+        "REFERENCE.SECURITY_SCHEMES" | translate
+      }}</span>
+    </div>
+    <p-button
+      label="{{ 'REFERENCE.ADD_BUTTON' | translate }}"
+      icon="pi pi-plus"
+      [rounded]="true"
+      [text]="true"
+      [raised]="true"
+      (onClick)="addSecurityScheme()"
+    ></p-button>
+  </div>
+
+  <div
+    *ngFor="let key of getSecuritySchemeKeys(); let i = index"
+    class="flex flex-col gap-2 p-3 rounded-md bg-surface-50 dark:bg-surface-800 mb-4"
+  >
+    <div
+      *ngIf="securitySchemes[key]?.type === 'oauth2'"
+      class="flex flex-col md:flex-row items-center gap-2 w-full"
+    >
+      <p-select
+        [options]="types"
+        [ngModel]="getSecuritySchemeType(key)"
+        (ngModelChange)="setSecuritySchemeType(key, $event)"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Type"
+        class="w-full md:flex-1"
+      />
+
+      <p-floatlabel variant="on" class="w-full md:flex-1">
+        <input
+          pInputText
+          [ngModel]="key"
+          (blur)="renameSecuritySchemeKeyFromEvent($event, key)"
+          (keydown.enter)="renameSecuritySchemeKeyFromEvent($event, key)"
+          placeholder="Name"
+          id="keyInput"
+        />
+        <label for="keyInput">{{ "REFERENCE.KEY" | translate }}</label>
+      </p-floatlabel>
+
+      <p-multiSelect
+        [options]="oauthFlowOptions"
+        [ngModel]="selectedFlowsMap[key]"
+        (ngModelChange)="setSecuritySchemeFlows(key, $event)"
+        optionLabel="label"
+        optionValue="value"
+        display="chip"
+        class="w-full md:flex-1"
+      />
+
+      <p-button
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        icon="pi pi-align-left"
+        class="p-p-button-text p-p-button-sm"
+        (click)="flowPopover.toggle($event)"
+      ></p-button>
+
+      <p-popover #flowPopover (onHide)="onReferenceChange(null)">
+        <div
+          class="flex flex-col gap-3 min-w-[340px] max-h-[400px] overflow-y-auto text-xs p-2"
+        >
+          <div
+            *ngFor="let flow of selectedFlowsMap[key]"
+            class="flex flex-col gap-2 pb-2"
+          >
+            <span
+              class="font-semibold text-[10px] uppercase text-color-secondary"
+            >
+              {{ flow }}
+            </span>
+
+            <div class="grid grid-cols-2 gap-1">
+              <input
+                pInputText
+                [(ngModel)]="securitySchemes[key].flows[flow].refreshUrl"
+                [placeholder]="'REFERENCE.REFRESH_URL' | translate"
+                class="text-xs p-1"
+              />
+              <input
+                *ngIf="flow !== 'clientCredentials'"
+                pInputText
+                [(ngModel)]="securitySchemes[key].flows[flow].authorizationUrl"
+                [placeholder]="'REFERENCE.AUTHORIZATION_URL' | translate"
+                class="text-xs p-1"
+              />
+              <input
+                *ngIf="flow !== 'implicit'"
+                pInputText
+                [(ngModel)]="securitySchemes[key].flows[flow].tokenUrl"
+                [placeholder]="'REFERENCE.TOKEN_URL' | translate"
+                class="text-xs p-1"
+              />
+            </div>
+
+            <div class="flex items-center gap-1">
+              <span class="text-[11px]">{{
+                "REFERENCE.SCOPES" | translate
+              }}</span>
+              <p-button
+                [rounded]="true"
+                [text]="true"
+                [raised]="true"
+                icon="pi pi-plus"
+                class="p-p-button-text p-p-button-sm"
+                (click)="addScopeToFlow(key, flow)"
+              ></p-button>
+            </div>
+
+            <div
+              *ngFor="let scope of getScopeKeys(key, flow); let i = index"
+              class="grid grid-cols-[1fr_2fr_auto] gap-1 items-center"
+            >
+              <input
+                pInputText
+                [(ngModel)]="editableScopes[key][flow][scope]"
+                (blur)="
+                  renameScopeKey(
+                    key,
+                    flow,
+                    scope,
+                    editableScopes[key][flow][scope]
+                  )
+                "
+                (keydown.enter)="
+                  renameScopeKey(
+                    key,
+                    flow,
+                    scope,
+                    editableScopes[key][flow][scope]
+                  )
+                "
+                class="text-xs p-1"
+              />
+              <input
+                pInputText
+                [(ngModel)]="securitySchemes[key].flows[flow].scopes[scope]"
+                [placeholder]="'REFERENCE.DESCRIPTION' | translate"
+                class="w-full text-xs p-1"
+              />
+              <p-button
+                [rounded]="true"
+                [text]="true"
+                [raised]="true"
+                icon="pi pi-trash"
+                class="p-p-button-text p-p-button-sm"
+                (click)="removeScope(key, flow, scope)"
+              ></p-button>
+            </div>
+
+            <p-divider />
+          </div>
+        </div>
+      </p-popover>
+
+      <p-button
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        icon="pi pi-book"
+        class="p-p-button-text p-p-button-sm"
+        (click)="descPopover.toggle($event)"
+      ></p-button>
+
+      <p-popover #descPopover (onHide)="onReferenceChange(null)">
+        <div class="flex flex-col gap-2 max-w-xs">
+          <label class="text-sm font-medium mb-1">
+            {{ "REFERENCE.DESCRIPTION" | translate }}
+          </label>
+          <textarea
+            pInputTextarea
+            rows="5"
+            [(ngModel)]="securitySchemes[key].description"
+            class="w-full text-sm"
+            placeholder="Enter scheme description..."
+            class="p-textarea p-component w-full ng-pristine ng-valid p-filled ng-touched text-sm"
+            (blur)="onReferenceChange($event)"
+          ></textarea>
+        </div>
+      </p-popover>
+
+      <p-button
+        icon="pi pi-trash"
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        severity="danger"
+        (click)="deleteSecurityScheme(key)"
+      ></p-button>
+    </div>
+
+    <div
+      *ngIf="securitySchemes[key]?.type === 'openIdConnect'"
+      class="flex flex-col md:flex-row items-center gap-2 w-full"
+    >
+      <p-select
+        [options]="types"
+        [ngModel]="getSecuritySchemeType(key)"
+        (ngModelChange)="setSecuritySchemeType(key, $event)"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Type"
+        class="w-full md:flex-1"
+      />
+
+      <p-floatlabel variant="on" class="w-full md:flex-1">
+        <input
+          pInputText
+          [ngModel]="key"
+          (blur)="renameSecuritySchemeKeyFromEvent($event, key)"
+          (keydown.enter)="renameSecuritySchemeKeyFromEvent($event, key)"
+        />
+        <label for="keyInput">{{ "REFERENCE.KEY" | translate }}</label>
+      </p-floatlabel>
+
+      <p-floatlabel variant="on" class="w-full md:flex-1">
+        <input
+          pInputText
+          [ngModel]="securitySchemes[key]?.openIdConnectUrl"
+          (blur)="onReferenceChange($event)"
+          (keydown.enter)="onReferenceChange($event)"
+        />
+        <label for="keyInput">{{
+          "REFERENCE.OPENID_CONNECT_URL" | translate
+        }}</label>
+      </p-floatlabel>
+
+      <p-button
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        icon="pi pi-book"
+        class="p-p-button-text p-p-button-sm"
+        (click)="descPopover.toggle($event)"
+      ></p-button>
+
+      <p-popover #descPopover (onHide)="onReferenceChange(null)">
+        <div class="flex flex-col gap-2 max-w-xs">
+          <label class="text-sm font-medium mb-1">
+            {{ "REFERENCE.DESCRIPTION" | translate }}
+          </label>
+          <textarea
+            pInputTextarea
+            rows="5"
+            [(ngModel)]="securitySchemes[key].description"
+            class="w-full text-sm"
+            placeholder="Enter scheme description..."
+            class="p-textarea p-component w-full ng-pristine ng-valid p-filled ng-touched text-sm"
+            (blur)="onReferenceChange($event)"
+          ></textarea>
+        </div>
+      </p-popover>
+
+      <p-button
+        icon="pi pi-trash"
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        severity="danger"
+        (click)="deleteSecurityScheme(key)"
+      ></p-button>
+    </div>
+
+    <div
+      *ngIf="securitySchemes[key]?.type === 'apiKey'"
+      class="flex flex-col md:flex-row items-center gap-2 w-full"
+    >
+      <p-select
+        [options]="types"
+        [ngModel]="getSecuritySchemeType(key)"
+        (ngModelChange)="setSecuritySchemeType(key, $event)"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Type"
+        class="w-full md:flex-1"
+      />
+
+      <p-floatlabel variant="on" class="w-full md:flex-1">
+        <input
+          pInputText
+          [ngModel]="key"
+          required
+          (blur)="renameSecuritySchemeKeyFromEvent($event, key)"
+          (keydown.enter)="renameSecuritySchemeKeyFromEvent($event, key)"
+          id="keyInput"
+        />
+        <label for="keyInput">{{ "REFERENCE.KEY" | translate }}</label>
+      </p-floatlabel>
+
+      <p-floatlabel variant="on" class="w-full md:flex-1">
+        <input
+          pInputText
+          [(ngModel)]="securitySchemes[key].name"
+          required
+          (blur)="onReferenceChange($event)"
+          (keydown.enter)="onReferenceChange($event)"
+          id="nameInput"
+        />
+        <label for="nameInput">{{ "REFERENCE.NAME" | translate }}</label>
+      </p-floatlabel>
+
+      <p-select
+        [options]="ins"
+        [(ngModel)]="securitySchemes[key].in"
+        (ngModelChange)="setSecuritySchemeIn(key, $event)"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="In"
+        class="w-full md:flex-1"
+      />
+
+      <p-button
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        icon="pi pi-book"
+        class="p-p-button-text p-p-button-sm"
+        (click)="descPopover.toggle($event)"
+      ></p-button>
+
+      <p-popover #descPopover (onHide)="onReferenceChange(null)">
+        <div class="flex flex-col gap-2 max-w-xs">
+          <label class="text-sm font-medium mb-1">
+            {{ "REFERENCE.DESCRIPTION" | translate }}
+          </label>
+          <textarea
+            pInputTextarea
+            rows="5"
+            [(ngModel)]="securitySchemes[key].description"
+            class="w-full text-sm"
+            placeholder="Enter scheme description..."
+            class="p-textarea p-component w-full ng-pristine ng-valid p-filled ng-touched text-sm"
+            (blur)="onReferenceChange($event)"
+          ></textarea>
+        </div>
+      </p-popover>
+
+      <p-button
+        icon="pi pi-trash"
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        severity="danger"
+        (click)="deleteSecurityScheme(key)"
+      ></p-button>
+    </div>
+
+    <div
+      *ngIf="securitySchemes[key]?.type === 'http'"
+      class="flex flex-col md:flex-row items-center gap-2 w-full"
+    >
+      <p-select
+        [options]="types"
+        [ngModel]="getSecuritySchemeType(key)"
+        (ngModelChange)="setSecuritySchemeType(key, $event)"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Type"
+        class="w-full md:flex-1"
+      />
+
+      <p-floatlabel variant="on" class="w-full md:flex-1">
+        <input
+          pInputText
+          [ngModel]="key"
+          (blur)="renameSecuritySchemeKeyFromEvent($event, key)"
+          (keydown.enter)="renameSecuritySchemeKeyFromEvent($event, key)"
+          placeholder="Name"
+          id="keyInput"
+        />
+        <label for="keyInput">{{ "REFERENCE.KEY" | translate }}</label>
+      </p-floatlabel>
+
+      <p-select
+        [options]="https"
+        [(ngModel)]="securitySchemes[key].scheme"
+        (ngModelChange)="setSecuritySchemeHttps(key, $event)"
+        optionLabel="label"
+        optionValue="value"
+        [filter]="true"
+        placeholder="Scheme"
+        class="w-full md:flex-1"
+      />
+
+      <p-button
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        icon="pi pi-book"
+        class="p-p-button-text p-p-button-sm"
+        (click)="descPopover.toggle($event)"
+      ></p-button>
+
+      <p-popover #descPopover (onHide)="onReferenceChange(null)">
+        <div class="flex flex-col gap-2 max-w-xs">
+          <label class="text-sm font-medium mb-1">
+            {{ "REFERENCE.DESCRIPTION" | translate }}
+          </label>
+          <textarea
+            pInputTextarea
+            rows="5"
+            [(ngModel)]="securitySchemes[key].description"
+            class="w-full text-sm"
+            placeholder="Enter scheme description..."
+            class="p-textarea p-component w-full ng-pristine ng-valid p-filled ng-touched text-sm"
+            (blur)="onReferenceChange($event)"
+          ></textarea>
+        </div>
+      </p-popover>
+
+      <p-button
+        icon="pi pi-trash"
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        severity="danger"
+        (click)="deleteSecurityScheme(key)"
+      ></p-button>
+    </div>
+  </div>
+
+  <p-divider />
+
+  <div class="flex items-center justify-between py-4">
+    <div class="flex items-center gap-2" style="color: var(--p-primary-color)">
+      <i class="pi pi-globe text-2xl" style="font-size: 2rem"></i>
+      <span class="text-lg font-bold">
+        {{ "REFERENCE.GLOBAL_SECURITY" | translate }}
+      </span>
+    </div>
+
+    <p-button
+      label="{{ 'REFERENCE.ADD_BUTTON' | translate }}"
+      icon="pi pi-plus"
+      [rounded]="true"
+      [text]="true"
+      [raised]="true"
+      (onClick)="addGlobalSecurity()"
+    ></p-button>
+  </div>
+
+  <div class="flex items-center gap-2 mt-2">
+    <p-toggleSwitch
+      [(ngModel)]="hasEmptySecurity"
+      (onChange)="onReferenceChange(null)"
+    ></p-toggleSwitch>
+    <span class="text font-bold" style="color: var(--p-primary-color)">
+      {{ "REFERENCE.OPTIONAL_GLOBAL_SECURITY" | translate }}</span
+    >
+  </div>
+
+  <ng-container
+    *ngFor="let security of selectedExtensions?.security; let i = index"
+  >
+    <div
+      *ngIf="!isEmptySecurity(security)"
+      class="border p-3 rounded mb-3"
+      [style.borderColor]="'var(--p-form-field-border-color)'"
+    >
+      <div class="flex items-center justify-between gap-2">
+        <div
+          class="text-sm font-bold text-primary"
+          style="color: var(--p-primary-color)"
+        >
+          {{ "REFERENCE.SECURITY" | translate }}-{{
+            hasEmptySecurity ? i : i + 1
+          }}
+        </div>
+        <p-button
+          icon="pi pi-plus"
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+          (click)="AddSecurity(i)"
+          [disabled]="getUnusedSecuritySchemes(security, '').length === 0"
+          pTooltip="Add security"
+        ></p-button>
+      </div>
+
+      <p-divider></p-divider>
+
+      <div class="flex justify-between items-start">
+        <div class="flex flex-col gap-2 w-full">
+          <div *ngFor="let key of getSecurityKeys(security)">
+            <div class="flex items-center flex-wrap gap-2 w-full">
+              <div class="flex flex-wrap items-center gap-2 flex-grow">
+                <p-select
+                  [options]="getUnusedSecuritySchemes(security, key)"
+                  [ngModel]="key"
+                  (ngModelChange)="renameSecurityKey(security, key, $event)"
+                  optionLabel="label"
+                  optionValue="value"
+                  class="w-48 text-sm"
+                  appendTo="body"
+                />
+                <p-multiSelect
+                  *ngIf="getSecuritySchemeType(key) === 'oauth2'"
+                  [options]="getOauthScopes(key)"
+                  [(ngModel)]="security[key]"
+                  (ngModelChange)="onReferenceChange(null)"
+                  display="chip"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Select scopes"
+                  class="w-64 text-sm"
+                  appendTo="body"
+                />
+              </div>
+
+              <p-button
+                icon="pi pi-trash"
+                [rounded]="true"
+                [text]="true"
+                [raised]="true"
+                severity="danger"
+                (click)="deleteSecurity(security, key)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <p-divider />
+
+  <div
+    class="flex items-center gap-2 mb-2"
+    style="color: var(--p-primary-color)"
+  >
+    <i class="pi pi-address-book text-2xl" style="font-size: 2rem"></i>
+    <span class="text-lg font-bold">{{ "REFERENCE.CONTACT" | translate }}</span>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+    <p-floatlabel>
+      <input
+        pInputText
+        id="contactName"
+        [(ngModel)]="contactName"
+        class="w-full"
+        (blur)="onReferenceChange($event)"
+        (keydown.enter)="onReferenceChange($event)"
+      />
+      <label for="contactName">{{
+        "REFERENCE.CONTACT_NAME" | translate
+      }}</label>
+    </p-floatlabel>
+
+    <p-floatlabel>
+      <input
+        pInputText
+        id="contactUrl"
+        [(ngModel)]="contactUrl"
+        class="w-full"
+        (blur)="onReferenceChange($event)"
+        (keydown.enter)="onReferenceChange($event)"
+      />
+      <label for="contactUrl">{{ "REFERENCE.CONTACT_URL" | translate }}</label>
+    </p-floatlabel>
+
+    <p-floatlabel>
+      <input
+        pInputText
+        id="contactEmail"
+        [(ngModel)]="contactEmail"
+        class="w-full"
+        (blur)="onReferenceChange($event)"
+        (keydown.enter)="onReferenceChange($event)"
+      />
+      <label for="contactEmail">{{
+        "REFERENCE.CONTACT_EMAIL" | translate
+      }}</label>
+    </p-floatlabel>
+  </div>
+
+  <div class="mb-4">
+    <p-floatlabel>
+      <input
+        pInputText
+        id="termsOfService"
+        [(ngModel)]="termsOfService"
+        class="w-full"
+        (blur)="onReferenceChange($event)"
+        (keydown.enter)="onReferenceChange($event)"
+      />
+      <label for="termsOfService">{{ "REFERENCE.TERMS" | translate }}</label>
+    </p-floatlabel>
+  </div>
+
+  <p-divider />
+
+  <div
+    class="flex items-center gap-2 mb-2"
+    style="color: var(--p-primary-color)"
+  >
+    <i class="pi pi-id-card text-2xl" style="font-size: 2rem"></i>
+    <span class="text-lg font-bold">{{ "REFERENCE.LICENSE" | translate }}</span>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_2fr] gap-2 mb-4">
+    <p-floatlabel>
+      <input
+        pInputText
+        id="licenseName"
+        [(ngModel)]="licenseName"
+        class="w-full"
+        (blur)="onReferenceChange($event)"
+        (keydown.enter)="onReferenceChange($event)"
+      />
+      <label for="licenseName">{{
+        "REFERENCE.LICENSE_NAME" | translate
+      }}</label>
+    </p-floatlabel>
+
+    <p-select
+      [options]="licenseOptions"
+      [(ngModel)]="selectedLicense"
+      optionLabel="name"
+      placeholder="URL"
+      class="w-full md:w-28"
+    ></p-select>
+
+    <p-floatlabel>
+      <input
+        pInputText
+        id="licenseUrl"
+        [(ngModel)]="licenseUrl"
+        class="w-full"
+        (blur)="onReferenceChange($event)"
+        (keydown.enter)="onReferenceChange($event)"
+      />
+      <label for="licenseUrl">https://example.com/license</label>
+    </p-floatlabel>
+  </div>
+
+  <!-- <p-select
+  [options]="licenseOptions"
+  [(ngModel)]="selectedLicense"
+  optionLabel="name"
+  placeholder="Chose a SPDX License Identifier"
+  class="w-full md:w-56"
+></p-select>
+<input pInputText id="value1" [(ngModel)]="licenseName" /> -->
+
+  <p-divider />
+  <div
+    class="flex items-center gap-2 mb-2"
+    style="color: var(--p-primary-color)"
+  >
+    <i class="pi pi-objects-column" style="font-size: 2rem"></i>
+    <div class="text-lg font-bold mb-2">
+      {{ "REFERENCE.EXTENSIONS" | translate }}
+    </div>
+  </div>
+  <app-schema-extensions
+    class="flex-shrink-0"
+    [selectedSchema]="selectedExtensions"
+    [nameOfId]="nameOfId"
+    (extensionChanged)="updateSwaggerSpec()"
+  ></app-schema-extensions>
+</div>

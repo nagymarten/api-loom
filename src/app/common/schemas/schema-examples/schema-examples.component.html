@@ -1,0 +1,60 @@
+<div class="flex flex-col gap-4">
+  <div class="flex justify-between items-center">
+    <p-button
+      [label]="'SCHEMAS.EXAMPLES.ADD' | translate"
+      icon="pi pi-file-plus"
+      (click)="generateAndAddExample()"
+      class="p-button-outlined p-button-primary"
+      [rounded]="true"
+      [raised]="true"
+    ></p-button>
+
+    <div class="flex gap-2 items-center">
+      <p-toast></p-toast>
+      <p-button
+        icon="pi pi-copy"
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        (click)="copyExample()"
+        pTooltip="{{ 'SCHEMAS.EXAMPLES.COPY' | translate }}"
+        tooltipPosition="top"
+        class="p-button-text"
+      ></p-button>
+      <p-button
+        *ngIf="selectedSchema?.examples?.length > 0"
+        icon="pi pi-trash"
+        (click)="deleteExample()"
+        pTooltip="{{ 'SCHEMAS.EXAMPLES.DELETE' | translate }}"
+        tooltipPosition="top"
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        severity="danger"
+      ></p-button>
+    </div>
+  </div>
+
+  <div class="card">
+    <p-listbox
+      [options]="responseExamples"
+      [(ngModel)]="activeItem"
+      optionLabel="label"
+      (onChange)="onExampleSelectFromList()"
+      class="w-full md:w-56"
+    ></p-listbox>
+  </div>
+
+  <div *ngIf="selectedSchema?.examples?.length > 0" class="flex flex-col gap-4">
+    <textarea
+      pTextarea
+      rows="10"
+      cols="50"
+      pInputTextarea
+      [formControl]="examplesControl"
+      [placeholder]="'SCHEMAS.EXAMPLES.EDIT' | translate"
+      class="example-textarea"
+      (blur)="saveCurrentExample($event)"
+    ></textarea>
+  </div>
+</div>

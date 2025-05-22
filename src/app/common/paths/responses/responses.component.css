@@ -1,0 +1,56 @@
+.parameters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  min-width: 720px;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.parameter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 0;
+}
+
+.name-input {
+  width: 150px;
+  font-size: 13px;
+}
+
+.type-select {
+  width: 150px;
+  font-size: 13px;
+}
+
+.desc-input {
+  flex: 1;
+  font-size: 13px;
+}
+
+.button-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+}
+
+.icon-btn .p-button {
+  padding: 4px 6px;
+  min-width: 32px;
+  height: 32px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+p-message {
+  margin-top: 10px;
+}

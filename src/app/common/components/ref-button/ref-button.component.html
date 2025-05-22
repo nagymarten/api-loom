@@ -1,0 +1,10 @@
+<p-button
+  *ngIf="rowData.showReferenceButton && col.field === 'name'"
+  [rounded]="true"
+  [text]="true"
+  [raised]="true"
+  class="p-ml-2"
+  (click)="goRefScheme($event)"
+  icon="pi pi-link"
+  type="button"
+></p-button>

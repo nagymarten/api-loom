@@ -1,0 +1,330 @@
+<div class="mt-5">
+  <div *ngIf="selectedSchema">
+    <p-treeTable
+      [value]="jsonTree"
+      [columns]="cols"
+      [scrollable]="true"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      class="w-full overflow-auto rounded-lg"
+    >
+      <ng-template pTemplate="header" let-columns>
+        <tr class=" ">
+          <th
+            *ngFor="let col of columns"
+            class="px-4 py-2 font-semibold"
+            style="color: var(--p-primary-color)"
+          >
+            {{ col.header }}
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template
+        pTemplate="body"
+        let-rowNode
+        let-rowData="rowData"
+        let-columns="columns"
+      >
+        <tr [ttRow]="rowNode" class="border-b">
+          <td
+            *ngFor="let col of columns; let i = index"
+            [ttEditableColumn]="
+              (col.field === 'name' && rowNode.parent) || !rowData.editDisabled
+            "
+            [ttEditableColumnDisabled]="
+              !rowNode.parent ||
+              rowData.editDisabled ||
+              (rowData.showAddButton &&
+                col.field === 'name' &&
+                !rowData.isObjArrOrDisc)
+            "
+            [ngClass]="{ 'p-toggler-column': i === 0 }"
+            class="px-4 py-2 align-top"
+          >
+            <div class="flex items-center gap-2 w-full">
+              <p-treeTableToggler [rowNode]="rowNode" *ngIf="i === 0" />
+
+              <div class="relative max-h-[30rem] overflow-auto">
+                <app-scheme-type-overlay-panel
+                  #overlayPanel
+                  [rowData]="rowData"
+                  [selectedCol]="selectedCol"
+                  [apiSchemas]="apiSchemas"
+                  [selectedSchema]="selectedSchema"
+                  (schemaUpdated)="onSchemaUpdated($event)"
+                  class="block w-full"
+                ></app-scheme-type-overlay-panel>
+              </div>
+
+              <ng-container *ngIf="col.field === 'name' && rowNode.parent">
+                <p-treeTableCellEditor>
+                  <ng-template pTemplate="input">
+                    <input
+                      type="text"
+                      [(ngModel)]="rowData[col.field]"
+                      [ngModelOptions]="{ standalone: true }"
+                      placeholder="Enter schema name"
+                      (blur)="onFieldBlur(rowData[col.field], $event, rowData)"
+                      (keydown.enter)="
+                        onFieldEnter(rowData[col.field], $event, rowData)
+                      "
+                      class="bg-transparent border-none outline-none font-normal leading-snug font-sans text-sm"
+                    />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    <ng-container
+                      *ngIf="
+                        !rowData.isChildOfProperties &&
+                          ((rowData.showReferenceButton &&
+                            !rowData.isObjArrOrDisc) ||
+                            (rowData.showAddButton &&
+                              isSpecialType(rowData[col.field]))) &&
+                          col.field === 'name';
+                        else defaultOutput
+                      "
+                    >
+                      <p-button
+                        label="{{ rowData[col.field] || 'name' }}"
+                        [outlined]="true"
+                        (click)="toggleChildOverlay($event, rowData)"
+                        class="no-border-button"
+                        [rounded]="true"
+                        [text]="true"
+                        [raised]="true"
+                      ></p-button>
+                    </ng-container>
+                    <ng-template #defaultOutput>
+                      <span
+                        [ngClass]="{
+                          'text-secondary italic': !rowData[col.field]
+                        }"
+                      >
+                        {{ rowData[col.field] || "name" }}
+                      </span>
+                    </ng-template>
+                  </ng-template>
+                </p-treeTableCellEditor>
+              </ng-container>
+
+              <ng-container
+                *ngIf="
+                  col.field !== 'name' &&
+                  rowData.showReferenceButton &&
+                  rowData.isObjArrOrDisc
+                "
+              >
+                <p-button
+                  label="{{ rowData[col.field] }}"
+                  [outlined]="true"
+                  (click)="toggleChildOverlay($event, rowData)"
+                  class="no-border-button"
+                  [rounded]="true"
+                  [text]="true"
+                  [raised]="true"
+                ></p-button>
+              </ng-container>
+
+              <ng-container *ngIf="col.field !== 'name'">
+                <ng-container
+                  *ngIf="
+                    (isSpecialType(rowData[col.field]) &&
+                      !rowData.isReferenceChild &&
+                      !rowData.isRootNode &&
+                      !rowData.showReferenceButton &&
+                      !rowData.showAddButton) ||
+                    (rowData.isObjArrOrDisc &&
+                      isSpecialType(rowData[col.field]))
+                  "
+                >
+                  <p-button
+                    label="{{ rowData[col.field] }}"
+                    [outlined]="true"
+                    (click)="toggleChildOverlay($event, rowData)"
+                    class="no-border-button"
+                    [rounded]="true"
+                    [text]="true"
+                    [raised]="true"
+                  ></p-button>
+                </ng-container>
+
+                <ng-container
+                  *ngIf="
+                    !isSpecialType(rowData[col.field]) &&
+                    !rowData.isRootNode &&
+                    getTypeStatus(
+                      rowData[col.field] || rowData.isReferenceChild
+                    )
+                  "
+                >
+                  {{ rowData[col.field] }}
+                </ng-container>
+
+                <ng-container
+                  *ngIf="
+                    isSpecialType(rowData[col.field]) &&
+                    !rowData.isRootNode &&
+                    rowData.showAddButton &&
+                    !rowData.isObjArrOrDisc &&
+                    !rowData.isReferenceChild &&
+                    !rowData.isSubschemeChild
+                  "
+                >
+                  <p-button
+                    label="{{ rowData[col.field] }}"
+                    [outlined]="true"
+                    (click)="toggleChildOverlay($event, rowData)"
+                    class="no-border-button"
+                    [rounded]="true"
+                    [text]="true"
+                    [raised]="true"
+                  ></p-button>
+                </ng-container>
+              </ng-container>
+
+              <ng-container
+                *ngIf="
+                  (col.field == 'name' &&
+                    rowNode.parent &&
+                    !rowData.isReferenceChild &&
+                    rowData.isSubschemeChild) ||
+                  (rowData.isObjArrOrDisc && col.field == 'name')
+                "
+              >
+                <ng-container *ngIf="isSpecialType(rowData[col.field])">
+                  <p-button
+                    label="{{ rowData[col.field] }}"
+                    [outlined]="true"
+                    (click)="toggleChildOverlay($event, rowData)"
+                    class="no-border-button"
+                    [rounded]="true"
+                    [text]="true"
+                    [raised]="true"
+                  ></p-button>
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    isSpecialType(rowData[col.field]) &&
+                    rowData.isReferenceChild
+                  "
+                >
+                  {{ rowData[col.field] }}
+                </ng-container>
+              </ng-container>
+
+              <ng-container
+                *ngIf="
+                  col.field === 'name' &&
+                  rowNode.parent &&
+                  rowData.editDisabled &&
+                  !isSpecialType(rowData[col.field]) &&
+                  !rowData.isReferenceChild
+                "
+              >
+                {{ rowData[col.field] }}
+              </ng-container>
+
+              <ng-container *ngIf="col.field === 'name' && !rowNode.parent">
+                <p-button
+                  label="{{ rowData[col.field] }}"
+                  [outlined]="true"
+                  (click)="toggleChildOverlay($event, rowData)"
+                  class="no-border-button"
+                  [rounded]="true"
+                  [text]="true"
+                  [raised]="true"
+                ></p-button>
+                <ng-container
+                  *ngIf="
+                    isSpecialType(rowData[col.field]) &&
+                    rowData.isReferenceChild
+                  "
+                >
+                  {{ rowData[col.field] }}
+                </ng-container>
+              </ng-container>
+
+              <ng-container
+                *ngIf="col.field == 'name' && rowData.isReferenceChild"
+              >
+                <ng-container
+                  *ngIf="
+                    isSpecialType(rowData[col.field]) &&
+                    rowData.isReferenceChild
+                  "
+                >
+                  {{ rowData[col.field] }}
+                </ng-container>
+              </ng-container>
+
+              <div
+                class="ml-auto flex items-center gap-2"
+                *ngIf="
+                  col.field === 'type' &&
+                  rowNode.parent &&
+                  !rowData.isReferenceChild
+                "
+              >
+                <p-toggleswitch
+                  [(ngModel)]="rowData.isRequired"
+                  [disabled]="rowData.editDisabled"
+                  (click)="onInfoClick(rowData)"
+                  pTooltip="{{ 'SCHEMA_TABS.REQUIRED' | translate }}?"
+                  tooltipPosition="top"
+
+
+                >
+                  <ng-template #handle let-checked="checked">
+                    <i
+                      [ngClass]="[
+                        '!text-xs',
+                        'pi',
+                        checked ? 'pi-check' : 'pi-times'
+                      ]"
+                    ></i>
+                  </ng-template>
+                </p-toggleswitch>
+                <p-button
+                  type="button"
+                  icon="pi pi-book"
+                  [rounded]="true"
+                  [text]="true"
+                  [raised]="true"
+                  (click)="onBookClick($event, rowData)"
+                ></p-button>
+                <app-overlay-textarea
+                  [selectedSchema]="selectedSchema"
+                  (schemaUpdated)="handleSchemaUpdated($event)"
+                ></app-overlay-textarea>
+                <p-button
+                  type="button"
+                  [rounded]="true"
+                  [text]="true"
+                  [raised]="true"
+                  severity="danger"
+                  icon="pi pi-trash"
+                  (click)="onDeleteClick(rowData)"
+                ></p-button>
+              </div>
+
+              <app-add-scheme-button
+                [rowData]="rowData"
+                [col]="col"
+                [jsonTree]="jsonTree"
+                (addScheme)="handleAddScheme($event, rowData)"
+              ></app-add-scheme-button>
+
+              <app-ref-button
+                pTooltip="{{ 'SCHEMA_TABS.GO_TO_REFERENCE' | translate }}"
+                tooltipPosition="top"
+                [rowData]="rowData"
+                [col]="col"
+                (onGoRefSchemeClick)="handleGoRefScheme($event)"
+                (click)="$event.stopPropagation()"
+              ></app-ref-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-treeTable>
+  </div>
+</div>

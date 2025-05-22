@@ -1,0 +1,93 @@
+<p-toast></p-toast>
+<p-confirmDialog> </p-confirmDialog>
+
+<div class="flex flex-col gap-6">
+  <div>
+    <div class="text-lg font-bold mb-2" style="color: var(--p-primary-color)">
+      {{ "PATHS.SUMMARY" | translate }}
+    </div>
+    <input
+      pInputText
+      id="summary_label"
+      [(ngModel)]="summary"
+      autocomplete="off"
+      [placeholder]="'PATHS.PLACEHOLDERS.SUMMARY' | translate"
+      (blur)="onPathFieldBlur($event, 'summary')"
+      (keydown.enter)="onPathFieldBlur($event, 'summary')"
+    />
+  </div>
+  <div>
+    <div class="text-lg font-bold mb-2" style="color: var(--p-primary-color)">
+       {{ "PATHS.OPERATION_ID" | translate }}
+    </div>
+    <input
+      pInputText
+      id="summary_label"
+      [(ngModel)]="operationId "
+      autocomplete="off"
+      [placeholder]="'PATHS.PLACEHOLDERS.OPERATION_ID' | translate"
+      (blur)="onPathFieldBlur($event , 'operationId')"
+      (keydown.enter)="onPathFieldBlur($event, 'operationId')"
+    />
+  </div>
+
+  <div>
+    <strong style="color: var(--p-primary-color)">{{ "DESCRIPTION" | translate }}</strong>
+    <input
+      pInputText
+      id="description_label"
+      [(ngModel)]="description"
+      autocomplete="off"
+      [placeholder]="'PATHS.PLACEHOLDERS.DESCRIPTION' | translate"
+      (blur)="onPathFieldBlur($event , 'description')"
+      (keydown.enter)="onPathFieldBlur($event, 'description')"
+    />
+  </div>
+
+  <div class="mt-8">
+    <p-tabs value="0">
+      <p-tablist>
+        <p-tab value="0" (click)="setActiveTab('parameters')">
+          {{ "PATHS.TABS.PARAMETERS" | translate }}
+        </p-tab>
+        <p-tab value="1" (click)="setActiveTab('request')">
+          {{ "PATHS.TABS.REQUEST" | translate }}
+        </p-tab>
+        <p-tab value="2" (click)="setActiveTab('responses')">
+          {{ "PATHS.TABS.RESPONSES" | translate }}
+        </p-tab>
+      </p-tablist>
+
+      <p-tabpanels class="overflow-auto">
+        <p-tabpanel value="0">
+          <app-parameters
+            [specVersion]="specsVersion"
+            [parameters]="parameters"
+            (parametersChange)="handleParametersChange($event)"
+            class="overflow-auto"
+          >
+          </app-parameters>
+        </p-tabpanel>
+
+        <p-tabpanel value="1">
+          <app-path-request-page
+            *ngIf="methodDetailsForm.get('requestBody')"
+            [methodDetails]="methodDetailsForm"
+            [apiPath]="apiPath"
+            [method]="method"
+          ></app-path-request-page>
+        </p-tabpanel>
+
+        <p-tabpanel value="2">
+          <app-responses
+            [specVersion]="specsVersion"
+            [responses]="responses"
+            (responsesChange)="handleResponsesChange($event)"
+            [apiPath]="apiPath"
+            [method]="method"
+          ></app-responses>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </div>
+</div>

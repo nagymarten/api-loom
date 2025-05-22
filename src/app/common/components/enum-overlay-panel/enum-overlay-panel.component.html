@@ -1,0 +1,23 @@
+<p-popover #optionsMenu>
+  <div class="flex flex-col min-w-[12rem] text-sm text-left gap-2 p-2">
+    <p-button
+      type="button"
+      [severity]="isMarked('example') ? 'primary' : 'secondary'"
+      (click)="selectOption('example')"
+      [icon]="exampleIcon"
+      label="{{ 'SCHEME_OVERLAY.MARK_AS_EXAMPLE' | translate }}"
+      [text]="true"
+      class="justify-start"
+    ></p-button>
+
+    <p-button
+      type="button"
+      [severity]="isMarked('default') ? 'primary' : 'secondary'"
+      (click)="selectOption('default')"
+      [icon]="defaultIcon"
+      label="{{ 'SCHEME_OVERLAY.MARK_AS_DEFAULT' | translate }}"
+      [text]="true"
+      class="justify-start"
+    ></p-button>
+  </div>
+</p-popover>

@@ -1,0 +1,378 @@
+{
+  "SEARCH": "Keresés",
+  "LOG_OUT": "Kijelentkezés",
+  "DESCRIPTION": "Leírás",
+  "FILTER": "Szűrő",
+  "BUTTON": {
+    "PUBLISH_TO_DB": "Publikálás adatbázisba"
+  },
+  "TOAST": {
+    "WARNING": "Figyelmeztetés",
+    "SUCCESS": "Siker",
+    "ERROR": "Hiba",
+    "PATH_EXISTS": "Ilyen kulccsal már létezik egy útvonal",
+    "PATH_EMPTY": "Az útvonal neve nem lehet üres",
+    "METHOD_ALREADY_EXISTS": "A metódus már létezik az útvonalhoz.",
+    "MODEL_ADDED": "A modell sikeresen hozzáadva.",
+    "PATH_ADDED": "Az útvonal sikeresen hozzáadva.",
+    "METHOD_ADDED": "Az metódus sikeresen hozzáadva.",
+    "RENAME": {
+      "INVALID_KEYS": "A régi vagy az új név érvénytelen.",
+      "OLD_KEY_NOT_FOUND": "A(z) '{{key}}' nevű referencia nem létezik.",
+      "NEW_KEY_EXISTS": "A(z) '{{key}}' nevű referencia már létezik.",
+      "SUCCESS": "A(z) '{{oldKey}}' nevű referencia sikeresen átnevezve '{{newKey}}'-re."
+    },
+    "REFRESH_DB": {
+      "SUMMARY": "Adatbázis frissítve",
+      "DETAIL": "A Swagger specifikáció feltöltésre került az adatbázisba.",
+      "NO_ID_SUMMARY": "Frissítés sikertelen",
+      "NO_ID_DETAIL": "Nem található az azonosító a Swagger specifikációhoz."
+    }
+  },
+  "NO_REFERENCE": {
+    "TITLE": "Nincs kiválasztva OpenAPI referencia",
+    "DESCRIPTION": "Importálhatsz meglévő Swagger/OpenAPI fájlt, vagy létrehozhatsz egy újat.",
+    "FEATURES": {
+      "IMPORT": "Importálj YAML vagy JSON fájlokat az importálás gombbal.",
+      "DEFAULT_STRUCTURE": "Az új specifikációk alapértelmezett struktúrával jönnek létre (v3.1 vagy v3.0).",
+      "EDIT_SIDEBAR": "Utak és modellek szerkesztése az oldalsáv segítségével, miután betöltöttél egy specifikációt.",
+      "RIGHT_CLICK": "Kattints jobb egérgombbal bármelyik elemre az oldalsávban a további lehetőségekért."
+    }
+  },
+  "EXPORT_DIALOG": {
+    "HEADER": "Exportálás",
+    "FORMAT": "Formátum",
+    "JSON": "JSON",
+    "YAML": "YAML",
+    "CANCEL": "Mégse",
+    "SAVE_TO_FILE": "Mentés fájlba",
+    "SET_TITLE": "OpenAPI cím beállítása",
+    "TITLE_LABEL": "Cím",
+    "TITLE_PLACEHOLDER": "Írd be az OpenAPI címet",
+    "CREATE": "Létrehozás"
+  },
+  "SIDEBAR": {
+    "REFERENCES": {
+      "LABEL": "Hivatkozások",
+      "RIGHTMENU": {
+        "ADDOPENAPI": "OpenAPI hozzáadása",
+        "NEWMODEL": "Új modell",
+        "IMPORT": "Importálás",
+        "EXPORT": "Exportálás",
+        "COPY_PATH": "Útvonal másolása",
+        "COPY_RELATIVE_PATH": "Relatív útvonal másolása",
+        "RENAME": "Átnevezés",
+        "DELETE": "Törlés",
+        "DUPLICATE": "Megkettőzés"
+      }
+    },
+    "OVERVIEW_BUTTON": "API Áttekintés",
+    "PATHS": {
+      "LABEL": "Útvonalak",
+      "RIGHTMENU": {
+        "NEW_PATH": "Új útvonal",
+        "COPY_PATH": "Útvonal másolása",
+        "COPY_RELATIVE_PATH": "Relatív útvonal másolása",
+        "NEW_OPERATION": "Új művelet",
+        "RENAME_PATH": "Útvonal átnevezése",
+        "DELETE_PATH": "Útvonal törlése"
+      },
+      "ADD_PATH": "Útvonal hozzáadása",
+      "MODIFY_PATH": "Útvonal módosítása",
+      "ENTER_NEW_PATH_NAME": "Írja be az új útvonal nevét",
+      "RENAME_ENDPOINT": "Végpont átnevezése",
+      "NEW_METHOD": "Új metódus",
+      "ENTER_NEW_METHOD_NAME": "Írja be az új metódus nevét (pl. get, post)",
+      "TOAST": {
+        "MISSING": "Kérjük, adjon meg érvényes útvonalnevet.",
+        "NOT_FOUND": "Az eredeti útvonal nem található. Átnevezés nem lehetséges.",
+        "EXISTS": "Már létezik egy útvonal ezzel a névvel.",
+        "SUCCESS": "Az útvonal sikeresen átnevezve."
+      },
+      "TOAST_RENAME_ENDPOINT": {
+        "INVALID_INPUT": "Érvénytelen útvonal, metódus vagy összegzés. Kérjük, ellenőrizze a bemenetet.",
+        "METHOD_NOT_FOUND": "A megadott metódus nem található az adott útvonalhoz.",
+        "SWAGGER_FETCH_FAILED": "Nem sikerült lekérni a Swagger specifikációt.",
+        "SUCCESS": "Az végpont összegzése sikeresen frissítve."
+      },
+      "CONFIRM_DELETE_ENDPOINT": {
+        "MESSAGE": "Biztosan törölni szeretné a(z) \"{{method}}\" végpontot az \"{{path}}\" útvonalról?",
+        "HEADER": "Törlés megerősítése",
+        "ACCEPT": "Törlés",
+        "REJECT": "Mégse",
+        "SUCCESS_SUMMARY": "Törölve",
+        "SUCCESS_DETAIL": "A végpont sikeresen törölve lett."
+      },
+      "CONFIRM_DELETE": {
+        "MESSAGE": "Biztosan törölni szeretné az útvonalat: \"{{path}}\"?",
+        "HEADER": "Törlés megerősítése",
+        "ACCEPT": "Igen",
+        "REJECT": "Nem",
+        "SUCCESS_SUMMARY": "Törölve",
+        "SUCCESS_DETAIL": "Az útvonal sikeresen törölve lett."
+      },
+      "CONFIRM_DELETE_CONTENT_TYPE": {
+        "MESSAGE": "Biztosan törölni szeretné a(z) '{{contentType}}' tartalomtípust?",
+        "HEADER": "Törlés megerősítése",
+        "ACCEPT": "Törlés",
+        "REJECT": "Mégse",
+        "SUCCESS_SUMMARY": "Törölve",
+        "SUCCESS_DETAIL": "A(z) '{{contentType}}' tartalomtípus sikeresen törölve lett."
+      }
+    },
+    "MODELS": {
+      "LABEL": "Modellek",
+      "SUMMARY": "Összegzés",
+      "RIGHTMENU": {
+        "NEW_MODEL": "Új modell",
+        "COPY_PATH": "Útvonal másolása",
+        "COPY_RELATIVE_PATH": "Relatív útvonal másolása"
+      },
+      "CONFIRM_DELETE": {
+        "MESSAGE": "Biztosan törölni szeretné a(z) '{{model}}' modellt?",
+        "HEADER": "Törlés megerősítése",
+        "ACCEPT": "Törlés",
+        "REJECT": "Mégse",
+        "SUCCESS_SUMMARY": "Törölve",
+        "SUCCESS_DETAIL": "A modell sikeresen törölve lett.",
+        "NO_MODEL_SELECTED": "Nincs kiválasztott modell a törléshez."
+      },
+      "ADD_MODEL": "Modell hozzáadása",
+      "ENTER_NEW_MODEL_NAME": "Írja be az új modell nevét",
+      "RENAME_MODEL": "Modell átnevezése",
+      "NEW_MODEL_NAME": "Új modell neve"
+    },
+    "COMMON": {
+      "CANCEL": "Mégse",
+      "SAVE": "Mentés"
+    }
+  },
+
+  "SCHEME_OVERLAY": {
+    "MARK_AS_EXAMPLE": "Megjelölés példaként",
+    "MARK_AS_DEFAULT": "Megjelölés alapértelmezetként",
+    "SELECT_TYPE": "Válasszon típust",
+    "SELECT_MULTIPLE_TYPES": "Válasszon több típust",
+    "MULTISELECT": "Többszörös kiválasztás",
+    "NOT_MULTISELECT": "Nem többszörös kiválasztás",
+    "PROPERTIES": "Tulajdonságok",
+    "MIN_PROPERTIES": "Minimális tulajdonságok",
+    "MAX_PROPERTIES": "Maximális tulajdonságok",
+    "TYPE": "Típus",
+    "COMPONENTS": "Komponensek",
+    "COMBINE_SCHEMAS": "Sémák kombinálása",
+    "COMBINE_SELECT_OPTION": "Válasszon egy lehetőséget a sémák kombinálásához",
+    "SELECT_COMBINE_TYPE": "Válasszon kombinációs típust",
+    "ALLOW_ADDITIONAL_PROPERTIES": "Zusätzliche Eigenschaften erlauben",
+    "DEPRECATED": "Elavult",
+    "NULLABLE": "Null érték engedélyezett",
+    "NOT_NULLABLE": "Null érték nem engedélyezett",
+    "BEHAVIOR": "Viselkedés",
+    "READ_WRITE": "Olvasás/Írás",
+    "MIN_ITEMS": "Minimum elemek",
+    "MAX_ITEMS": "Maximum elemek",
+    "UNIQUE_ITEMS": "Egyedi elemek",
+    "FORMAT": "Formátum",
+    "SELECT_INTEGER_FORMAT": "Egész szám formátum kiválasztása",
+    "DEFAULT": "Alapértelmezett",
+    "DEFAULT_INTEGER": "Alapértelmezett egész szám",
+    "EXAMPLE": "Példa",
+    "EXAMPLE_INTEGER": "Példa egész szám",
+    "MINIMUM": "Minimum",
+    "MAXIMUM": "Maximum",
+    "MULTIPLE_OF": "Többszöröse",
+    "EXCLUSIVE_MIN": "Kizárólagos minimum",
+    "EXCLUSIVE_MAX": "Kizárólagos maximum",
+    "DEFAULT_NUMBER": "Alapértelmezett szám",
+    "EXAMPLE_NUMBER": "Példa szám",
+    "DEFAULT_STRING": "Alapértelmezett szöveg érték",
+    "EXAMPLE_STRING": "Példa szöveg érték",
+    "PATTERN": "Minta",
+    "MIN_LENGTH": "Minimális hossz",
+    "MAX_LENGTH": "Maximális hossz",
+    "DEFAULT_BOOLEAN": "Alapértelmezett logikai érték",
+    "SELECT_BOOLEAN_VALUE": "Válassz értéket",
+    "ENUM": "Felsorolás",
+    "ENTER_ENUM_VALUE": "Adja meg az értéket",
+    "OPTIONS": "Beállítások",
+    "REMOVE_VALUE": "Érték eltávolítása",
+    "REMOVE_THIS_VALUE": "Ez az érték eltávolítása",
+    "ADD": "Hozzáadás",
+    "DICTIONARY": "Szótár"
+  },
+  "SCHEMA_TABS": {
+    "NAME": "Név",
+    "TYPE": "Típus",
+    "REQUIRED": "Kötelező mező",
+    "GO_TO_REFERENCE": "Ugrás a hivatkozáshoz"
+  },
+  "REFERENCE": {
+    "TITLE": "Cím",
+    "VERSION": "Verzió",
+    "INTERNAL": "INTERNAL",
+    "OPTIONAL_GLOBAL_SECURITY": "Opcionális globális biztonság",
+    "SUMMARY": "Összefoglaló",
+    "SELECT_A_VALUE": "Válassz értéket",
+    "NEW_ENUM_VALUE": "Új enum érték",
+    "VARIABLES": "Változók",
+    "ALLOWED_VALUES": "Engedélyezett értékek",
+    "SECURITY": "Biztonság",
+    "DESCRIPTION": "Leírás",
+    "CONTACT": "Kapcsolat",
+    "CONTACT_NAME": "Kapcsolattartó neve",
+    "CONTACT_URL": "Kapcsolati URL",
+    "CONTACT_EMAIL": "Kapcsolati e-mail",
+    "TERMS": "Szolgáltatási feltételek URL",
+    "LICENSE": "Licenc",
+    "LICENSE_NAME": "Licenc neve",
+    "LICENSE_TYPE": "Válassz licenctípust",
+    "LICENSE_URL": "Licenc URL",
+    "EXTENSIONS": "X-kiterjesztések",
+    "SERVERS": "Szerverek",
+    "SECURITY_SCHEMES": "Biztonsági sémák",
+    "GLOBAL_SECURITY": "Globális biztonság",
+    "ADD_BUTTON": "Hozzáadás",
+    "KEY": "Kulcs",
+    "NAME": "Név",
+    "OPENID_CONNECT_URL": "OpenID Connect URL",
+    "SERVER_VARIABLES": "Szerverváltozók",
+    "REFRESH_URL": "Frissítési URL",
+    "AUTHORIZATION_URL": "Engedélyezési URL",
+    "TOKEN_URL": "Token URL",
+    "SCOPES": "Scope-ok"
+  },
+  "SCHEMAS": {
+    "TOAST": {
+      "TITLE_UPDATED": "A séma címe sikeresen frissítve lett.",
+      "DESCRIPTION_UPDATED": "A séma leírása sikeresen frissítve lett.",
+      "SUMMARY_UPDATED": "Az összegzés sikeresen frissítve.",
+      "OPERATIONID_UPDATED": "Az operációs azonosító sikeresen frissítve."
+    },
+    "PLACEHOLDER": {
+      "TITLE": "Séma címe",
+      "DESCRIPTION": "Nincs elérhető leírás",
+      "CLICK_TO_ADD": "Kattintson a cím hozzáadásához",
+      "CLICK_TO_ADD_DESCRIPTION": "Kattintson a leírás hozzáadásához"
+    },
+    "TABS": {
+      "SCHEMA": "Séma",
+      "EXAMPLES": "Példák",
+      "EXTENSIONS": "Bővítmények"
+    },
+    "EXAMPLES": {
+      "ADD": "Példa hozzáadása",
+      "COPY": "Példa másolása",
+      "DELETE": "Példa törlése",
+      "EDIT": "Példa szerkesztése"
+    },
+    "EXTENSIONS": {
+      "ADD": "Kiterjesztés hozzáadása",
+      "COPY": "Kiterjesztés másolása",
+      "DELETE": "Kiterjesztés törlése",
+      "EDIT": "Kiterjesztés szerkesztése",
+      "LABEL": "Kiterjesztés neve",
+      "PLACEHOLDER": {
+        "CLICK_TO_ADD_DESCRIPTION": "Kattints ide leírás hozzáadásához"
+      }
+    }
+  },
+
+  "PATHS": {
+    "SUMMARY": "Összegzés",
+    "OPERATION_ID": "Művelet azonosító",
+    "DESCRIPTION": "Leírás",
+    "NAME": "Név",
+    "TABS": {
+      "GENERAL": "Általános",
+      "PARAMETERS": "Paraméterek",
+      "REQUEST": "Kérés",
+      "RESPONSES": "Válaszok"
+    },
+    "PLACEHOLDERS": {
+      "SUMMARY": "Összegzés megadása...",
+      "DESCRIPTION": "Leírás megadása...",
+      "RESPONSE_MESSAGE": "Válasz üzenet...",
+      "OPERATION_ID": "Művelet azonosító megadása..."
+    },
+    "MESSAGES": {
+      "PARAMETERS_CONTENT": "A paraméterek tartalma ide kerül...",
+      "NO_BODY_CONTENT": "Nincs törzs tartalom",
+      "NO_HEADERS_DEFINED": "Nincsenek meghatározott fejlécek",
+      "RESPONSE_ADDED": "Response Added",
+      "RESPONSE_CODE_ADDED": "Response with code {{responseCode}} has been successfully added.",
+      "NEW_RESPONSE_DESCRIPTION": "Új válsz leírás",
+      "RESPONSE_DELETED": "Válasz törölve",
+      "RESPONSE_CODE_DELETED": "A(z) {{responseCode}} válaszkód sikeresen törölve."
+    },
+    "RESPONSES": {
+      "MESSAGES": {
+        "NO_BODY_CONTENT": "Nincs törzs tartalom"
+      }
+    },
+    "PARAMETERS": {
+      "HEADERS": "Fejlécek",
+      "QUERY_PARAMETERS": "Lekérdezési paraméterek",
+      "COOKIES": "Sütik",
+      "ADD": "Hozzáadás",
+      "REQUIRED": "Kötelező",
+      "POPUP": {
+        "ADD": "Hozzáadás",
+        "PARAMETER_PROPERTIES": "Paraméter tulajdonságai",
+        "STYLE": "Stílus",
+        "SELECT_STYLE": "Válassz stílust",
+        "DEPRECATED": "Elavult",
+        "SCHEMA_PROPERTIES": "Séma tulajdonságai",
+        "FORMAT": "Formátum",
+        "FORMAT_PLACEHOLDER": "float",
+        "DEFAULT": "Alapértelmezett",
+        "DEFAULT_PLACEHOLDER": "Add meg az alapméretezett értéket",
+        "ENUM": "Felsorolás",
+        "EXAMPLE": "Példa",
+        "EXAMPLE_PLACEHOLDER": "példa",
+        "NUMBER_PROPERTIES": "Szám tulajdonságai",
+        "MINIMUM": "Minimum",
+        "MAXIMUM": "Maximum",
+        "EXCLUSIVE_MIN": "Kizárólagos minimum",
+        "EXCLUSIVE_MAX": "Kizárólagos maximum",
+        "MULTIPLE_OF": "Többszöröse",
+        "ENUM_PLACEHOLDER": "Írjon be egy értéket és nyomjon Entert",
+        "ARRAY_PROPERTIES": "Tömb Tulajdonságok",
+        "UNIQUE_ITEMS": "Egyedi elemek",
+        "MIN_ITEMS": "Minimum elemek",
+        "MAX_ITEMS": "Maximum elemek",
+        "EXPLODE": "Explode",
+        "ALLOW_EMPTY_VALUE": "Üres érték engedélyezése",
+        "ALLOW_RESERVED": "Foglalt értékek engedélyezése",
+        "STRING_PROPERTIES": "Karakterlánc Tulajdonságok",
+        "PATTERN": "Minta",
+        "MIN_LENGTH": "Minimum hossz",
+        "MAX_LENGTH": "Maximum hossz"
+      },
+      "MESSAGES": {
+        "NO_HEADERS": "Nincsenek fejlécek megadva.",
+        "NO_QUERY_PARAMS": "Nincsenek lekérdezési paraméterek meghatározva.",
+        "NO_COOKIES": "Nincsenek sütik meghatározva."
+      }
+    },
+    "BUTTONS": {
+      "ADD_RESPONSE": "Válasz hozzáadása"
+    },
+    "LABELS": {
+      "RESPONSE": "Válasz",
+      "HEADERS": "Fejlécek",
+      "BODY": "Törzs"
+    },
+    "PROMPTS": {
+      "ENTER_RESPONSE_CODE": "Adja meg az új válaszkódot (pl. 201, 404):",
+      "CONFIRM_DELETE": "Biztosan törölni szeretné a következő válaszkódot: {{responseCode}}?"
+    },
+    "WARNINGS": {
+      "PATH_WARNING_TITLE": "Hiányzó API útvonal",
+      "API_PATH_NOT_FOUND": "Az API útvonal '{{apiPath}}' nem található. Létrehozás...",
+      "METHOD_WARNING_TITLE": "Hiányzó API metódus",
+      "METHOD_NOT_FOUND": "A(z) '{{method}}' metódus nem található. Létrehozás...",
+      "PATH_UPDATED_TITLE": "API útvonal frissítve",
+      "PATH_UPDATED": "Az API útvonal '{{apiPath}}' sikeresen frissítve lett."
+    }
+  }
+}

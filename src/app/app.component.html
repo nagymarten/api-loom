@@ -1,0 +1,14 @@
+<div class="app-container">
+  <div class="content-wrapper">
+    <app-drawer-menu></app-drawer-menu>
+    <main class="main-content">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <app-menu-bredcrumb
+          class="flex justify-start items-center pb-1"
+        ></app-menu-bredcrumb>
+        <app-refresh-database-button></app-refresh-database-button>
+      </div>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

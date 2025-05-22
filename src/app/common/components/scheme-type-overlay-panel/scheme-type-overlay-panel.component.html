@@ -1,0 +1,1841 @@
+<p-popover #op (onHide)="onOverlayHide()" [baseZIndex]="1000">
+  <div class="flex flex-column gap-3 w-25rem">
+    <p-tabs value="{{ activeTabIndex }}">
+      <p-tablist>
+        <p-tab value="0">{{ "SCHEME_OVERLAY.TYPE" | translate }}</p-tab>
+        <p-tab value="1">{{ "SCHEME_OVERLAY.COMPONENTS" | translate }}</p-tab>
+        <p-tab value="2">{{
+          "SCHEME_OVERLAY.COMBINE_SCHEMAS" | translate
+        }}</p-tab>
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel value="0">
+          <div class="card flex-column">
+            <div class="type-selection-container">
+              <div *ngIf="!isMultiselect">
+                <p-select
+                  [options]="types"
+                  [(ngModel)]="selectedType"
+                  optionLabel="name"
+                  [placeholder]="'SCHEME_OVERLAY.SELECT_TYPE' | translate"
+                  [showClear]="true"
+                  [style]="{ flex: 1 }"
+                  (onChange)="onTypeSelect()"
+                  [appendTo]="'body'"
+                ></p-select>
+              </div>
+
+              <div *ngIf="isMultiselect">
+                <p-multiSelect
+                  [options]="multiselectTypes"
+                  [(ngModel)]="selectedMultipleTypes"
+                  optionLabel="name"
+                  [placeholder]="
+                    'SCHEME_OVERLAY.SELECT_MULTIPLE_TYPES' | translate
+                  "
+                  [style]="{ width: '100%' }"
+                  [appendTo]="'body'"
+                  (onChange)="onSelectedMultipleTypesChange($event.value)"
+                ></p-multiSelect>
+              </div>
+
+              <p-toggleswitch
+                id="isMultiselect"
+                [(ngModel)]="isMultiselect"
+                [pTooltip]="
+                  (isMultiselect
+                    ? 'SCHEME_OVERLAY.MULTISELECT'
+                    : 'SCHEME_OVERLAY.NOT_MULTISELECT'
+                  ) | translate
+                "
+                (onChange)="onMultislectChange()"
+                class="not-nullable-button"
+                [disabled]="
+                  selectedType?.name === 'enum' ||
+                  selectedType?.name === 'dictionary'
+                "
+              >
+              </p-toggleswitch>
+            </div>
+
+            <p-divider />
+            <p-panel
+              [header]="'SCHEME_OVERLAY.PROPERTIES' | translate"
+              [toggleable]="true"
+              [collapsed]="false"
+            >
+              <ng-container *ngIf="selectedType?.name === 'object'">
+                <div class="properties-content">
+                  <div class="object-properties-container">
+                    <div class="form-group">
+                      <label for="minProperties">{{
+                        "SCHEME_OVERLAY.MIN_PROPERTIES" | translate
+                      }}</label>
+                      <input
+                        pInputText
+                        id="minProperties"
+                        type="number"
+                        pInputText
+                        placeholder=">= 0"
+                        [(ngModel)]="minProperties"
+                        (blur)="onFieldBlur('minProperties', $event)"
+                        (keydown.enter)="onFieldBlur('minProperties', $event)"
+                        [style]="{ width: '100%' }"
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="maxProperties">{{
+                        "SCHEME_OVERLAY.MAX_PROPERTIES" | translate
+                      }}</label>
+                      <input
+                        pInputText
+                        id="maxProperties"
+                        type="number"
+                        pInputText
+                        placeholder=">= 0"
+                        [(ngModel)]="maxProperties"
+                        (blur)="onFieldBlur('maxProperties', $event)"
+                        (keydown.enter)="onFieldBlur('maxProperties', $event)"
+                        [style]="{ width: '100%' }"
+                      />
+                    </div>
+
+                    <div class="toggle-group">
+                      <label for="allow_additional_properties">
+                        {{
+                          "SCHEME_OVERLAY.ALLOW_ADDITIONAL_PROPERTIES"
+                            | translate
+                        }}
+                      </label>
+                      <p-toggleSwitch
+                        id="allow_additional_properties"
+                        [(ngModel)]="allowAdditionalProperties"
+                        (onChange)="
+                          onFieldChange(
+                            'allowAdditionalProperties',
+                            $event.checked
+                          )
+                        "
+                      ></p-toggleSwitch>
+                    </div>
+
+                    <div class="toggle-group">
+                      <label for="deprecatedSwitch">
+                        {{ "SCHEME_OVERLAY.DEPRECATED" | translate }}
+                      </label>
+                      <p-toggleSwitch
+                        id="deprecatedSwitch"
+                        [(ngModel)]="deprecated"
+                        (onChange)="onFieldChange('deprecated', $event.checked)"
+                      ></p-toggleSwitch>
+
+                      <p-toggleSwitch
+                        id="isNullableObject"
+                        [(ngModel)]="isNullableObject"
+                        [pTooltip]="
+                          isNullableObject
+                            ? ('SCHEME_OVERLAY.NULLABLE' | translate)
+                            : ('SCHEME_OVERLAY.NOT_NULLABLE' | translate)
+                        "
+                        (onChange)="
+                          onFieldChange('isNullableObject', $event.checked)
+                        "
+                        class="not-nullable-button"
+                      ></p-toggleSwitch>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="selectedType?.name === 'array'">
+                <div class="properties-content">
+                  <div class="array-properties-container">
+                    <div class="form-group">
+                      <label for="behavior">{{
+                        "SCHEME_OVERLAY.BEHAVIOR" | translate
+                      }}</label>
+                      <p-select
+                        id="behavior"
+                        [options]="behaviorOptions"
+                        [(ngModel)]="selectedArrayBehavior"
+                        optionLabel="name"
+                        [placeholder]="'SCHEME_OVERLAY.READ_WRITE' | translate"
+                        [style]="{ width: '100%' }"
+                        (onChange)="
+                          onArrayFieldChange(
+                            'selectedArrayBehavior',
+                            $event.value
+                          )
+                        "
+                      ></p-select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="minItems">{{
+                        "SCHEME_OVERLAY.MIN_ITEMS" | translate
+                      }}</label>
+                      <input
+                        pInputText
+                        id="minItems"
+                        type="number"
+                        pInputText
+                        placeholder=">= 0"
+                        [(ngModel)]="minArrayItems"
+                        [style]="{ width: '100%' }"
+                        (blur)="onArrayFieldBlur('minArrayItems', $event)"
+                        (keydown.enter)="
+                          onArrayFieldBlur('minArrayItems', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="maxItems">{{
+                        "SCHEME_OVERLAY.MAX_ITEMS" | translate
+                      }}</label>
+                      <input
+                        id="maxItems"
+                        type="number"
+                        pInputText
+                        placeholder=">= 0"
+                        [(ngModel)]="maxArrayItems"
+                        [style]="{ width: '100%' }"
+                        (blur)="onArrayFieldBlur('maxArrayItems', $event)"
+                        (keydown.enter)="
+                          onArrayFieldBlur('maxArrayItems', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="toggle-group">
+                      <label for="uniqe_items">{{
+                        "SCHEME_OVERLAY.UNIQUE_ITEMS" | translate
+                      }}</label>
+                      <p-toggleSwitch
+                        id="uniqe_items"
+                        [(ngModel)]="uniqueArrayItems"
+                        (onChange)="
+                          onArrayFieldChange('uniqueArrayItems', $event.checked)
+                        "
+                      ></p-toggleSwitch>
+
+                      <label for="deprecatedSwitch">{{
+                        "SCHEME_OVERLAY.DEPRECATED" | translate
+                      }}</label>
+                      <p-toggleSwitch
+                        id="deprecated"
+                        [(ngModel)]="deprecatedArray"
+                        (onChange)="
+                          onArrayFieldChange('deprecatedArray', $event.checked)
+                        "
+                      ></p-toggleSwitch>
+
+                      <p-toggleSwitch
+                        id="isNullableArray"
+                        [(ngModel)]="isNullableArray"
+                        [pTooltip]="
+                          isNullableArray
+                            ? ('SCHEME_OVERLAY.NULLABLE' | translate)
+                            : ('SCHEME_OVERLAY.NOT_NULLABLE' | translate)
+                        "
+                        (onChange)="
+                          onArrayFieldChange('isNullableArray', $event.checked)
+                        "
+                        class="not-nullable-button"
+                      ></p-toggleSwitch>
+                    </div>
+                  </div>
+                </div>
+                <app-sub-scheme-type
+                  [rowData]="rowData"
+                  [selectedCol]="selectedCol"
+                  [apiSchemas]="apiSchemas"
+                  [selectedSchema]="selectedSchema"
+                  [selectedSchemaName]="selectedSchemaName"
+                  [selectedArrayItems]="arrayItems"
+                ></app-sub-scheme-type>
+              </ng-container>
+
+              <ng-container *ngIf="selectedType?.name === 'integer'">
+                <div class="properties-content">
+                  <div class="properties-container">
+                    <div class="form-group">
+                      <label for="format">{{
+                        "SCHEME_OVERLAY.FORMAT" | translate
+                      }}</label>
+                      <p-select
+                        id="format"
+                        [options]="intFormats"
+                        [(ngModel)]="selectedIntegerFormat"
+                        [placeholder]="
+                          'SCHEME_OVERLAY.SELECT_INTEGER_FORMAT' | translate
+                        "
+                        [style]="{ width: '100%' }"
+                        optionLabel="name"
+                        (onChange)="
+                          onIntegerFieldChange(
+                            'selectedIntegerFormat',
+                            $event.value
+                          )
+                        "
+                      ></p-select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="behavior">{{
+                        "SCHEME_OVERLAY.BEHAVIOR" | translate
+                      }}</label>
+                      <p-select
+                        [options]="behaviorOptions"
+                        [(ngModel)]="selectedIntegerBehavior"
+                        optionLabel="name"
+                        [placeholder]="'SCHEME_OVERLAY.READ_WRITE' | translate"
+                        [style]="{ width: '100%' }"
+                        (onChange)="
+                          onIntegerFieldChange(
+                            'selectedIntegerBehavior',
+                            $event.value
+                          )
+                        "
+                      ></p-select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="default">{{
+                        "SCHEME_OVERLAY.DEFAULT" | translate
+                      }}</label>
+                      <input
+                        id="default"
+                        type="text"
+                        pInputText
+                        [placeholder]="
+                          'SCHEME_OVERLAY.DEFAULT_INTEGER' | translate
+                        "
+                        [(ngModel)]="defaultInteger"
+                        [style]="{ width: '100%' }"
+                        (blur)="onIntegerFieldBlur('defaultInteger', $event)"
+                        (keydown.enter)="
+                          onIntegerFieldBlur('defaultInteger', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="example">{{
+                        "SCHEME_OVERLAY.EXAMPLE" | translate
+                      }}</label>
+                      <input
+                        id="example"
+                        type="text"
+                        pInputText
+                        [placeholder]="
+                          'SCHEME_OVERLAY.EXAMPLE_INTEGER' | translate
+                        "
+                        [(ngModel)]="exampleInteger"
+                        [style]="{ width: '100%' }"
+                        (blur)="onIntegerFieldBlur('exampleInteger', $event)"
+                        (keydown.enter)="
+                          onIntegerFieldBlur('exampleInteger', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="minimum">{{
+                        "SCHEME_OVERLAY.MINIMUM" | translate
+                      }}</label>
+                      <input
+                        id="minimum"
+                        type="number"
+                        pInputText
+                        placeholder="0"
+                        [(ngModel)]="minimumInteger"
+                        [style]="{ width: '100%' }"
+                        (blur)="onIntegerFieldBlur('minimumInteger', $event)"
+                        (keydown.enter)="
+                          onIntegerFieldBlur('minimumInteger', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="maximum">{{
+                        "SCHEME_OVERLAY.MAXIMUM" | translate
+                      }}</label>
+                      <input
+                        id="maximum"
+                        type="number"
+                        pInputText
+                        placeholder="100"
+                        [(ngModel)]="maximumInteger"
+                        [style]="{ width: '100%' }"
+                        (blur)="onIntegerFieldBlur('maximumInteger', $event)"
+                        (keydown.enter)="
+                          onIntegerFieldBlur('maximumInteger', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="multipleOf">{{
+                        "SCHEME_OVERLAY.MULTIPLE_OF" | translate
+                      }}</label>
+                      <input
+                        id="multipleOf"
+                        type="number"
+                        pInputText
+                        placeholder=">= 0"
+                        [(ngModel)]="multipleOfInteger"
+                        [style]="{ width: '100%' }"
+                        (blur)="onIntegerFieldBlur('multipleOfInteger', $event)"
+                        (keydown.enter)="
+                          onIntegerFieldBlur('multipleOfInteger', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="toggle-group">
+                      <label for="exclusiveMin">{{
+                        "SCHEME_OVERLAY.EXCLUSIVE_MIN" | translate
+                      }}</label>
+                      <p-toggleSwitch
+                        id="exclusiveMin"
+                        [(ngModel)]="exclusiveMinInteger"
+                        (onChange)="
+                          onIntegerFieldChange(
+                            'exclusiveMinInteger',
+                            $event.checked
+                          )
+                        "
+                      ></p-toggleSwitch>
+
+                      <label for="exclusiveMax">{{
+                        "SCHEME_OVERLAY.EXCLUSIVE_MAX" | translate
+                      }}</label>
+                      <p-toggleSwitch
+                        id="exclusiveMax"
+                        [(ngModel)]="exclusiveMaxInteger"
+                        (onChange)="
+                          onIntegerFieldChange(
+                            'exclusiveMaxInteger',
+                            $event.checked
+                          )
+                        "
+                      ></p-toggleSwitch>
+
+                      <label for="deprecated">{{
+                        "SCHEME_OVERLAY.DEPRECATED" | translate
+                      }}</label>
+                      <p-toggleSwitch
+                        id="deprecated"
+                        [(ngModel)]="deprecatedInteger"
+                        (onChange)="
+                          onIntegerFieldChange(
+                            'deprecatedInteger',
+                            $event.checked
+                          )
+                        "
+                      ></p-toggleSwitch>
+
+                      <p-toggleSwitch
+                        id="isNullableInteger"
+                        [(ngModel)]="isNullableInteger"
+                        [pTooltip]="
+                          isNullableInteger
+                            ? ('SCHEME_OVERLAY.NULLABLE' | translate)
+                            : ('SCHEME_OVERLAY.NOT_NULLABLE' | translate)
+                        "
+                        (onChange)="
+                          onIntegerFieldChange(
+                            'isNullableInteger',
+                            $event.checked
+                          )
+                        "
+                        class="not-nullable-button"
+                      ></p-toggleSwitch>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="selectedType?.name === 'number'">
+                <div class="properties-content">
+                  <div class="properties-container">
+                    <div class="form-group">
+                      <label for="format">{{
+                        "SCHEME_OVERLAY.FORMAT" | translate
+                      }}</label>
+                      <p-select
+                        id="format"
+                        [options]="numberFormats"
+                        [(ngModel)]="selectedNumberFormat"
+                        optionLabel="name"
+                        [placeholder]="
+                          'SCHEME_OVERLAY.SELECT_INTEGER_FORMAT' | translate
+                        "
+                        [style]="{ width: '100%' }"
+                        (onChange)="
+                          onNumberFieldChange(
+                            'selectedNumberFormat',
+                            $event.value
+                          )
+                        "
+                      ></p-select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="behaviorNumber">{{
+                        "SCHEME_OVERLAY.BEHAVIOR" | translate
+                      }}</label>
+                      <p-select
+                        id="behaviorNumber"
+                        [options]="behaviorOptions"
+                        [(ngModel)]="selectedNumberBehavior"
+                        optionLabel="name"
+                        [placeholder]="'SCHEME_OVERLAY.READ_WRITE' | translate"
+                        [style]="{ width: '100%' }"
+                        (onChange)="
+                          onNumberFieldChange(
+                            'selectedNumberBehavior',
+                            $event.value
+                          )
+                        "
+                      ></p-select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="defaultNumber">{{
+                        "SCHEME_OVERLAY.DEFAULT" | translate
+                      }}</label>
+                      <input
+                        id="defaultNumber"
+                        type="text"
+                        pInputText
+                        placeholder="{{ 'SCHEME_OVERLAY.DEFAULT' | translate }}"
+                        [(ngModel)]="defaultNumber"
+                        [style]="{ width: '100%' }"
+                        (blur)="onNumberFieldBlur('defaultNumber', $event)"
+                        (keydown.enter)="
+                          onNumberFieldBlur('defaultNumber', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="exampleNumber">{{
+                        "SCHEME_OVERLAY.EXAMPLE" | translate
+                      }}</label>
+                      <input
+                        id="exampleNumber"
+                        type="text"
+                        pInputText
+                        placeholder="{{ 'SCHEME_OVERLAY.EXAMPLE' | translate }}"
+                        [(ngModel)]="exampleNumber"
+                        [style]="{ width: '100%' }"
+                        (blur)="onNumberFieldBlur('exampleNumber', $event)"
+                        (keydown.enter)="
+                          onNumberFieldBlur('exampleNumber', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="minimumNumber">{{
+                        "SCHEME_OVERLAY.MINIMUM" | translate
+                      }}</label>
+                      <input
+                        id="minimumNumber"
+                        type="number"
+                        pInputText
+                        placeholder=">= 0"
+                        [(ngModel)]="minimumNumber"
+                        [style]="{ width: '100%' }"
+                        (blur)="onNumberFieldBlur('minimumNumber', $event)"
+                        (keydown.enter)="
+                          onNumberFieldBlur('minimumNumber', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="maximumNumber">{{
+                        "SCHEME_OVERLAY.MAXIMUM" | translate
+                      }}</label>
+                      <input
+                        id="maximumNumber"
+                        type="number"
+                        pInputText
+                        placeholder=">= 0"
+                        [(ngModel)]="maximumNumber"
+                        [style]="{ width: '100%' }"
+                        (blur)="onNumberFieldBlur('maximumNumber', $event)"
+                        (keydown.enter)="
+                          onNumberFieldBlur('maximumNumber', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="multipleOfNumber">{{
+                        "SCHEME_OVERLAY.MULTIPLE_OF" | translate
+                      }}</label>
+                      <input
+                        id="multipleOfNumber"
+                        type="number"
+                        pInputText
+                        placeholder=">= 0"
+                        [(ngModel)]="multipleOfNumber"
+                        [style]="{ width: '100%' }"
+                        (blur)="onNumberFieldBlur('multipleOfNumber', $event)"
+                        (keydown.enter)="
+                          onNumberFieldBlur('multipleOfNumber', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="toggle-group">
+                      <label for="exclusiveMinSwitch">{{
+                        "SCHEME_OVERLAY.EXCLUSIVE_MIN" | translate
+                      }}</label>
+                      <p-toggleSwitch
+                        id="exclusiveMinSwitch"
+                        [(ngModel)]="exclusiveMinNumber"
+                        (onChange)="
+                          onNumberFieldChange(
+                            'exclusiveMinNumber',
+                            $event.checked
+                          )
+                        "
+                      ></p-toggleSwitch>
+
+                      <label for="exclusiveMaxSwitch">{{
+                        "SCHEME_OVERLAY.EXCLUSIVE_MAX" | translate
+                      }}</label>
+                      <p-toggleSwitch
+                        id="exclusiveMaxSwitch"
+                        [(ngModel)]="exclusiveMaxNumber"
+                        (onChange)="
+                          onNumberFieldChange(
+                            'exclusiveMaxNumber',
+                            $event.checked
+                          )
+                        "
+                      ></p-toggleSwitch>
+
+                      <label for="deprecatedSwitch">{{
+                        "SCHEME_OVERLAY.DEPRECATED" | translate
+                      }}</label>
+                      <p-toggleSwitch
+                        id="deprecatedSwitch"
+                        [(ngModel)]="deprecatedNumber"
+                        (onChange)="
+                          onNumberFieldChange(
+                            'deprecatedNumber',
+                            $event.checked
+                          )
+                        "
+                      ></p-toggleSwitch>
+
+                      <p-toggleSwitch
+                        id="isNullableNumber"
+                        [(ngModel)]="isNullableNumber"
+                        [pTooltip]="
+                          isNullableNumber
+                            ? ('SCHEME_OVERLAY.NULLABLE' | translate)
+                            : ('SCHEME_OVERLAY.NOT_NULLABLE' | translate)
+                        "
+                        (onChange)="
+                          onNumberFieldChange(
+                            'isNullableNumber',
+                            $event.checked
+                          )
+                        "
+                        class="not-nullable-button"
+                      ></p-toggleSwitch>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="selectedType?.name === 'string'">
+                <div class="properties-content">
+                  <div class="string-properties-container">
+                    <div class="form-group">
+                      <label for="format">{{
+                        "SCHEME_OVERLAY.FORMAT" | translate
+                      }}</label>
+                      <p-select
+                        id="format"
+                        [options]="stringFormats"
+                        [(ngModel)]="selectedStringFormat"
+                        optionLabel="name"
+                        [placeholder]="'SCHEME_OVERLAY.FORMAT' | translate"
+                        [style]="{ width: '100%' }"
+                        (onChange)="
+                          onStringFormatSelect(
+                            'selectedStringFormat',
+                            $event.value
+                          )
+                        "
+                      ></p-select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="behavior">{{
+                        "SCHEME_OVERLAY.BEHAVIOR" | translate
+                      }}</label>
+                      <p-select
+                        [options]="behaviorOptions"
+                        [(ngModel)]="selectedStringBehavior"
+                        optionLabel="name"
+                        [placeholder]="'SCHEME_OVERLAY.READ_WRITE' | translate"
+                        [style]="{ width: '100%' }"
+                        (onChange)="
+                          onBehaviorOptionsSelect(
+                            'selectedStringBehavior',
+                            $event.value
+                          )
+                        "
+                      ></p-select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="default">{{
+                        "SCHEME_OVERLAY.DEFAULT_STRING" | translate
+                      }}</label>
+                      <input
+                        id="default"
+                        type="text"
+                        pInputText
+                        [placeholder]="'SCHEME_OVERLAY.DEFAULT' | translate"
+                        [(ngModel)]="defaultString"
+                        [style]="{ width: '100%' }"
+                        (blur)="onStringFieldBlur('defaultString', $event)"
+                        (keydown.enter)="
+                          onStringFieldBlur('defaultString', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="example">{{
+                        "SCHEME_OVERLAY.EXAMPLE_STRING" | translate
+                      }}</label>
+                      <input
+                        id="example"
+                        type="text"
+                        pInputText
+                        [placeholder]="'SCHEME_OVERLAY.EXAMPLE' | translate"
+                        [(ngModel)]="exampleString"
+                        [style]="{ width: '100%' }"
+                        (blur)="onStringFieldBlur('exampleString', $event)"
+                        (keydown.enter)="
+                          onStringFieldBlur('exampleString', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="pattern">{{
+                        "SCHEME_OVERLAY.PATTERN" | translate
+                      }}</label>
+                      <input
+                        id="pattern"
+                        type="text"
+                        pInputText
+                        placeholder="^[A-Za-z0-9 _-]+$"
+                        [(ngModel)]="stringPattern"
+                        [style]="{ width: '100%' }"
+                        (blur)="onStringFieldBlur('stringPattern', $event)"
+                        (keydown.enter)="
+                          onStringFieldBlur('stringPattern', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="minLength">{{
+                        "SCHEME_OVERLAY.MIN_LENGTH" | translate
+                      }}</label>
+                      <input
+                        id="minLength"
+                        type="number"
+                        pInputText
+                        placeholder=">= 0"
+                        [(ngModel)]="stringMinLength"
+                        [style]="{ width: '100%' }"
+                        (blur)="onStringFieldBlur('stringMinLength', $event)"
+                        (keydown.enter)="
+                          onStringFieldBlur('stringMinLength', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="maxLength">{{
+                        "SCHEME_OVERLAY.MAX_LENGTH" | translate
+                      }}</label>
+                      <input
+                        id="maxLength"
+                        type="number"
+                        pInputText
+                        placeholder=">= 0"
+                        [(ngModel)]="stringMaxLength"
+                        [style]="{ width: '100%' }"
+                        (blur)="onStringFieldBlur('stringMaxLength', $event)"
+                        (keydown.enter)="
+                          onStringFieldBlur('stringMaxLength', $event)
+                        "
+                      />
+                    </div>
+
+                    <div class="toggle-group">
+                      <label for="isStringDeprecated">{{
+                        "SCHEME_OVERLAY.DEPRECATED" | translate
+                      }}</label>
+                      <p-toggleSwitch
+                        [(ngModel)]="isStringDeprecated"
+                        id="isStringDeprecated"
+                        (onChange)="
+                          onStringFieldChange(
+                            'isStringDeprecated',
+                            $event.checked
+                          )
+                        "
+                      ></p-toggleSwitch>
+
+                      <p-toggleSwitch
+                        id="isNullableString"
+                        [(ngModel)]="isNullableString"
+                        [pTooltip]="
+                          isNullableString
+                            ? ('SCHEME_OVERLAY.NULLABLE' | translate)
+                            : ('SCHEME_OVERLAY.NOT_NULLABLE' | translate)
+                        "
+                        (onChange)="
+                          onStringFieldChange(
+                            'isNullableString',
+                            $event.checked
+                          )
+                        "
+                        class="not-nullable-button"
+                      ></p-toggleSwitch>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="selectedType?.name === 'boolean'">
+                <div class="boolean-properties-container">
+                  <div class="form-group">
+                    <label for="behavior">{{
+                      "SCHEME_OVERLAY.BEHAVIOR" | translate
+                    }}</label>
+                    <p-select
+                      id="behavior"
+                      [options]="behaviorOptions"
+                      [(ngModel)]="selectedBooleanBehavior"
+                      optionLabel="name"
+                      [placeholder]="'SCHEME_OVERLAY.READ_WRITE' | translate"
+                      [style]="{ width: '100%' }"
+                      (onChange)="
+                        onBooleanFieldChange(
+                          'selectedBooleanBehavior',
+                          $event.value
+                        )
+                      "
+                      [appendTo]="'body'"
+                    ></p-select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="default">{{
+                      "SCHEME_OVERLAY.DEFAULT_BOOLEAN" | translate
+                    }}</label>
+                    <p-select
+                      id="default"
+                      [options]="booleanDefaults"
+                      [(ngModel)]="defaultBoolean"
+                      optionLabel="name"
+                      [placeholder]="
+                        'SCHEME_OVERLAY.SELECT_BOOLEAN_VALUE' | translate
+                      "
+                      [style]="{ width: '100%' }"
+                      (onChange)="
+                        onBooleanFieldChange('defaultBoolean', $event.value)
+                      "
+                    ></p-select>
+                  </div>
+
+                  <p-divider />
+
+                  <div class="toggle-group">
+                    <label for="deprecatedSwitch">{{
+                      "SCHEME_OVERLAY.DEPRECATED" | translate
+                    }}</label>
+                    <p-toggleSwitch
+                      [(ngModel)]="deprecatedBoolean"
+                      id="deprecated"
+                      (onChange)="
+                        onBooleanFieldChange(
+                          'deprecatedBoolean',
+                          $event.checked
+                        )
+                      "
+                    ></p-toggleSwitch>
+
+                    <p-toggleSwitch
+                      id="isNullableBoolean"
+                      [(ngModel)]="isNullableBoolean"
+                      [pTooltip]="
+                        isNullableBoolean
+                          ? ('SCHEME_OVERLAY.NULLABLE' | translate)
+                          : ('SCHEME_OVERLAY.NOT_NULLABLE' | translate)
+                      "
+                      (onChange)="
+                        onBooleanFieldChange(
+                          'isNullableBoolean',
+                          $event.checked
+                        )
+                      "
+                      class="not-nullable-button"
+                    ></p-toggleSwitch>
+                  </div>
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="selectedType?.name === 'enum'">
+                <div class="flex flex-col gap-6">
+                  <div class="flex flex-col gap-2">
+                    <label
+                      class="font-semibold text-sm text-gray-700 dark:text-gray-200"
+                    >
+                      {{ "SCHEME_OVERLAY.ENUM" | translate }}
+                    </label>
+
+                    <div
+                      *ngFor="
+                        let value of enumValues;
+                        let i = index;
+                        trackBy: trackByIndex
+                      "
+                      class="flex items-center gap-2"
+                    >
+                      <input
+                        type="text"
+                        pInputText
+                        [(ngModel)]="enumValues[i]"
+                        [placeholder]="
+                          'SCHEME_OVERLAY.ENTER_ENUM_VALUE' | translate
+                        "
+                        class="flex-grow p-inputtext w-full"
+                      />
+
+                      <div class="relative">
+                        <p-button
+                          icon="pi pi-ellipsis-v"
+                          (click)="enumOverlayPanels?.open($event)"
+                          [ariaLabel]="'SCHEME_OVERLAY.OPTIONS' | translate"
+                          [rounded]="true"
+                          [text]="true"
+                          [raised]="true"
+                        ></p-button>
+
+                        <app-enum-overlay-panel
+                          #enumOverlayPanels
+                          [index]="i"
+                          [value]="value"
+                          [markedAsExample]="enumExample"
+                          [markedAsDefault]="enumDefault"
+                          (markAsExample)="onMarkAsExample(i)"
+                          (markAsDefault)="onMarkAsDefault(i)"
+                        ></app-enum-overlay-panel>
+                      </div>
+
+                      <p-button
+                        icon="pi pi-trash"
+                        class="text-red-500"
+                        [rounded]="true"
+                        [text]="true"
+                        [raised]="true"
+                        severity="danger"
+                        (click)="removeEnumValue(i)"
+                        [ariaLabel]="'SCHEME_OVERLAY.REMOVE_VALUE' | translate"
+                        [pTooltip]="
+                          'SCHEME_OVERLAY.REMOVE_THIS_VALUE' | translate
+                        "
+                      ></p-button>
+                    </div>
+
+                    <div>
+                      <p-button
+                        [label]="'SCHEME_OVERLAY.ADD' | translate"
+                        icon="pi pi-plus"
+                        class="mt-2"
+                        [rounded]="true"
+                        [text]="true"
+                        [raised]="true"
+                        (click)="addEnumValue()"
+                      ></p-button>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col gap-2">
+                    <label
+                      for="behavior"
+                      class="font-semibold text-sm text-gray-700 dark:text-gray-200"
+                    >
+                      {{ "SCHEME_OVERLAY.BEHAVIOR" | translate }}
+                    </label>
+                    <p-select
+                      id="behavior"
+                      [options]="behaviorOptions"
+                      [(ngModel)]="selectedEnumBehavior"
+                      optionLabel="name"
+                      [placeholder]="'SCHEME_OVERLAY.READ_WRITE' | translate"
+                      [style]="{ width: '100%' }"
+                      (onChange)="
+                        onEnumFieldChange('selectedEnumBehavior', $event.value)
+                      "
+                      [appendTo]="'body'"
+                    ></p-select>
+                  </div>
+
+                  <div class="flex items-center gap-4">
+                    <label
+                      for="deprecatedSwitch"
+                      class="font-semibold text-sm text-gray-700 dark:text-gray-200"
+                    >
+                      {{ "SCHEME_OVERLAY.DEPRECATED" | translate }}
+                    </label>
+                    <p-toggleSwitch
+                      [(ngModel)]="deprecatedEnum"
+                      id="deprecatedSwitch"
+                      (onChange)="
+                        onEnumFieldChange('deprecatedEnum', $event.checked)
+                      "
+                    ></p-toggleSwitch>
+                  </div>
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="selectedType?.name === 'dictionary'">
+                <div class="properties-content">
+                  <div class="dictionary-properties-container">
+                    <div class="form-group">
+                      <label for="minDictionaryProperties">{{
+                        "SCHEME_OVERLAY.MIN_PROPERTIES" | translate
+                      }}</label>
+                      <input
+                        id="minDictionaryProperties"
+                        type="number"
+                        pInputText
+                        placeholder=">= 0"
+                        [(ngModel)]="minDictionaryProperties"
+                        (blur)="
+                          onDictionaryFieldBlur(
+                            'minDictionaryProperties',
+                            $event
+                          )
+                        "
+                        (keydown.enter)="
+                          onDictionaryFieldBlur(
+                            'minDictionaryProperties',
+                            $event
+                          )
+                        "
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="maxDictionaryProperties">{{
+                        "SCHEME_OVERLAY.MAX_PROPERTIES" | translate
+                      }}</label>
+                      <input
+                        id="maxDictionaryProperties"
+                        type="number"
+                        pInputText
+                        placeholder=">= 0"
+                        [(ngModel)]="maxDictionaryProperties"
+                        (blur)="
+                          onDictionaryFieldBlur(
+                            'maxDictionaryProperties',
+                            $event
+                          )
+                        "
+                        (keydown.enter)="
+                          onDictionaryFieldBlur(
+                            'maxDictionaryProperties',
+                            $event
+                          )
+                        "
+                      />
+                    </div>
+
+                    <div class="toggle-group">
+                      <label for="deprecatedDictionarySwitch">{{
+                        "SCHEME_OVERLAY.DEPRECATED" | translate
+                      }}</label>
+                      <p-toggleSwitch
+                        id="deprecatedDictionarySwitch"
+                        [(ngModel)]="deprecatedDictionary"
+                        (onChange)="
+                          onDictionaryFieldChange(
+                            'deprecatedDictionary',
+                            $event.checked
+                          )
+                        "
+                      ></p-toggleSwitch>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="behaviorDictionary">{{
+                        "SCHEME_OVERLAY.BEHAVIOR" | translate
+                      }}</label>
+                      <p-select
+                        id="behaviorDictionary"
+                        [options]="behaviorOptions"
+                        [(ngModel)]="selectedDictionaryBehavior"
+                        optionLabel="name"
+                        [placeholder]="'SCHEME_OVERLAY.READ_WRITE' | translate"
+                        (onChange)="
+                          onDictionaryFieldChange(
+                            'selectedDictionaryBehavior',
+                            $event.value
+                          )
+                        "
+                        [appendTo]="'body'"
+                      ></p-select>
+                    </div>
+                  </div>
+                </div>
+                <app-sub-scheme-type
+                  [rowData]="rowData"
+                  [selectedCol]="selectedCol"
+                  [apiSchemas]="apiSchemas"
+                  [selectedSchema]="selectedSchema"
+                  [selectedSchemaName]="selectedSchemaName"
+                  [selectedArrayItems]="additionalPropertiesDisc"
+                >
+                </app-sub-scheme-type>
+              </ng-container>
+
+              <ng-container
+                *ngIf="isMultiselect && isMultiselectAndMoreThanOne"
+              >
+                <p-tabs [(value)]="activeMultiselectTabIndex">
+                  <p-tablist>
+                    <p-tab
+                      *ngFor="
+                        let tab of temporaryMultiSelectMenu;
+                        let i = index
+                      "
+                      [value]="i"
+                    >
+                      {{ tab.label }}
+                    </p-tab>
+                  </p-tablist>
+
+                  <p-tabpanels>
+                    <p-tabpanel [value]="getTabIndex('Integer')">
+                      <div class="properties-content">
+                        <div class="properties-container">
+                          <div class="form-group">
+                            <label for="minimum">Minimum</label>
+                            <input
+                              id="minimum"
+                              type="number"
+                              pInputText
+                              placeholder="0"
+                              [(ngModel)]="minimumMultiselect"
+                              [style]="{ width: '100%' }"
+                              (blur)="
+                                onMultipleFieldBlur(
+                                  'minimumMultiselect',
+                                  $event
+                                )
+                              "
+                              (keydown.enter)="
+                                onMultipleFieldBlur(
+                                  'minimumMultiselect',
+                                  $event
+                                )
+                              "
+                            />
+                          </div>
+
+                          <div class="form-group">
+                            <label for="maximum">Maximum</label>
+                            <input
+                              id="maximum"
+                              type="number"
+                              pInputText
+                              placeholder="100"
+                              [(ngModel)]="maximumMultiselect"
+                              [style]="{ width: '100%' }"
+                              (blur)="
+                                onMultipleFieldBlur(
+                                  'maximumMultiselect',
+                                  $event
+                                )
+                              "
+                              (keydown.enter)="
+                                onMultipleFieldBlur(
+                                  'maximumMultiselect',
+                                  $event
+                                )
+                              "
+                            />
+                          </div>
+
+                          <div class="form-group">
+                            <label for="multipleOf">Multiple Of</label>
+                            <input
+                              id="multipleOf"
+                              type="number"
+                              pInputText
+                              placeholder=">= 0"
+                              [(ngModel)]="multipleOfMultiselect"
+                              [style]="{ width: '100%' }"
+                              (blur)="
+                                onMultipleFieldBlur(
+                                  'multipleOfMultiselect',
+                                  $event
+                                )
+                              "
+                              (keydown.enter)="
+                                onMultipleFieldBlur(
+                                  'multipleOfMultiselect',
+                                  $event
+                                )
+                              "
+                            />
+                          </div>
+
+                          <div class="toggle-group">
+                            <label for="exclusiveMin">exclusiveMin</label>
+
+                            <p-toggleSwitch
+                              id="exclusiveMin"
+                              [(ngModel)]="exclusiveMinMultiselect"
+                              (onChange)="
+                                onMultipleFieldBlur(
+                                  'exclusiveMinMultiselect',
+                                  $event.checked
+                                )
+                              "
+                            ></p-toggleSwitch>
+                            <label for="exclusiveMax">exclusiveMax</label>
+
+                            <p-toggleSwitch
+                              id="exclusiveMax"
+                              [(ngModel)]="exclusiveMaxMultiselect"
+                              (onChange)="
+                                onMultipleFieldBlur(
+                                  'exclusiveMaxMultiselect',
+                                  $event.checked
+                                )
+                              "
+                            ></p-toggleSwitch>
+                            <label for="deprecated">deprecated</label>
+
+                            <p-toggleSwitch
+                              id="deprecated"
+                              [(ngModel)]="deprecatedMultiselect"
+                              (onChange)="
+                                onMultipleFieldBlur(
+                                  'deprecatedMultiselect',
+                                  $event.checked
+                                )
+                              "
+                            ></p-toggleSwitch>
+                          </div>
+                        </div>
+                      </div>
+                    </p-tabpanel>
+
+                    <p-tabpanel [value]="getTabIndex('String')">
+                      <div class="properties-content">
+                        <div class="string-properties-container">
+                          <div class="form-group">
+                            <label for="pattern">Pattern</label>
+                            <input
+                              id="pattern"
+                              type="text"
+                              pInputText
+                              placeholder="^[A-Za-z0-9 _-]+$"
+                              [(ngModel)]="stringMultiselectPattern"
+                              [style]="{ width: '100%' }"
+                              (blur)="
+                                onMultipleFieldBlur(
+                                  'stringMultiselectPattern',
+                                  $event
+                                )
+                              "
+                              (keydown.enter)="
+                                onMultipleFieldBlur(
+                                  'stringMultiselectPattern',
+                                  $event
+                                )
+                              "
+                            />
+                          </div>
+
+                          <div class="form-group">
+                            <label for="minLength">minLength</label>
+                            <input
+                              id="minLength"
+                              type="number"
+                              pInputText
+                              placeholder=">= 0"
+                              [(ngModel)]="stringMultiselectMinLength"
+                              [style]="{ width: '100%' }"
+                              (blur)="
+                                onMultipleFieldBlur(
+                                  'stringMultiselectMinLength',
+                                  $event
+                                )
+                              "
+                              (keydown.enter)="
+                                onMultipleFieldBlur(
+                                  'stringMultiselectMinLength',
+                                  $event
+                                )
+                              "
+                            />
+                          </div>
+
+                          <div class="form-group">
+                            <label for="maxLength">maxLength</label>
+                            <input
+                              id="maxLength"
+                              type="number"
+                              pInputText
+                              placeholder=">= 0"
+                              [(ngModel)]="stringMultiselectMaxLength"
+                              [style]="{ width: '100%' }"
+                              (blur)="
+                                onMultipleFieldBlur(
+                                  'stringMultiselectMaxLength',
+                                  $event
+                                )
+                              "
+                              (keydown.enter)="
+                                onMultipleFieldBlur(
+                                  'stringMultiselectMaxLength',
+                                  $event
+                                )
+                              "
+                            />
+                          </div>
+
+                          <div class="toggle-group">
+                            <label for="isMultiselectDeprecated"
+                              >deprecated</label
+                            >
+                            <p-toggleSwitch
+                              [(ngModel)]="deprecatedMultiselect"
+                              id="isMultiselectDeprecated"
+                              (onChange)="
+                                onMultipleFieldChange(
+                                  'deprecatedMultiselect',
+                                  $event.checked
+                                )
+                              "
+                            ></p-toggleSwitch>
+                          </div>
+                        </div>
+                      </div>
+                    </p-tabpanel>
+
+                    <p-tabpanel [value]="getTabIndex('Array')">
+                      <div class="properties-content">
+                        <div class="array-properties-container">
+                          <div class="form-group">
+                            <label for="behavior">Behavior</label>
+                            <p-select
+                              id="behavior"
+                              [options]="behaviorOptions"
+                              [(ngModel)]="selectedMultiselectBehavior"
+                              optionLabel="name"
+                              placeholder="Read/Write"
+                              [style]="{ width: '100%' }"
+                              (onChange)="
+                                onMultipleFieldChange(
+                                  'selectedMultiselectBehavior',
+                                  $event.value
+                                )
+                              "
+                            ></p-select>
+                          </div>
+
+                          <div class="form-group">
+                            <label for="minItems">minItems</label>
+                            <input
+                              id="minItems"
+                              type="number"
+                              pInputText
+                              placeholder=">= 0"
+                              [(ngModel)]="minMultiselectArrayItems"
+                              [style]="{ width: '100%' }"
+                              (blur)="
+                                onMultipleFieldBlur(
+                                  'minMultiselectArrayItems',
+                                  $event
+                                )
+                              "
+                              (keydown.enter)="
+                                onMultipleFieldBlur(
+                                  'minMultiselectArrayItems',
+                                  $event
+                                )
+                              "
+                            />
+                          </div>
+
+                          <div class="form-group">
+                            <label for="maxItems">maxItems</label>
+                            <input
+                              id="maxItems"
+                              type="number"
+                              pInputText
+                              placeholder=">= 0"
+                              [(ngModel)]="maxMultiselectArrayItems"
+                              [style]="{ width: '100%' }"
+                              (blur)="
+                                onMultipleFieldBlur(
+                                  'maxMultiselectArrayItems',
+                                  $event
+                                )
+                              "
+                              (keydown.enter)="
+                                onMultipleFieldBlur(
+                                  'maxMultiselectArrayItems',
+                                  $event
+                                )
+                              "
+                            />
+                          </div>
+
+                          <div class="toggle-group">
+                            <label for="uniqe_items">uniqe items</label>
+                            <p-toggleSwitch
+                              id="uniqe_items"
+                              [(ngModel)]="uniqueMultiselectArrayItems"
+                              (onChange)="
+                                onMultipleFieldChange(
+                                  'uniqueMultiselectArrayItems',
+                                  $event.checked
+                                )
+                              "
+                            ></p-toggleSwitch>
+
+                            <label for="deprecatedSwitch">deprecated</label>
+                            <p-toggleSwitch
+                              id="deprecated"
+                              [(ngModel)]="deprecatedMultiselect"
+                              (onChange)="
+                                onMultipleFieldChange(
+                                  'deprecatedMultiselect',
+                                  $event.checked
+                                )
+                              "
+                            ></p-toggleSwitch>
+                          </div>
+                        </div>
+                      </div>
+                    </p-tabpanel>
+
+                    <p-tabpanel [value]="getTabIndex('Object')">
+                      <div class="properties-content">
+                        <div class="object-properties-container">
+                          <div class="form-group">
+                            <label for="minProperties">minProperties</label>
+                            <input
+                              id="minProperties"
+                              type="number"
+                              pInputText
+                              placeholder=">= 0"
+                              [(ngModel)]="minMultiselectProperties"
+                              (blur)="
+                                onMultipleFieldBlur(
+                                  'minMultiselectProperties',
+                                  $event
+                                )
+                              "
+                              (keydown.enter)="
+                                onMultipleFieldBlur(
+                                  'minMultiselectProperties',
+                                  $event
+                                )
+                              "
+                              [style]="{ width: '100%' }"
+                            />
+                          </div>
+
+                          <div class="form-group">
+                            <label for="maxProperties">maxProperties</label>
+                            <input
+                              id="maxProperties"
+                              type="number"
+                              pInputText
+                              placeholder=">= 0"
+                              [(ngModel)]="maxMultiselectProperties"
+                              (blur)="
+                                onMultipleFieldBlur(
+                                  'maxMultiselectProperties',
+                                  $event
+                                )
+                              "
+                              (keydown.enter)="
+                                onMultipleFieldBlur(
+                                  'maxMultiselectProperties',
+                                  $event
+                                )
+                              "
+                              [style]="{ width: '100%' }"
+                            />
+                          </div>
+
+                          <div class="toggle-group">
+                            <label for="allow_additional_properties"
+                              >allow additional properties</label
+                            >
+                            <p-toggleSwitch
+                              id="allow_additional_properties"
+                              [(ngModel)]="allowMultiselectAdditionalProperties"
+                              (onChange)="
+                                onMultipleFieldChange(
+                                  'allowMultiselectAdditionalProperties',
+                                  $event.checked
+                                )
+                              "
+                            ></p-toggleSwitch>
+                          </div>
+
+                          <div class="toggle-group">
+                            <label for="deprecatedSwitch">deprecated</label>
+                            <p-toggleSwitch
+                              id="deprecatedSwitch"
+                              [(ngModel)]="deprecatedMultiselect"
+                              (onChange)="
+                                onMultipleFieldChange(
+                                  'deprecatedMultiselect',
+                                  $event.checked
+                                )
+                              "
+                            ></p-toggleSwitch>
+                          </div>
+                        </div>
+                      </div>
+                    </p-tabpanel>
+
+                    <p-tabpanel [value]="getTabIndex('Number')">
+                      <div class="properties-content">
+                        <div class="properties-container">
+                          <div class="form-group">
+                            <label for="minimumNumber">Minimum</label>
+                            <input
+                              id="minimumNumber"
+                              type="number"
+                              pInputText
+                              placeholder=">= 0"
+                              [(ngModel)]="minimumMultiselect"
+                              [style]="{ width: '100%' }"
+                              (blur)="
+                                onMultipleFieldBlur(
+                                  'minimumMultiselect',
+                                  $event
+                                )
+                              "
+                              (keydown.enter)="
+                                onMultipleFieldBlur(
+                                  'minimumMultiselect',
+                                  $event
+                                )
+                              "
+                            />
+                          </div>
+
+                          <div class="form-group">
+                            <label for="maximumNumber">Maximum</label>
+                            <input
+                              id="maximumNumber"
+                              type="number"
+                              pInputText
+                              placeholder=">= 0"
+                              [(ngModel)]="maximumMultiselect"
+                              [style]="{ width: '100%' }"
+                              (blur)="
+                                onMultipleFieldBlur(
+                                  'maximumMultiselect',
+                                  $event
+                                )
+                              "
+                              (keydown.enter)="
+                                onMultipleFieldBlur(
+                                  'maximumMultiselect',
+                                  $event
+                                )
+                              "
+                            />
+                          </div>
+
+                          <div class="form-group">
+                            <label for="multipleOfNumber">Multiple Of</label>
+                            <input
+                              id="multipleOfNumber"
+                              type="number"
+                              pInputText
+                              placeholder=">= 0"
+                              [(ngModel)]="multipleOfMultiselect"
+                              [style]="{ width: '100%' }"
+                              (blur)="
+                                onMultipleFieldBlur(
+                                  'multipleOfMultiselect',
+                                  $event
+                                )
+                              "
+                              (keydown.enter)="
+                                onMultipleFieldBlur(
+                                  'multipleOfMultiselect',
+                                  $event
+                                )
+                              "
+                            />
+                          </div>
+
+                          <div class="toggle-group">
+                            <label for="exclusiveMinSwitch">exclusiveMin</label>
+                            <p-toggleSwitch
+                              id="exclusiveMinSwitch"
+                              [(ngModel)]="exclusiveMinMultiselect"
+                              (onChange)="
+                                onMultipleFieldChange(
+                                  'exclusiveMinMultiselect',
+                                  $event.checked
+                                )
+                              "
+                            ></p-toggleSwitch>
+
+                            <label for="exclusiveMaxSwitch">exclusiveMax</label>
+                            <p-toggleSwitch
+                              id="exclusiveMaxSwitch"
+                              [(ngModel)]="exclusiveMaxMultiselect"
+                              (onChange)="
+                                onMultipleFieldChange(
+                                  'exclusiveMaxMultiselect',
+                                  $event.checked
+                                )
+                              "
+                            ></p-toggleSwitch>
+
+                            <label for="deprecatedSwitch">deprecated</label>
+                            <p-toggleSwitch
+                              id="deprecatedSwitch"
+                              [(ngModel)]="deprecatedMultiselect"
+                              (onChange)="
+                                onMultipleFieldChange(
+                                  'deprecatedMultiselect',
+                                  $event.checked
+                                )
+                              "
+                            ></p-toggleSwitch>
+                          </div>
+                        </div>
+                      </div>
+                    </p-tabpanel>
+
+                    <p-tabpanel [value]="getTabIndex('Common')">
+                      <div class="boolean-properties-container">
+                        <div class="form-group">
+                          <label for="behavior">Behavior</label>
+                          <p-select
+                            id="behavior"
+                            [options]="behaviorOptions"
+                            [(ngModel)]="selectedMultiselectBehavior"
+                            optionLabel="name"
+                            placeholder="Read/Write"
+                            [style]="{ width: '100%' }"
+                            (onChange)="
+                              onMultipleFieldChange(
+                                'selectedMultiselectBehavior',
+                                $event.value
+                              )
+                            "
+                            [appendTo]="'body'"
+                          ></p-select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="format">Format</label>
+                          <p-select
+                            id="format"
+                            [options]="multipleFormats"
+                            [(ngModel)]="selectedMultipleFormat"
+                            placeholder="Select multiselect format"
+                            [style]="{ width: '100%' }"
+                            optionLabel="name"
+                            (onChange)="
+                              onMultipleFieldChange(
+                                'selectedMultipleFormat',
+                                $event.value
+                              )
+                            "
+                          ></p-select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="example">Example</label>
+                          <input
+                            id="example"
+                            type="text"
+                            pInputText
+                            placeholder="example"
+                            [(ngModel)]="exampleMultiselect"
+                            [style]="{ width: '100%' }"
+                            (blur)="
+                              onMultipleFieldBlur('exampleMultiselect', $event)
+                            "
+                            (keydown.enter)="
+                              onMultipleFieldBlur('exampleMultiselect', $event)
+                            "
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <label for="default">Default</label>
+                          <input
+                            id="default"
+                            type="text"
+                            pInputText
+                            placeholder="default"
+                            [(ngModel)]="defaultMultiselect"
+                            [style]="{ width: '100%' }"
+                            (blur)="
+                              onMultipleFieldBlur('defaultMultiselect', $event)
+                            "
+                            (keydown.enter)="
+                              onMultipleFieldBlur('defaultMultiselect', $event)
+                            "
+                          />
+                        </div>
+
+                        <p-divider />
+
+                        <div class="toggle-group">
+                          <label for="deprecatedSwitch">deprecated</label>
+                          <p-toggleSwitch
+                            [(ngModel)]="deprecatedMultiselect"
+                            id="deprecated"
+                            (onChange)="
+                              onMultipleFieldChange(
+                                'deprecatedMultiselect',
+                                $event.checked
+                              )
+                            "
+                          ></p-toggleSwitch>
+                          <p-toggleSwitch
+                            id="isNullableBoolean"
+                            [(ngModel)]="isNullableMultiselect"
+                            [pTooltip]="
+                              isNullableBoolean ? 'Nullable' : 'Not nullable'
+                            "
+                            (onChange)="
+                              onMultipleFieldChange(
+                                'isNullableMultiselect',
+                                $event.checked
+                              )
+                            "
+                            class="not-nullable-button"
+                          ></p-toggleSwitch>
+                        </div>
+                      </div>
+                    </p-tabpanel>
+                  </p-tabpanels>
+                </p-tabs>
+              </ng-container>
+            </p-panel></div
+        ></p-tabpanel>
+        <p-tabpanel value="1"
+          ><div class="p-toolbar-group-start">
+            <span
+              class="p-input-icon-left gap-2"
+              style="margin-bottom: 1rem; display: flex; align-items: center"
+            >
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                [(ngModel)]="searchQuery"
+                (ngModelChange)="filterSchemas()"
+                [placeholder]="'SEARCH' | translate"
+                style="width: 100%; max-width: 300px"
+              />
+            </span>
+
+            <p-divider class="custom-divider"></p-divider>
+
+            <div #scroller>
+              <div
+                *ngFor="let item of filteredSchemas"
+                [id]="'item-' + item.name"
+                style="
+                  height: 50px;
+                  padding: 10px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <p-button
+                  [rounded]="true"
+                  [text]="true"
+                  [raised]="true"
+                  label="{{ item.name }}"
+                  (click)="onSchemeSelect(item)"
+                  [ngClass]="{
+                    'selected-button': item.name === selectedRefSchema
+                  }"
+                  [style]="{
+                    'background-color':
+                      item.name === selectedRefSchema ? '#d4edda' : '',
+                    color: item.name === selectedRefSchema ? '#155724' : ''
+                  }"
+                ></p-button>
+                <i
+                  *ngIf="item.name === selectedRefSchema"
+                  class="pi pi-check"
+                  style="color: green; margin-left: 8px"
+                ></i>
+              </div>
+            </div></div
+        ></p-tabpanel>
+        <p-tabpanel value="2">
+          <span>{{ "SCHEME_OVERLAY.COMBINE_SELECT_OPTION" | translate }}</span>
+          <p-divider />
+          <div class="card flex">
+            <p>AND = all of</p>
+            <p-divider />
+            <p>XOR = one of</p>
+            <p-divider />
+            <p>OR = any of</p>
+          </div>
+          <p-divider />
+
+          <p-divider />
+          <p-select
+            [options]="combineTypes"
+            [(ngModel)]="selectedCombineType"
+            optionLabel="name"
+            [placeholder]="'SCHEME_OVERLAY.SELECT_COMBINE_TYPE' | translate"
+            styleClass="combine-dropdown"
+            [showClear]="true"
+            (onChange)="onCombineTypeChange()"
+            [appendTo]="'body'"
+          ></p-select>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </div>
+</p-popover>

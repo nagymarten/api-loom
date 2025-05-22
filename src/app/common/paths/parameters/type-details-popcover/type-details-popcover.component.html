@@ -1,0 +1,774 @@
+<p-popover
+  #op
+  [dismissable]="true"
+  [style]="{ width: '25rem', maxHeight: '80vh', overflowY: 'auto' }"
+>
+  <ng-template pTemplate="trigger">
+    <p-button
+      [label]="'PATHS.PARAMETERS.POPUP.ADD' | translate"
+      icon="pi pi-plus"
+      class="btn btn-primary"
+      [rounded]="true"
+      [text]="true"
+      [raised]="true"
+      type="button"
+    ></p-button>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <div class="flex flex-col p-4 gap-4">
+      <ng-container *ngIf="isNumeric">
+        <div class="flex justify-between items-center mb-2">
+          <h5 class="text-base font-bold mb-0">
+            {{ "PATHS.PARAMETERS.POPUP.PARAMETER_PROPERTIES" | translate }}
+          </h5>
+          <div class="flex items-center gap-2">
+            <label class="text-sm">
+              {{ "PATHS.PARAMETERS.POPUP.DEPRECATED" | translate }}
+            </label>
+            <p-inputSwitch
+              [(ngModel)]="deprecated"
+              (onChange)="onDeprecatedToggle()"
+            ></p-inputSwitch>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2" *ngIf="specVersion !== '2.0'">
+          <label class="text-sm font-medium">
+            {{ "PATHS.PARAMETERS.POPUP.STYLE" | translate }}
+          </label>
+          <p-select
+            [options]="styles"
+            [(ngModel)]="style"
+            (onChange)="onStyleChange()"
+            [placeholder]="'PATHS.PARAMETERS.POPUP.SELECT_STYLE' | translate"
+            class="w-full bg-gray-100 border rounded-md px-3 py-2"
+          ></p-select>
+        </div>
+
+        <h5 class="text-base font-bold mt-4 mb-2">
+          {{ "PATHS.PARAMETERS.POPUP.SCHEMA_PROPERTIES" | translate }}
+        </h5>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.FORMAT" | translate }}
+            </label>
+            <p-select
+              [options]="formatOptionsNumbers"
+              [(ngModel)]="format"
+              optionLabel="label"
+              placeholder="{{
+                'PATHS.PARAMETERS.POPUP.FORMAT_PLACEHOLDER' | translate
+              }}"
+              class="w-full bg-gray-100 border rounded-md px-3 py-2"
+            ></p-select>
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.DEFAULT" | translate }}
+            </label>
+            <input
+              pInputText
+              [(ngModel)]="defaultValue"
+              (ngModelChange)="onDefaultChange()"
+              [placeholder]="
+                'PATHS.PARAMETERS.POPUP.DEFAULT_PLACEHOLDER' | translate
+              "
+              class="w-full bg-gray-100 border rounded-md px-3 py-2"
+            />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2" *ngIf="specVersion !== '2.0'">
+          <label class="text-sm font-medium">
+            {{ "PATHS.PARAMETERS.POPUP.ENUM" | translate }}
+          </label>
+
+          <input
+            pInputText
+            [(ngModel)]="newEnum"
+            (keydown.enter)="addEnum()"
+            [placeholder]="
+              'PATHS.PARAMETERS.POPUP.ENUM_PLACEHOLDER' | translate
+            "
+            class="w-full bg-gray-100 border rounded-md px-3 py-2"
+          />
+
+          <div class="flex flex-wrap gap-2 mt-2">
+            <p-chip
+              *ngFor="let enumItem of enumValues; let i = index"
+              [label]="enumItem"
+              removable="true"
+              (onRemove)="removeEnum(i)"
+            ></p-chip>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium">
+            {{ "PATHS.PARAMETERS.POPUP.EXAMPLE" | translate }}
+          </label>
+          <input
+            pInputText
+            [(ngModel)]="example"
+            (ngModelChange)="onExampleChange()"
+            [placeholder]="
+              'PATHS.PARAMETERS.POPUP.EXAMPLE_PLACEHOLDER' | translate
+            "
+            class="w-full bg-gray-100 border rounded-md px-3 py-2"
+          />
+        </div>
+
+        <h5 class="text-base font-bold mt-4 mb-2">
+          {{ "PATHS.PARAMETERS.POPUP.NUMBER_PROPERTIES" | translate }}
+        </h5>
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Minimum -->
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.MINIMUM" | translate }}
+            </label>
+            <input
+              pInputText
+              type="number"
+              [(ngModel)]="minimum"
+              (ngModelChange)="onMinimumChange()"
+              class="w-full bg-gray-100 border rounded-md px-3 py-2"
+            />
+          </div>
+
+          <div class="flex flex-col justify-end gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.EXCLUSIVE_MIN" | translate }}
+            </label>
+            <p-inputSwitch
+              [(ngModel)]="exclusiveMinimum"
+              (onChange)="onExclusiveMinimumToggle()"
+            ></p-inputSwitch>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.MAXIMUM" | translate }}
+            </label>
+            <input
+              pInputText
+              type="number"
+              [(ngModel)]="maximum"
+              (ngModelChange)="onMaximumChange()"
+              class="w-full bg-gray-100 border rounded-md px-3 py-2"
+            />
+          </div>
+
+          <div class="flex flex-col justify-end gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.EXCLUSIVE_MAX" | translate }}
+            </label>
+            <p-inputSwitch
+              [(ngModel)]="exclusiveMaximum"
+              (onChange)="onExclusiveMaximumToggle()"
+            ></p-inputSwitch>
+          </div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium">
+            {{ "PATHS.PARAMETERS.POPUP.MULTIPLE_OF" | translate }}
+          </label>
+          <input
+            pInputText
+            type="number"
+            [(ngModel)]="multipleOf"
+            (ngModelChange)="onMultipleOfChange()"
+            class="w-full bg-gray-100 border rounded-md px-3 py-2"
+          />
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="isBoolean">
+        <div class="flex justify-between items-center mb-2">
+          <h5 class="text-base font-bold mb-0">
+            {{ "PATHS.PARAMETERS.POPUP.PARAMETER_PROPERTIES" | translate }}
+          </h5>
+          <div class="flex items-center gap-2">
+            <label class="text-sm">
+              {{ "PATHS.PARAMETERS.POPUP.DEPRECATED" | translate }}
+            </label>
+            <p-inputSwitch
+              [(ngModel)]="deprecated"
+              (onChange)="onDeprecatedToggle()"
+            ></p-inputSwitch>
+          </div>
+        </div>
+
+        <h5 class="text-base font-bold mt-4 mb-2">
+          {{ "PATHS.PARAMETERS.POPUP.SCHEMA_PROPERTIES" | translate }}
+        </h5>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.FORMAT" | translate }}
+            </label>
+            <p-select
+              [options]="formatOptions"
+              [(ngModel)]="format"
+              optionLabel="label"
+              placeholder="{{
+                'PATHS.PARAMETERS.POPUP.FORMAT_PLACEHOLDER' | translate
+              }}"
+              class="w-full bg-gray-100 border rounded-md px-3 py-2"
+            ></p-select>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.DEFAULT" | translate }}
+            </label>
+            <input
+              pInputText
+              [(ngModel)]="defaultValue"
+              [placeholder]="
+                'PATHS.PARAMETERS.POPUP.DEFAULT_PLACEHOLDER' | translate
+              "
+              class="w-full bg-gray-100 border rounded-md px-3 py-2"
+            />
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.UNIQUE_ITEMS" | translate }}
+            </label>
+            <p-inputSwitch
+              [(ngModel)]="uniqueItems"
+              (onChange)="onUniqueItemsToggle()"
+            ></p-inputSwitch>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.ALLOW_EMPTY_VALUE" | translate }}
+            </label>
+            <p-inputSwitch
+              [(ngModel)]="allowEmptyValue"
+              (onChange)="onAllowEmptyValueToggle()"
+            ></p-inputSwitch>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.ALLOW_RESERVED" | translate }}
+            </label>
+            <p-inputSwitch
+              [(ngModel)]="allowReserved"
+              (onChange)="onAllowReservedToggle()"
+            ></p-inputSwitch>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.EXPLODE" | translate }}
+            </label>
+            <p-inputSwitch
+              [(ngModel)]="explode"
+              (onChange)="onExplodeToggle()"
+            ></p-inputSwitch>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 mt-4" *ngIf="specVersion !== '2.0'">
+          <label class="text-sm font-medium">
+            {{ "PATHS.PARAMETERS.POPUP.ENUM" | translate }}
+          </label>
+          <input
+            pInputText
+            [(ngModel)]="newEnum"
+            (keydown.enter)="addEnum()"
+            [placeholder]="
+              'PATHS.PARAMETERS.POPUP.ENUM_PLACEHOLDER' | translate
+            "
+            class="w-full bg-gray-100 border rounded-md px-3 py-2"
+          />
+          <div class="flex flex-wrap gap-2 mt-2">
+            <p-chip
+              *ngFor="let item of enumValues; let i = index"
+              [label]="item.toString()"
+              removable="true"
+              (onRemove)="removeEnum(i)"
+            ></p-chip>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 mt-4">
+          <label class="text-sm font-medium">
+            {{ "PATHS.PARAMETERS.POPUP.EXAMPLE" | translate }}
+          </label>
+          <input
+            pInputText
+            [(ngModel)]="example"
+            [placeholder]="
+              'PATHS.PARAMETERS.POPUP.EXAMPLE_PLACEHOLDER' | translate
+            "
+            class="w-full bg-gray-100 border rounded-md px-3 py-2"
+          />
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="isArray">
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-2" *ngIf="specVersion !== '2.0'">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.STYLE" | translate }}
+            </label>
+            <p-select
+              [options]="styles"
+              [(ngModel)]="style"
+              (onChange)="onStyleChange()"
+              [placeholder]="'PATHS.PARAMETERS.POPUP.SELECT_STYLE' | translate"
+              class="w-full bg-gray-100 border rounded-md px-3 py-2"
+            ></p-select>
+          </div>
+
+          <div class="flex flex-wrap gap-6 items-center mb-4">
+            <div class="flex items-center gap-2">
+              <label class="text-sm font-medium">
+                {{ "PATHS.PARAMETERS.POPUP.DEPRECATED" | translate }}
+              </label>
+              <p-inputSwitch
+                [(ngModel)]="deprecated"
+                (onChange)="onDeprecatedToggle()"
+              ></p-inputSwitch>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <label class="text-sm font-medium">
+                {{ "PATHS.PARAMETERS.POPUP.EXPLODE" | translate }}
+              </label>
+              <p-inputSwitch
+                [(ngModel)]="explode"
+                (onChange)="onExplodeToggle()"
+              ></p-inputSwitch>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-4 mt-6">
+          <h5 class="text-base font-bold mb-2">
+            {{ "PATHS.PARAMETERS.POPUP.SCHEMA_PROPERTIES" | translate }}
+          </h5>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+              <label class="text-sm font-medium">
+                {{ "PATHS.PARAMETERS.POPUP.FORMAT" | translate }}
+              </label>
+              <p-select
+                [options]="formatOptions"
+                [(ngModel)]="format"
+                (onChange)="onFormatChange()"
+                optionLabel="label"
+                placeholder="{{
+                  'PATHS.PARAMETERS.POPUP.FORMAT_PLACEHOLDER' | translate
+                }}"
+                class="w-full bg-gray-100 border rounded-md px-3 py-2"
+              ></p-select>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label class="text-sm font-medium">
+                {{ "PATHS.PARAMETERS.POPUP.DEFAULT" | translate }}
+              </label>
+              <input
+                pInputText
+                [(ngModel)]="defaultValue"
+                (ngModelChange)="onDefaultChange()"
+                [placeholder]="
+                  'PATHS.PARAMETERS.POPUP.DEFAULT_PLACEHOLDER' | translate
+                "
+                class="w-full bg-gray-100 border rounded-md px-3 py-2"
+              />
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-2 mt-4" *ngIf="specVersion !== '2.0'">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.ENUM" | translate }}
+            </label>
+            <input
+              pInputText
+              [(ngModel)]="newEnum"
+              (keydown.enter)="addEnum()"
+              [placeholder]="
+                'PATHS.PARAMETERS.POPUP.ENUM_PLACEHOLDER' | translate
+              "
+              class="w-full bg-gray-100 border rounded-md px-3 py-2"
+            />
+            <div class="flex flex-wrap gap-2 mt-2">
+              <p-chip
+                *ngFor="let item of enumValues; let i = index"
+                [label]="item.toString()"
+                removable="true"
+                (onRemove)="removeEnum(i)"
+              ></p-chip>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-2 mt-4">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.EXAMPLE" | translate }}
+            </label>
+            <input
+              pInputText
+              [(ngModel)]="example"
+              (ngModelChange)="onExampleChange()"
+              [placeholder]="
+                'PATHS.PARAMETERS.POPUP.EXAMPLE_PLACEHOLDER' | translate
+              "
+              class="w-full bg-gray-100 border rounded-md px-3 py-2"
+            />
+          </div>
+        </div>
+
+        <ng-container
+          *ngIf="param?.type === 'array' || param?.schema?.type === 'array'"
+        >
+          <h5 class="text-base font-bold mt-6 mb-2">
+            {{ "PATHS.PARAMETERS.POPUP.ARRAY_PROPERTIES" | translate }}
+          </h5>
+
+          <div class="flex flex-wrap gap-6 items-center mb-4">
+            <div class="flex items-center gap-2">
+              <label class="text-sm font-medium">
+                {{ "PATHS.PARAMETERS.POPUP.UNIQUE_ITEMS" | translate }}
+              </label>
+              <p-inputSwitch
+                [(ngModel)]="uniqueItems"
+                (onChange)="onUniqueItemsToggle()"
+              ></p-inputSwitch>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <label class="text-sm font-medium">
+                {{ "PATHS.PARAMETERS.POPUP.DEPRECATED" | translate }}
+              </label>
+              <p-inputSwitch
+                [(ngModel)]="deprecated"
+                (onChange)="onDeprecatedToggle()"
+              ></p-inputSwitch>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+              <label class="text-sm font-medium">
+                {{ "PATHS.PARAMETERS.POPUP.MIN_ITEMS" | translate }}
+              </label>
+              <input
+                pInputText
+                type="number"
+                [(ngModel)]="minItems"
+                (ngModelChange)="onMinItemsChange()"
+                [placeholder]="'>= 0'"
+                class="w-full bg-gray-100 border rounded-md px-3 py-2"
+              />
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label class="text-sm font-medium">
+                {{ "PATHS.PARAMETERS.POPUP.MAX_ITEMS" | translate }}
+              </label>
+              <input
+                pInputText
+                type="number"
+                [(ngModel)]="maxItems"
+                (ngModelChange)="onMaxItemsChange()"
+                [placeholder]="'>= 0'"
+                class="w-full bg-gray-100 border rounded-md px-3 py-2"
+              />
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="isString">
+        <h5 class="text-base font-bold mb-2">
+          {{ "PATHS.PARAMETERS.POPUP.PARAMETER_PROPERTIES" | translate }}
+        </h5>
+
+        <div class="flex flex-col gap-2" *ngIf="specVersion !== '2.0'">
+          <label class="text-sm font-medium">
+            {{ "PATHS.PARAMETERS.POPUP.STYLE" | translate }}
+          </label>
+          <p-select
+            [options]="styles"
+            [(ngModel)]="style"
+            (onChange)="onStyleChange()"
+            [placeholder]="'PATHS.PARAMETERS.POPUP.SELECT_STYLE' | translate"
+            class="w-full bg-gray-100 border rounded-md px-3 py-2"
+          ></p-select>
+        </div>
+
+        <div class="flex flex-wrap gap-6 items-center mb-4 mt-2">
+          <div class="flex items-center gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.DEPRECATED" | translate }}
+            </label>
+            <p-inputSwitch
+              [(ngModel)]="deprecated"
+              (onChange)="onDeprecatedToggle()"
+            ></p-inputSwitch>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.ALLOW_EMPTY_VALUE" | translate }}
+            </label>
+            <p-inputSwitch
+              [(ngModel)]="allowEmptyValue"
+              (onChange)="onAllowEmptyValueToggle()"
+            ></p-inputSwitch>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.ALLOW_RESERVED" | translate }}
+            </label>
+            <p-inputSwitch
+              [(ngModel)]="allowReserved"
+              (onChange)="onAllowReservedToggle()"
+            ></p-inputSwitch>
+          </div>
+        </div>
+
+        <h5 class="text-base font-bold mt-6 mb-2">
+          {{ "PATHS.PARAMETERS.POPUP.SCHEMA_PROPERTIES" | translate }}
+        </h5>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.FORMAT" | translate }}
+            </label>
+            <p-select
+              [options]="formatOptions"
+              [(ngModel)]="format"
+              (onChange)="onFormatChange()"
+              optionLabel="label"
+              placeholder="{{
+                'PATHS.PARAMETERS.POPUP.FORMAT_PLACEHOLDER' | translate
+              }}"
+              class="w-full bg-gray-100 border rounded-md px-3 py-2"
+            ></p-select>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.DEFAULT" | translate }}
+            </label>
+            <input
+              pInputText
+              [(ngModel)]="defaultValue"
+              (ngModelChange)="onDefaultChange()"
+              [placeholder]="
+                'PATHS.PARAMETERS.POPUP.DEFAULT_PLACEHOLDER' | translate
+              "
+              class="w-full bg-gray-100 border rounded-md px-3 py-2"
+            />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 mt-4" *ngIf="specVersion !== '2.0'">
+          <label class="text-sm font-medium">
+            {{ "PATHS.PARAMETERS.POPUP.ENUM" | translate }}
+          </label>
+          <input
+            pInputText
+            [(ngModel)]="newEnum"
+            (keydown.enter)="addEnum()"
+            [placeholder]="
+              'PATHS.PARAMETERS.POPUP.ENUM_PLACEHOLDER' | translate
+            "
+            class="w-full bg-gray-100 border rounded-md px-3 py-2"
+          />
+          <div class="flex flex-wrap gap-2 mt-2">
+            <p-chip
+              *ngFor="let item of enumValues; let i = index"
+              [label]="item.toString()"
+              removable="true"
+              (onRemove)="removeEnum(i)"
+            ></p-chip>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 mt-4">
+          <label class="text-sm font-medium">
+            {{ "PATHS.PARAMETERS.POPUP.EXAMPLE" | translate }}
+          </label>
+          <input
+            pInputText
+            [(ngModel)]="example"
+            (ngModelChange)="onExampleChange()"
+            [placeholder]="
+              'PATHS.PARAMETERS.POPUP.EXAMPLE_PLACEHOLDER' | translate
+            "
+            class="w-full bg-gray-100 border rounded-md px-3 py-2"
+          />
+        </div>
+
+        <h5 class="text-base font-bold mt-6 mb-2">
+          {{ "PATHS.PARAMETERS.POPUP.STRING_PROPERTIES" | translate }}
+        </h5>
+
+        <div class="flex flex-col gap-2 mb-4">
+          <label class="text-sm font-medium">
+            {{ "PATHS.PARAMETERS.POPUP.PATTERN" | translate }}
+          </label>
+          <input
+            pInputText
+            [(ngModel)]="pattern"
+            (ngModelChange)="onPatternChange()"
+            [placeholder]="'^[A-Za-z0-9 _.-]+$'"
+            class="w-full bg-gray-100 border rounded-md px-3 py-2"
+          />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.MIN_LENGTH" | translate }}
+            </label>
+            <input
+              pInputText
+              type="number"
+              [(ngModel)]="minLength"
+              (ngModelChange)="onMinLengthChange()"
+              [placeholder]="'>= 0'"
+              class="w-full bg-gray-100 border rounded-md px-3 py-2"
+            />
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.MAX_LENGTH" | translate }}
+            </label>
+            <input
+              pInputText
+              type="number"
+              [(ngModel)]="maxLength"
+              (ngModelChange)="onMaxLengthChange()"
+              [placeholder]="'>= 0'"
+              class="w-full bg-gray-100 border rounded-md px-3 py-2"
+            />
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="isAny">
+        <h5 class="text-base font-bold mb-2">
+          {{ "PATHS.PARAMETERS.POPUP.PARAMETER_PROPERTIES" | translate }}
+        </h5>
+
+        <div class="flex flex-col gap-2" *ngIf="specVersion !== '2.0'">
+          <label class="text-sm font-medium">
+            {{ "PATHS.PARAMETERS.POPUP.STYLE" | translate }}
+          </label>
+          <p-select
+            [options]="styles"
+            [(ngModel)]="style"
+            (onChange)="onStyleChange()"
+            [placeholder]="'PATHS.PARAMETERS.POPUP.SELECT_STYLE' | translate"
+            class="w-full bg-gray-100 border rounded-md px-3 py-2"
+          ></p-select>
+        </div>
+
+        <div class="flex flex-wrap gap-6 items-center mb-4 mt-2">
+          <div class="flex items-center gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.DEPRECATED" | translate }}
+            </label>
+            <p-inputSwitch
+              [(ngModel)]="deprecated"
+              (onChange)="onDeprecatedToggle()"
+            ></p-inputSwitch>
+          </div>
+        </div>
+
+        <h5 class="text-base font-bold mt-6 mb-2">
+          {{ "PATHS.PARAMETERS.POPUP.SCHEMA_PROPERTIES" | translate }}
+        </h5>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.FORMAT" | translate }}
+            </label>
+            <p-select
+              [options]="formatOptions"
+              [(ngModel)]="format"
+              (onChange)="onFormatChange()"
+              optionLabel="label"
+              placeholder="{{
+                'PATHS.PARAMETERS.POPUP.FORMAT_PLACEHOLDER' | translate
+              }}"
+              class="w-full bg-gray-100 border rounded-md px-3 py-2"
+            ></p-select>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">
+              {{ "PATHS.PARAMETERS.POPUP.DEFAULT" | translate }}
+            </label>
+            <input
+              pInputText
+              [(ngModel)]="defaultValue"
+              (ngModelChange)="onDefaultChange()"
+              [placeholder]="
+                'PATHS.PARAMETERS.POPUP.DEFAULT_PLACEHOLDER' | translate
+              "
+              class="w-full bg-gray-100 border rounded-md px-3 py-2"
+            />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 mt-4" *ngIf="specVersion !== '2.0'">
+          <label class="text-sm font-medium">
+            {{ "PATHS.PARAMETERS.POPUP.ENUM" | translate }}
+          </label>
+          <input
+            pInputText
+            [(ngModel)]="newEnum"
+            (keydown.enter)="addEnum()"
+            [placeholder]="
+              'PATHS.PARAMETERS.POPUP.ENUM_PLACEHOLDER' | translate
+            "
+            class="w-full bg-gray-100 border rounded-md px-3 py-2"
+          />
+          <div class="flex flex-wrap gap-2 mt-2">
+            <p-chip
+              *ngFor="let item of enumValues; let i = index"
+              [label]="item.toString()"
+              removable="true"
+              (onRemove)="removeEnum(i)"
+            ></p-chip>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 mt-4">
+          <label class="text-sm font-medium">
+            {{ "PATHS.PARAMETERS.POPUP.EXAMPLE" | translate }}
+          </label>
+          <input
+            pInputText
+            [(ngModel)]="example"
+            (ngModelChange)="onExampleChange()"
+            [placeholder]="
+              'PATHS.PARAMETERS.POPUP.EXAMPLE_PLACEHOLDER' | translate
+            "
+            class="w-full bg-gray-100 border rounded-md px-3 py-2"
+          />
+        </div>
+      </ng-container>
+    </div>
+  </ng-template>
+</p-popover>

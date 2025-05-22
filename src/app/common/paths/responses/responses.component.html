@@ -1,0 +1,325 @@
+<p-toast></p-toast>
+<p-confirmDialog> </p-confirmDialog>
+
+<div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+  <div class="flex flex-wrap gap-2">
+    <p-chip
+      *ngFor="let status of responseKeys"
+      [label]="status"
+      [ngStyle]="getChipStyle(status)"
+      (click)="onResponseClick(status)"
+      removable="true"
+      (onRemove)="removeStatus(status)"
+    ></p-chip>
+  </div>
+
+  <p-button
+    type="button"
+    [rounded]="true"
+    [text]="true"
+    [raised]="true"
+    label="{{ 'PATHS.PARAMETERS.ADD' | translate }}"
+    icon="pi pi-plus"
+    (click)="statusCodeMenu.toggle($event)"
+    class="ml-auto"
+  ></p-button>
+
+  <p-menu #statusCodeMenu [model]="filteredStatusCodeMenuItems" [popup]="true">
+    <ng-template pTemplate="start">
+      <p-floatLabel variant="on">
+        <input
+          pInputText
+          id="status_code_filter"
+          [(ngModel)]="statusCodeFilterText"
+          (input)="filterStatusCodeMenuItems()"
+          autocomplete="off"
+          class="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+        />
+        <label for="status_code_filter">{{ "FILTER" | translate }}</label>
+      </p-floatLabel>
+    </ng-template>
+  </p-menu>
+</div>
+
+<p-divider></p-divider>
+
+<div *ngIf="selectedResponseData" class="">
+  <h3 class="font-bold text-lg mb-4" style="color: var(--p-primary-color)">
+    {{ selectedStatus }}
+  </h3>
+
+  <p-floatLabel variant="on">
+    <textarea
+      id="description"
+      pTextarea
+      rows="5"
+      cols="30"
+      [(ngModel)]="selectedResponseData.description"
+      (ngModelChange)="debouncedEmitUpdate()"
+      class="w-full"
+    ></textarea>
+    <label for="description">{{ "DESCRIPTION" | translate }}</label>
+  </p-floatLabel>
+</div>
+
+<p-divider></p-divider>
+
+<div class="flex flex-col gap-5 p-5 min-w-[720px]">
+  <div class="flex items-center justify-between gap-2">
+    <div class="flex items-center gap-2 text-lg font-semibold">
+      <span
+        class="pi pi-objects-column"
+        style="color: var(--p-primary-color)"
+      ></span>
+      <strong
+        class="text-base font-semibold"
+        style="color: var(--p-primary-color)"
+      >
+        {{ "PATHS.PARAMETERS.HEADERS" | translate }}
+      </strong>
+    </div>
+    <p-button
+      [label]="'PATHS.PARAMETERS.ADD' | translate"
+      icon="pi pi-plus"
+      [rounded]="true"
+      [text]="true"
+      [raised]="true"
+      class="p-button-sm"
+      (onClick)="addHeader()"
+    ></p-button>
+  </div>
+
+  <p-message
+    *ngIf="headerParams?.length === 0"
+    icon="pi pi-info"
+    severity="info"
+    text="{{ 'PATHS.PARAMETERS.MESSAGES.NO_HEADERS' | translate }}"
+    styleClass="h-full"
+  />
+
+  <div
+    class="parameter-row flex items-start gap-2 w-full py-1.5"
+    *ngFor="let headerParam of headerParams"
+  >
+    <p-floatlabel class="min-w-[150px] max-w-[200px] w-full text-[13px]">
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="headerParam.name"
+        (ngModelChange)="debouncedEmitUpdate()"
+      />
+      <label>{{ "PATHS.NAME" | translate }}</label>
+    </p-floatlabel>
+
+    <p-select
+      *ngIf="specVersion === '2.0'"
+      [options]="types"
+      [(ngModel)]="headerParam.type"
+      optionLabel="name"
+      optionValue="name"
+      placeholder="Type"
+      class="min-w-[150px] max-w-[200px] w-full text-[13px]"
+      (ngModelChange)="emitResponsesUpdate()"
+    ></p-select>
+
+    <p-select
+      *ngIf="
+        specVersion === '3.0.0' ||
+        specVersion === '3.1.0' ||
+        specVersion === '3.0'
+      "
+      [options]="types"
+      [(ngModel)]="headerParam.schema.type"
+      optionLabel="name"
+      optionValue="name"
+      placeholder="Type"
+      class="min-w-[150px] max-w-[200px] w-full text-[13px]"
+      (ngModelChange)="emitResponsesUpdate()"
+    ></p-select>
+
+    <p-floatlabel class="flex-1 min-w-[200px] text-[13px]">
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="headerParam.description"
+        (ngModelChange)="debouncedEmitUpdate()"
+      />
+      <label>{{ "PATHS.DESCRIPTION" | translate }}</label>
+    </p-floatlabel>
+
+    <div class="flex items-center gap-1 ml-1.5">
+      <p-button
+        icon="pi pi-link"
+        class="icon-btn"
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        pTooltip="{{ 'PATHS.PARAMETERS.REF' | translate }}"
+        tooltipPosition="top"
+        (click)="refPopover.toggle($event)"
+      ></p-button>
+
+      <p-popover #refPopover>
+        <div class="w-72 p-3">
+          <label class="block text-xs font-semibold mb-2">$REF TARGET</label>
+          <div class="flex items-center gap-2 mb-3">
+            <p-select
+              [options]="refOptions"
+              [(ngModel)]="selectedRefType"
+              class="w-32"
+              optionLabel="label"
+              optionValue="value"
+            ></p-select>
+
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="refInput"
+              placeholder="Enter target"
+              class="flex-1"
+            />
+          </div>
+
+          <div class="text-xs text-gray-500">
+            <p *ngIf="selectedRefType === 'swaggerhub'">SwaggerHub domains</p>
+            <p *ngIf="selectedRefType === 'url'">External URL</p>
+            <p *ngIf="selectedRefType === 'file'">This File</p>
+            <p *ngIf="selectedRefType === 'project'">This Project</p>
+          </div>
+        </div>
+      </p-popover>
+
+      <p-button
+        icon="pi pi-info-circle"
+        class="icon-btn"
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        [disabled]="true"
+        (click)="requiredToggle(headerParam)"
+        [severity]="headerParam.required ? 'danger' : undefined"
+      ></p-button>
+
+      <p-button
+        icon="pi pi-list"
+        class="icon-btn"
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        (click)="toggleChildOverlay($event, popover)"
+      ></p-button>
+
+      <p-button
+        icon="pi pi-trash"
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        severity="danger"
+        (onClick)="remove(headerParam)"
+      ></p-button>
+    </div>
+
+    <app-type-details-popcover
+      #popover
+      [param]="headerParam"
+      [specVersion]="specVersion"
+      (paramChange)="onPopoverClosed($event, headerParam)"
+      (paramUpdateOnClose)="onPopoverClosed($event, headerParam)"
+    ></app-type-details-popcover>
+  </div>
+
+  <p-divider></p-divider>
+
+  <div class="my-5 py-2">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2 text-lg font-semibold">
+        <i
+          class="pi pi-objects-column text-base"
+          style="color: var(--p-primary-color)"
+        ></i>
+        <strong style="color: var(--p-primary-color)"
+          >{{ "PATHS.LABELS.BODY" | translate }}
+        </strong>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p-menu #menu [model]="filteredMenuItems" [popup]="true">
+          <ng-template pTemplate="start">
+            <p-floatLabel variant="on">
+              <input
+                pInputText
+                id="filter_input"
+                [(ngModel)]="filterText"
+                (input)="filterMenuItems()"
+                autocomplete="off"
+                class="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+              />
+              <label for="filter_input">{{ "FILTER" | translate }}</label>
+            </p-floatLabel>
+          </ng-template>
+        </p-menu>
+
+        <p-button
+          type="button"
+          [rounded]="true"
+          [text]="true"
+          [raised]="true"
+          label="{{ 'PATHS.PARAMETERS.ADD' | translate }}"
+          icon="pi pi-plus"
+          (click)="menu.toggle($event)"
+          class="ml-auto"
+        ></p-button>
+      </div>
+    </div>
+    <div class="mt-4">
+      <p-message
+        *ngIf="getRequestBodyContentKeys()?.length === 0"
+        icon="pi pi-info"
+        severity="info"
+        text="{{ 'PATHS.RESPONSES.MESSAGES.NO_BODY_CONTENT' | translate }}"
+        styleClass="h-full"
+      />
+      <div class="flex gap-2 relative" #buttonContainer>
+        <div
+          *ngFor="let contentType of getRequestBodyContentKeys()"
+          class="flex items-center mb-2"
+        >
+          <p-button
+            #buttonRef
+            [rounded]="true"
+            [text]="true"
+            [raised]="true"
+            label="{{ contentType }}"
+            [ngClass]="{ selected: contentType === selectedContentType }"
+            (onClick)="selectContentType(contentType)"
+            class="font-bold text-sm border-none cursor-pointer transition-colors"
+            [severity]="
+              selectedContentType === contentType ? 'primary' : 'secondary'
+            "
+          ></p-button>
+
+          <p-button
+            icon="pi pi-trash"
+            (click)="deleteContentType(contentType)"
+            [severity]="
+              selectedContentType === contentType ? 'primary' : 'secondary'
+            "
+            [rounded]="true"
+            [text]="true"
+            class="border-none"
+          ></p-button>
+        </div>
+      </div>
+
+      <app-schema-tabs
+        *ngIf="requestBodyContentAsArray.length > 0"
+        [selectedSchema]="selectedSchema"
+        [selectedSchemaName]="selectedContentType"
+        [nameOfId]="nameOfId"
+        [apiDataService]="getApiDataService"
+        (schemaUpdated)="onSchemaUpdated($event)"
+        (deleteRowEvent)="onChildDelete()"
+      ></app-schema-tabs>
+    </div>
+  </div>
+</div>

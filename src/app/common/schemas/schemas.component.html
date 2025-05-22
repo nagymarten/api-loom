@@ -1,0 +1,74 @@
+<div *ngIf="apiSchemas.length > 0" class="flex flex-col gap-6">
+  <div>
+    <div class="text-lg font-bold mb-2" style="color: var(--p-primary-color)">
+      {{ "SIDEBAR.MODELS.SUMMARY" | translate }}
+    </div>
+    <input
+      type="text"
+      pInputText
+      [(ngModel)]="schema"
+      (blur)="onSchemaTitelBlur($event)"
+      (keydown.enter)="onSchemaTitelBlur($event)"
+      [placeholder]="'SCHEMAS.PLACEHOLDER.TITLE' | translate"
+      autocomplete="off"
+    />
+  </div>
+
+  <div>
+    <div class="text-lg font-bold mb-2" style="color: var(--p-primary-color)">
+      {{ "DESCRIPTION" | translate }}
+    </div>
+    <input
+      type="text"
+      pInputText
+      [ngModel]="selectedSchema?.description"
+      (ngModelChange)="selectedSchema.description = $event"
+      (blur)="onSchemaDescriptionBlur($event)"
+      (keydown.enter)="onSchemaDescriptionBlur($event)"
+      [placeholder]="'SCHEMAS.PLACEHOLDER.DESCRIPTION' | translate"
+      autocomplete="off"
+    />
+  </div>
+
+  <div class="mt-5">
+    <p-tabs value="0">
+      <p-tablist>
+        <p-tab value="0" (click)="setActiveTab('schema')">
+          {{ "SCHEMAS.TABS.SCHEMA" | translate }}
+        </p-tab>
+        <p-tab value="1" (click)="setActiveTab('examples')">
+          {{ "SCHEMAS.TABS.EXAMPLES" | translate }}
+        </p-tab>
+        <p-tab value="2" (click)="setActiveTab('extensions')">
+          {{ "SCHEMAS.TABS.EXTENSIONS" | translate }}
+        </p-tab>
+      </p-tablist>
+
+      <p-tabpanels>
+        <p-tabpanel value="0">
+          <app-schema-tabs
+            [selectedSchema]="selectedSchema"
+            [selectedSchemaName]="selectedSchemaName"
+            [nameOfId]="nameOfId"
+            [apiDataService]="getApiDataService"
+            (deleteRowEvent)="onChildDelete()"
+            (schemaUpdated)="onSchemaUpdated($event)"
+          ></app-schema-tabs>
+        </p-tabpanel>
+        <p-tabpanel value="1">
+          <app-schema-examples
+            [selectedSchema]="selectedSchema"
+            (exampleChanged)="updateSwaggerSpec()"
+          ></app-schema-examples>
+        </p-tabpanel>
+        <p-tabpanel value="2">
+          <app-schema-extensions
+            [selectedSchema]="selectedSchema"
+            [nameOfId]="nameOfId"
+            (extensionChanged)="updateSwaggerSpec()"
+          ></app-schema-extensions>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </div>
+</div>

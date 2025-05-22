@@ -1,0 +1,382 @@
+{
+  "SEARCH": "Suche",
+  "LOG_OUT": "Abmelden",
+  "DESCRIPTION": "Beschreibung",
+  "FILTER": "Filter",
+  "BUTTON": {
+    "PUBLISH_TO_DB": "In Datenbank veröffentlichen"
+  },
+  "TOAST": {
+    "WARNING": "Warnung",
+    "SUCCESS": "Erfolg",
+    "ERROR": "Fehler",
+    "PATH_EXISTS": "Ein Pfad mit diesem Schlüssel existiert bereits",
+    "PATH_EMPTY": "Pfadname darf nicht leer sein",
+    "METHOD_ALREADY_EXISTS": "Die Methode existiert bereits für den Pfad.",
+    "MODEL_ADDED": "Das Modell wurde erfolgreich hinzugefügt.",
+    "PATH_ADDED": "Pfad wurde erfolgreich hinzugefügt.",
+    "METHOD_ADDED": "Methode wurde erfolgreich hinzugefügt.",
+    "RENAME": {
+      "INVALID_KEYS": "Alter oder neuer Name ist ungültig.",
+      "OLD_KEY_NOT_FOUND": "Referenz mit Schlüssel '{{key}}' existiert nicht.",
+      "NEW_KEY_EXISTS": "Referenz mit Schlüssel '{{key}}' existiert bereits.",
+      "SUCCESS": "Referenz '{{oldKey}}' wurde erfolgreich in '{{newKey}}' umbenannt."
+    },
+    "REFRESH_DB": {
+      "SUMMARY": "Datenbank aktualisiert",
+      "DETAIL": "Die Swagger-Spezifikation wurde in die Datenbank übertragen.",
+      "NO_ID_SUMMARY": "Aktualisierung fehlgeschlagen",
+      "NO_ID_DETAIL": "Keine ID für die Swagger-Spezifikation gefunden."
+    }
+  },
+  "NO_REFERENCE": {
+    "TITLE": "Keine OpenAPI-Referenz ausgewählt",
+    "DESCRIPTION": "Du kannst eine vorhandene Swagger/OpenAPI-Datei importieren oder eine neue erstellen.",
+    "FEATURES": {
+      "IMPORT": "Importiere YAML- oder JSON-Dateien über die Import-Schaltfläche.",
+      "DEFAULT_STRUCTURE": "Neue Spezifikationen werden mit einer Standardstruktur erstellt (v3.1 oder v3.0).",
+      "EDIT_SIDEBAR": "Bearbeite Pfade und Modelle über die Seitenleiste, sobald eine Spezifikation geladen ist.",
+      "RIGHT_CLICK": "Rechtsklicke auf ein Element in der Seitenleiste, um weitere Aktionen zu sehen."
+    }
+  },
+  "EXPORT_DIALOG": {
+    "HEADER": "Exportieren",
+    "FORMAT": "Format",
+    "JSON": "JSON",
+    "YAML": "YAML",
+    "CANCEL": "Abbrechen",
+    "SAVE_TO_FILE": "Datei speichern",
+    "SET_TITLE": "OpenAPI-Titel festlegen",
+    "TITLE_LABEL": "Titel",
+    "TITLE_PLACEHOLDER": "Geben Sie den OpenAPI-Titel ein",
+    "CREATE": "Erstellen"
+  },
+  "SIDEBAR": {
+    "REFERENCES": {
+      "LABEL": "Referenzen",
+      "RIGHTMENU": {
+        "ADDOPENAPI": "OpenAPI hinzufügen",
+        "NEWMODEL": "Neues Modell",
+        "IMPORT": "Importieren",
+        "EXPORT": "Exportieren",
+        "COPY_PATH": "Pfad kopieren",
+        "COPY_RELATIVE_PATH": "Relativen Pfad kopieren",
+        "RENAME": "Umbenennen",
+        "DELETE": "Löschen",
+        "DUPLICATE": "Duplizieren"
+      }
+    },
+    "OVERVIEW_BUTTON": "API-Übersicht",
+    "PATHS": {
+      "LABEL": "Pfade",
+      "RIGHTMENU": {
+        "NEW_PATH": "Neuer Pfad",
+        "COPY_PATH": "Pfad kopieren",
+        "COPY_RELATIVE_PATH": "Relativen Pfad kopieren",
+        "NEW_OPERATION": "Neue Operation",
+        "RENAME_PATH": "Pfad umbenennen",
+        "DELETE_PATH": "Pfad löschen"
+      },
+      "ADD_PATH": "Pfad hinzufügen",
+      "MODIFY_PATH": "Pfad bearbeiten",
+      "ENTER_NEW_PATH_NAME": "Geben Sie den neuen Pfadnamen ein",
+      "RENAME_ENDPOINT": "Endpunkt umbenennen",
+      "NEW_METHOD": "Neue Methode",
+      "ENTER_NEW_METHOD_NAME": "Geben Sie den neuen Methodennamen ein (z.B. get, post)",
+      "TOAST": {
+        "MISSING": "Bitte geben Sie einen gültigen Pfadnamen ein.",
+        "NOT_FOUND": "Ursprünglicher Pfad nicht gefunden. Umbenennung nicht möglich.",
+        "EXISTS": "Ein Pfad mit diesem neuen Namen existiert bereits.",
+        "SUCCESS": "Pfad erfolgreich umbenannt."
+      },
+      "TOAST_RENAME_ENDPOINT": {
+        "INVALID_INPUT": "Ungültiger Pfad, Methode oder Zusammenfassung. Bitte überprüfen Sie die Eingabe.",
+        "METHOD_NOT_FOUND": "Die angegebene Methode existiert für diesen Pfad nicht.",
+        "SWAGGER_FETCH_FAILED": "Fehler beim Abrufen der Swagger-Spezifikation.",
+        "SUCCESS": "Zusammenfassung des Endpunkts erfolgreich aktualisiert."
+      },
+      "CONFIRM_DELETE": {
+        "MESSAGE": "Sind Sie sicher, dass Sie den Pfad \"{{path}}\" löschen möchten?",
+        "HEADER": "Löschung bestätigen",
+        "ACCEPT": "Ja",
+        "REJECT": "Nein",
+        "SUCCESS_SUMMARY": "Gelöscht",
+        "SUCCESS_DETAIL": "Pfad wurde erfolgreich gelöscht."
+      },
+      "CONFIRM_DELETE_CONTENT_TYPE": {
+        "MESSAGE": "Sind Sie sicher, dass Sie den Inhaltstyp '{{contentType}}' löschen möchten?",
+        "HEADER": "Löschung bestätigen",
+        "ACCEPT": "Löschen",
+        "REJECT": "Abbrechen",
+        "SUCCESS_SUMMARY": "Gelöscht",
+        "SUCCESS_DETAIL": "Inhaltstyp '{{contentType}}' wurde erfolgreich gelöscht."
+      }
+    },
+    "MODELS": {
+      "LABEL": "Modelle",
+      "SUMMARY": "Zusammenfassung",
+      "RIGHTMENU": {
+        "NEW_MODEL": "Neues Modell",
+        "COPY_PATH": "Pfad kopieren",
+        "COPY_RELATIVE_PATH": "Relativen Pfad kopieren"
+      },
+      "CONFIRM_DELETE": {
+        "MESSAGE": "Sind Sie sicher, dass Sie das Modell '{{model}}' löschen möchten?",
+        "HEADER": "Löschung bestätigen",
+        "ACCEPT": "Löschen",
+        "REJECT": "Abbrechen",
+        "SUCCESS_SUMMARY": "Gelöscht",
+        "SUCCESS_DETAIL": "Modell wurde erfolgreich gelöscht.",
+        "NO_MODEL_SELECTED": "Kein Modell zum Löschen ausgewählt."
+      },
+      "CONFIRM_DELETE_ENDPOINT": {
+        "MESSAGE": "Sind Sie sicher, dass Sie den Endpunkt \"{{method}}\" vom Pfad \"{{path}}\" löschen möchten?",
+        "HEADER": "Löschung bestätigen",
+        "ACCEPT": "Löschen",
+        "REJECT": "Abbrechen",
+        "SUCCESS_SUMMARY": "Gelöscht",
+        "SUCCESS_DETAIL": "Endpunkt wurde erfolgreich gelöscht."
+      },
+      "ADD_MODEL": "Modell hinzufügen",
+      "ENTER_NEW_MODEL_NAME": "Geben Sie den neuen Modellnamen ein",
+      "RENAME_MODEL": "Modell umbenennen",
+      "NEW_MODEL_NAME": "Neuer Modellname"
+    },
+    "COMMON": {
+      "CANCEL": "Abbrechen",
+      "SAVE": "Speichern"
+    }
+  },
+  "SCHEME_OVERLAY": {
+    "MARK_AS_EXAMPLE": "Als Beispiel markieren",
+    "MARK_AS_DEFAULT": "Als Standardwert markieren",
+    "SELECT_TYPE": "Typ auswählen",
+    "SELECT_MULTIPLE_TYPES": "Mehrere Typen auswählen",
+    "MULTISELECT": "Mehrfachauswahl",
+    "NOT_MULTISELECT": "Keine Mehrfachauswahl",
+    "PROPERTIES": "Eigenschaften",
+    "MIN_PROPERTIES": "Minimale Eigenschaften",
+    "MAX_PROPERTIES": "Maximale Eigenschaften",
+    "TYPE": "Typ",
+    "COMPONENTS": "Komponenten",
+    "COMBINE_SCHEMAS": "Schemata kombinieren",
+    "COMBINE_SELECT_OPTION": "Wählen Sie unten eine Option, um Ihre Schemas zu kombinieren",
+    "SELECT_COMBINE_TYPE": "Kombinationstyp auswählen",
+    "ALLOW_ADDITIONAL_PROPERTIES": "Zusätzliche Eigenschaften erlauben",
+    "DEPRECATED": "Veraltet",
+    "NULLABLE": "Null erlaubt",
+    "NOT_NULLABLE": "Null nicht erlaubt",
+    "BEHAVIOR": "Verhalten",
+    "READ_WRITE": "Lesen/Schreiben",
+    "MIN_ITEMS": "Minimale Elemente",
+    "MAX_ITEMS": "Maximale Elemente",
+    "UNIQUE_ITEMS": "Eindeutige Elemente",
+    "FORMAT": "Format",
+    "SELECT_INTEGER_FORMAT": "Ganzzahlformat auswählen",
+    "DEFAULT": "Standardwert",
+    "DEFAULT_INTEGER": "Standard Ganzzahlwert",
+    "EXAMPLE": "Beispiel",
+    "EXAMPLE_INTEGER": "Beispiel Ganzzahl",
+    "MINIMUM": "Minimum",
+    "MAXIMUM": "Maximum",
+    "MULTIPLE_OF": "Vielfaches von",
+    "EXCLUSIVE_MIN": "Exklusives Minimum",
+    "EXCLUSIVE_MAX": "Exklusives Maximum",
+    "DEFAULT_NUMBER": "Standard Zahl",
+    "EXAMPLE_NUMBER": "Beispiel Zahl",
+    "DEFAULT_STRING": "Standardzeichenfolgewert",
+    "EXAMPLE_STRING": "Beispielzeichenfolge",
+    "PATTERN": "Muster",
+    "MIN_LENGTH": "Minimale Länge",
+    "MAX_LENGTH": "Maximale Länge",
+    "DEFAULT_BOOLEAN": "Standardwert (Boolean)",
+    "SELECT_BOOLEAN_VALUE": "Wähle einen Wert",
+    "ENUM": "Aufzählung",
+    "ENTER_ENUM_VALUE": "Wert eingeben",
+    "OPTIONS": "Optionen",
+    "REMOVE_VALUE": "Wert entfernen",
+    "REMOVE_THIS_VALUE": "Diesen Wert entfernen",
+    "ADD": "Hinzufügen",
+    "DICTIONARY": "Wörterbuch"
+  },
+  "SCHEMA_TABS": {
+    "NAME": "Name",
+    "TYPE": "Typ",
+    "REQUIRED": "Pflichtfeld",
+    "GO_TO_REFERENCE": "Zur Referenz gehen"
+  },
+  "REFERENCE": {
+    "TITLE": "Titel",
+    "VERSION": "Version",
+    "INTERNAL": "INTERNAL",
+    "SUMMARY": "Zusammenfassung",
+    "OPTIONAL_GLOBAL_SECURITY": "Optionale globale Sicherheit",
+    "SELECT_A_VALUE": "Wert auswählen",
+    "NEW_ENUM_VALUE": "Neuer Enum-Wert",
+    "VARIABLES": "Variablen",
+    "ALLOWED_VALUES": "Zulässige Werte",
+    "SECURITY": "Sicherheit",
+    "DESCRIPTION": "Beschreibung",
+    "CONTACT": "Kontakt",
+    "CONTACT_NAME": "Kontaktname",
+    "CONTACT_URL": "Kontakt-URL",
+    "CONTACT_EMAIL": "Kontakt-E-Mail",
+    "TERMS": "Nutzungsbedingungen URL",
+    "LICENSE": "Lizenz",
+    "LICENSE_NAME": "Lizenzname",
+    "LICENSE_TYPE": "Lizenztyp wählen",
+    "LICENSE_URL": "Lizenz-URL",
+    "EXTENSIONS": "X-Erweiterungen",
+    "SERVERS": "Server",
+    "SECURITY_SCHEMES": "Sicherheitsmechanismen",
+    "GLOBAL_SECURITY": "Globale Sicherheit",
+    "ADD_BUTTON": "Hinzufügen",
+    "KEY": "Schlüssel",
+    "NAME": "Name",
+    "OPENID_CONNECT_URL": "OpenID Connect-URL",
+    "SERVER_VARIABLES": "Servervariablen",
+    "REFRESH_URL": "Aktualisierungs-URL",
+    "AUTHORIZATION_URL": "Autorisierungs-URL",
+    "TOKEN_URL": "Token-URL",
+    "SCOPES": "Berechtigungen"
+  },
+  "SCHEMAS": {
+    "TOAST": {
+      "TITLE_UPDATED": "Der Schema-Titel wurde erfolgreich aktualisiert.",
+      "DESCRIPTION_UPDATED": "Die Schema-Beschreibung wurde erfolgreich aktualisiert.",
+      "SUMMARY_UPDATED": "Zusammenfassung erfolgreich aktualisiert.",
+      "OPERATIONID_UPDATED": "Operation-ID erfolgreich aktualisiert."
+    },
+    "PLACEHOLDER": {
+      "TITLE": "Schema-Titel",
+      "DESCRIPTION": "Keine Beschreibung verfügbar",
+      "CLICK_TO_ADD": "Klicken Sie hier, um einen Titel hinzuzufügen",
+      "CLICK_TO_ADD_DESCRIPTION": "Klicken Sie hier, um eine Beschreibung hinzuzufügen"
+    },
+    "TABS": {
+      "SCHEMA": "Schema",
+      "EXAMPLES": "Beispiele",
+      "EXTENSIONS": "Erweiterungen"
+    },
+    "EXAMPLES": {
+      "ADD": "Beispiel hinzufügen",
+      "COPY": "Beispiel kopieren",
+      "DELETE": "Beispiel löschen",
+      "EDIT": "Beispiel bearbeiten"
+    },
+    "EXTENSIONS": {
+      "ADD": "Erweiterung hinzufügen",
+      "COPY": "Erweiterung kopieren",
+      "DELETE": "Erweiterung löschen",
+      "EDIT": "Erweiterung bearbeiten",
+      "LABEL": "Name der Erweiterung",
+      "PLACEHOLDER": {
+        "CLICK_TO_ADD_DESCRIPTION": "Klicken Sie, um eine Beschreibung hinzuzufügen"
+      }
+    }
+  },
+  "PATHS": {
+    "SUMMARY": "Zusammenfassung",
+    "OPERATION_ID": "Operation ID",
+    "DESCRIPTION": "Beschreibung",
+    "NAME": "Name",
+    "TABS": {
+      "GENERAL": "Allgemein",
+      "PARAMETERS": "Parameter",
+      "REQUEST": "Anfrage",
+      "RESPONSES": "Antworten"
+    },
+    "PLACEHOLDERS": {
+      "SUMMARY": "Zusammenfassung eingeben...",
+      "DESCRIPTION": "Beschreibung eingeben...",
+      "RESPONSE_MESSAGE": "Antwortnachricht...",
+      "OPERATION_ID": "Operation ID eingeben..."
+    },
+    "MESSAGES": {
+      "PARAMETERS_CONTENT": "Parameterinhalt kommt hier hin...",
+      "NO_BODY_CONTENT": "Kein Body-Inhalt",
+      "NO_HEADERS_DEFINED": "Keine Header definiert",
+      "NEW_RESPONSE_DESCRIPTION": "Neue Antwortbeschreibung",
+      "RESPONSE_ADDED": "Antwort hinzugefügt",
+      "RESPONSE_CODE_ADDED": "Antwort mit Code {{responseCode}} wurde erfolgreich hinzugefügt.",
+      "RESPONSE_DELETED": "Antwort gelöscht",
+      "RESPONSE_CODE_DELETED": "Antwort mit Code {{responseCode}} wurde erfolgreich gelöscht."
+    },
+    "RESPONSES": {
+      "MESSAGES": {
+        "NO_BODY_CONTENT": "Kein Body-Inhalt"
+      }
+    },
+    "PARAMETERS": {
+      "HEADERS": "Kopfzeilen",
+      "QUERY_PARAMETERS": "Abfrageparameter",
+      "COOKIES": "Cookies",
+      "ADD": "Hinzufügen",
+      "REQUIRED": "Erforderlich",
+      "POPUP": {
+        "ADD": "Hinzufügen",
+        "PARAMETER_PROPERTIES": "Parameter-Eigenschaften",
+        "STYLE": "Stil",
+        "SELECT_STYLE": "Stil auswählen",
+        "DEPRECATED": "Veraltet",
+        "SCHEMA_PROPERTIES": "Schema-Eigenschaften",
+        "FORMAT": "Format",
+        "FORMAT_PLACEHOLDER": "float",
+        "DEFAULT": "Standard",
+        "DEFAULT_PLACEHOLDER": "Standardwert eingeben...",
+        "ENUM": "Aufzählung",
+        "EXAMPLE": "Beispiel",
+        "EXAMPLE_PLACEHOLDER": "beispiel",
+        "NUMBER_PROPERTIES": "Zahleneigenschaften",
+        "MINIMUM": "Minimum",
+        "MAXIMUM": "Maximum",
+        "EXCLUSIVE_MIN": "Exklusives Minimum",
+        "EXCLUSIVE_MAX": "Exklusives Maximum",
+        "MULTIPLE_OF": "Vielfaches von",
+        "ENUM_PLACEHOLDER": "Geben Sie einen Wert ein und drücken Sie Enter",
+        "ARRAY_PROPERTIES": "Array-Eigenschaften",
+        "UNIQUE_ITEMS": "Eindeutige Elemente",
+        "MIN_ITEMS": "Minimale Elemente",
+        "MAX_ITEMS": "Maximale Elemente",
+        "EXPLODE": "Explode",
+        "ALLOW_EMPTY_VALUE": "Leeren Wert erlauben",
+        "ALLOW_RESERVED": "Reservierte Werte erlauben",
+        "STRING_PROPERTIES": "Zeichenfolgen-Eigenschaften",
+        "PATTERN": "Muster",
+        "MIN_LENGTH": "Minimale Länge",
+        "MAX_LENGTH": "Maximale Länge"
+      },
+      "MESSAGES": {
+        "NO_HEADERS": "Keine Kopfzeilen definiert.",
+        "NO_QUERY_PARAMS": "Keine Abfrageparameter definiert.",
+        "NO_COOKIES": "Keine Cookies definiert."
+      }
+    },
+    "BUTTONS": {
+      "ADD_RESPONSE": "Antwort hinzufügen"
+    },
+    "LABELS": {
+      "RESPONSE": "Antwort",
+      "HEADERS": "Header",
+      "BODY": "Körper"
+    },
+    "PROMPTS": {
+      "ENTER_RESPONSE_CODE": "Geben Sie den neuen Antwortcode ein (z. B. 201, 404):",
+      "CONFIRM_DELETE": "Sind Sie sicher, dass Sie die Antwort mit Code {{responseCode}} löschen möchten?"
+    },
+    "ERRORS": {
+      "RESPONSE_EXISTS": "Doppelter Antwortcode",
+      "RESPONSE_CODE_EXISTS": "Antwortcode {{responseCode}} existiert bereits.",
+      "INVALID_RESPONSE_CODE": "Ungültiger Antwortcode",
+      "ENTER_VALID_CODE": "Bitte geben Sie einen gültigen numerischen Antwortcode ein."
+    },
+    "WARNINGS": {
+      "PATH_WARNING_TITLE": "Fehlender API-Pfad",
+      "API_PATH_NOT_FOUND": "API-Pfad '{{apiPath}}' nicht gefunden. Erstellen...",
+      "METHOD_WARNING_TITLE": "Fehlende API-Methode",
+      "METHOD_NOT_FOUND": "Methode '{{method}}' nicht gefunden. Erstellen...",
+      "PATH_UPDATED_TITLE": "API-Pfad aktualisiert",
+      "PATH_UPDATED": "Der API-Pfad '{{apiPath}}' wurde erfolgreich aktualisiert."
+    }
+  }
+}

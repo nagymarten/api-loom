@@ -1,0 +1,822 @@
+<p-toast></p-toast>
+<p-confirmDialog> </p-confirmDialog>
+
+<p-button
+  icon="pi pi-bars"
+  [label]="!isMobile ? 'Menu' : undefined"
+  text="true"
+  (click)="openDrawer()"
+  class="md:hidden m-2"
+/>
+
+<div class="card flex justify-center">
+  <p-drawer
+    #drawerRef
+    [(visible)]="visible"
+    [modal]="isMobile"
+    [showCloseIcon]="isMobile"
+    [closeOnEscape]="isMobile"
+    [ngStyle]="
+      !isMobile
+        ? { 'max-width': '320px', width: '320px', 'overflow-x': 'hidden' }
+        : null
+    "
+  >
+    <ng-template #headless>
+      <div class="flex flex-col h-full">
+        <div class="flex items-center justify-between px-2 pt-2 shrink-0">
+          <div class="flex items-center gap-2">
+            <a [routerLink]="['/']">
+              <svg
+                fill="var(--p-primary-color)"
+                height="38"
+                width="38"
+                version="1.1"
+                id="Capa_1"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 0 380 380"
+                xml:space="preserve"
+              >
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
+                  <g>
+                    <path
+                      d="M91.425,157.435c-1.065-2.297-3.366-3.767-5.897-3.767c-0.005,0-0.01,0-0.015,0c-2.537,0.006-4.839,1.487-5.895,3.794 L47.402,227.83c-1.494,3.264-0.06,7.122,3.204,8.616c0.877,0.401,1.797,0.591,2.702,0.591c2.464,0,4.821-1.409,5.914-3.796 l8.08-17.649h36.75l8.193,17.677c1.51,3.257,5.373,4.674,8.631,3.164c3.257-1.51,4.673-5.374,3.164-8.631L91.425,157.435z M73.254,202.592l12.311-26.888l12.462,26.888H73.254z"
+                    ></path>
+                    <path
+                      d="M166.496,152.865H135.07c-3.59,0-6.5,2.91-6.5,6.5v71.17c0,3.59,2.91,6.5,6.5,6.5c3.59,0,6.5-2.91,6.5-6.5V203.5h24.926 c13.96,0,25.316-11.357,25.316-25.316C191.813,164.223,180.456,152.865,166.496,152.865z M166.496,190.5H141.57v-24.635h24.926 c6.792,0,12.316,5.526,12.316,12.318C178.813,184.975,173.288,190.5,166.496,190.5z"
+                    ></path>
+                    <path
+                      d="M203.313,152.865c-3.59,0-6.5,2.91-6.5,6.5v71.17c0,3.59,2.91,6.5,6.5,6.5s6.5-2.91,6.5-6.5v-71.17 C209.813,155.775,206.902,152.865,203.313,152.865z"
+                    ></path>
+                    <path
+                      d="M368.317,46.487H11.684C5.241,46.487,0,51.73,0,58.173v263.656c0,6.442,5.241,11.684,11.684,11.684h356.634 c6.442,0,11.683-5.242,11.683-11.684V58.173C380,51.73,374.76,46.487,368.317,46.487z M280.949,259.268 c5.162-12.192,17.053-20.07,30.295-20.07c4.411,0,8.721,0.878,12.813,2.61c16.696,7.072,24.529,26.408,17.461,43.105 c-5.167,12.191-17.058,20.068-30.294,20.068c0,0,0,0-0.001,0c-4.411,0-8.721-0.878-12.81-2.611 c-8.089-3.424-14.361-9.793-17.659-17.935C277.455,276.294,277.524,267.356,280.949,259.268z M320.868,79.771 c6.844,0,12.387,5.547,12.387,12.387c0,6.842-5.543,12.387-12.387,12.387c-6.839,0-12.385-5.545-12.385-12.387 C308.483,85.318,314.029,79.771,320.868,79.771z M283.715,79.771c6.839,0,12.386,5.547,12.386,12.387 c0,6.842-5.547,12.387-12.386,12.387c-6.839,0-12.387-5.545-12.387-12.387C271.328,85.318,276.876,79.771,283.715,79.771z M246.561,79.771c6.839,0,12.381,5.547,12.381,12.387c0,6.842-5.542,12.387-12.381,12.387c-6.844,0-12.387-5.545-12.387-12.387 C234.175,85.318,239.718,79.771,246.561,79.771z M21.27,314.01V141.424H358.73v67.274c-1.537-2.202-3.677-4.02-6.327-5.143 l-20.614-8.726c-1.835-0.778-3.771-1.172-5.754-1.172c-5.956,0-11.303,3.54-13.623,9.02l-1.253,2.959 c-9.227,0.129-18.381,2.255-26.728,6.193l-2.426-2.107c-1.174-1.018-2.499-1.841-3.932-2.447c-1.841-0.779-3.782-1.174-5.771-1.174 c-4.276,0-8.341,1.858-11.154,5.099l-14.671,16.915c-2.583,2.986-3.855,6.794-3.581,10.735c0.285,3.941,2.084,7.535,5.064,10.115 l2.417,2.098c-2.755,8.849-3.563,18.179-2.365,27.344l-2.749,1.654c-6.981,4.2-9.242,13.302-5.039,20.293L249.044,315H22.26 C21.714,315,21.27,314.556,21.27,314.01z"
+                    ></path>
+                  </g>
+                </g>
+              </svg>
+            </a>
+            <a [routerLink]="['/']" (click)="onNavigateHome()">
+              <span class="font-semibold text-2xl text-primary">Loom</span>
+            </a>
+          </div>
+
+          <p-select
+            #languageSelectRef
+            [options]="languages"
+            [(ngModel)]="selectedLanguage"
+            optionLabel="name"
+            [filter]="false"
+            [showClear]="false"
+            placeholder="Select Language"
+            class="w-full md:w-40"
+            (onChange)="onLanguageChange($event, languageSelectRef)"
+          >
+            <ng-template #selectedItem let-selectedOption>
+              <div class="flex items-center gap-2">
+                <img
+                  [src]="getFlagUrl(selectedOption.code)"
+                  style="width: 18px; height: 12px; object-fit: cover"
+                />
+                <div>{{ selectedOption.name }}</div>
+              </div>
+            </ng-template>
+            <ng-template let-lang #item>
+              <div class="flex items-center gap-2">
+                <img
+                  [src]="getFlagUrl(lang.code)"
+                  style="width: 18px; height: 12px; object-fit: cover"
+                />
+                <div>{{ lang.name }}</div>
+              </div>
+            </ng-template>
+          </p-select>
+        </div>
+        <div class="overflow-y-auto">
+          <ul class="list-none p-4">
+            <li
+              class="border border-solid p-2 rounded"
+              style="
+                border-color: var(--p-inputtext-border-color);
+                background-color: var(--p-tabs-tab-background);
+                border-radius: var(--p-textarea-border-radius);
+              "
+            >
+              <div
+                #referencesHeader
+                pRipple
+                pStyleClass="@next"
+                enterFromClass="hidden"
+                enterActiveClass="animate-slidedown"
+                leaveToClass="hidden"
+                leaveActiveClass="animate-slideup"
+              >
+                <p-button
+                  pRipple
+                  [text]="true"
+                  severity="secondary"
+                  (click)="isReferencesExpanded = !isReferencesExpanded"
+                  [styleClass]="'w-full flex justify-start'"
+                  class="block w-full max-w-full items-center justify-start cursor-pointer rounded-md text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors"
+                >
+                  <div class="w-full flex items-center justify-between">
+                    <span class="flex items-center gap-2">
+                      <i class="pi pi-folder"></i>
+                      {{ "SIDEBAR.REFERENCES.LABEL" | translate }}
+                    </span>
+                    <i
+                      [ngClass]="{
+                        'pi pi-chevron-down transform transition-transform duration-400': true,
+                        'rotate-180': !isReferencesExpanded
+                      }"
+                    ></i>
+                  </div>
+                </p-button>
+              </div>
+
+              <ul class="list-none p-0 m-0 overflow-hidden flex flex-col gap-2">
+                <li *ngFor="let key of swaggerKeys">
+                  <p-button
+                    pRipple
+                    [text]="
+                      selectedSwaggerKey === key ||
+                      selectedSection === 'reference'
+                        ? 'false'
+                        : 'true'
+                    "
+                    [styleClass]="'w-full flex justify-start'"
+                    class="block w-full max-w-full items-center justify-start cursor-pointer rounded-md text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors"
+                    (click)="onReferenceSelect(key)"
+                    [severity]="
+                      selectedSwaggerKey === key ||
+                      selectedSection === 'reference'
+                        ? 'primary'
+                        : 'secondary'
+                    "
+                    (contextmenu)="onReferenceRightClick($event, key)"
+                  >
+                    <span class="font-medium">{{ key }}</span>
+                  </p-button>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <div class="list-none pl-6 pr-6 m-0">
+            <p-button
+              icon="pi pi-home"
+              [label]="'SIDEBAR.OVERVIEW_BUTTON' | translate"
+              [text]="
+                selectedSection === 'overview' && selectedSwaggerKey
+                  ? 'false'
+                  : 'true'
+              "
+              [severity]="
+                selectedSection === 'overview' && selectedSwaggerKey
+                  ? 'primary'
+                  : 'secondary'
+              "
+              class="block w-full max-w-full items-center justify-start cursor-pointer rounded-md text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors"
+              (click)="onNavigateToReferenceOverview()"
+              [styleClass]="'w-full flex justify-start'"
+            ></p-button>
+          </div>
+          <ul class="list-none p-4 m-0">
+            <li
+              class="border border-solid p-2 rounded"
+              style="
+                border-color: var(--p-inputtext-border-color);
+                background-color: var(--p-tabs-tab-background);
+                border-radius: var(--p-textarea-border-radius);
+              "
+            >
+              <div
+                pRipple
+                pStyleClass="@next"
+                enterFromClass="hidden"
+                enterActiveClass="animate-slidedown"
+                leaveToClass="hidden"
+                leaveActiveClass="animate-slideup"
+                class="mt-1"
+              >
+                <div class="flex items-center justify-between gap-1">
+                  <p-button
+                    pRipple
+                    [text]="true"
+                    severity="secondary"
+                    (onClick)="isPathsExpanded = !isPathsExpanded"
+                    [styleClass]="'w-full flex justify-start'"
+                    class="block w-full max-w-full items-center justify-start cursor-pointer rounded-md text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors"
+                  >
+                    <div class="w-full flex items-center justify-between">
+                      <span class="flex items-center gap-2">
+                        <i class="pi pi-folder"></i>
+                        {{ "SIDEBAR.PATHS.LABEL" | translate }}
+                      </span>
+                      <i
+                        [ngClass]="{
+                          'pi pi-chevron-down transform transition-transform duration-400': true,
+                          'rotate-180': !isPathsExpanded
+                        }"
+                      ></i>
+                    </div>
+                  </p-button>
+                  <p-button
+                    pRipple
+                    text="true"
+                    severity="secondary"
+                    (onClick)="createNewPath(); $event.stopPropagation()"
+                    pTooltip="{{ 'SIDEBAR.PATHS.ADD_PATH' | translate }}"
+                    tooltipPosition="top"
+                    [styleClass]="
+                      'w-full flex justify-start items-center gap-2'
+                    "
+                    class=""
+                  >
+                    <i class="pi pi-plus"></i>
+                  </p-button>
+                </div>
+              </div>
+              <ul class="list-none p-0 m-0 overflow-hidden">
+                <p-divider *ngIf="hasPaths()"></p-divider>
+
+                <li *ngFor="let path of paths | keyvalue">
+                  <p-button
+                    pRipple
+                    pStyleClass="@next"
+                    enterFromClass="hidden"
+                    enterActiveClass="animate-slidedown"
+                    leaveToClass="hidden"
+                    leaveActiveClass="animate-slideup"
+                    [text]="true"
+                    severity="secondary"
+                    (contextmenu)="onPathRightClick($event, path)"
+                    (click)="pathsChevron.classList.toggle('rotate-180')"
+                    class="w-full flex items-center text-sm rounded-border"
+                    [styleClass]="
+                      'w-full flex justify-start items-center gap-2'
+                    "
+                  >
+                    <div class="flex items-center gap-2 w-0 flex-grow">
+                      <mat-icon
+                        aria-hidden="false"
+                        fontIcon="route"
+                        class="mr-2"
+                      ></mat-icon>
+                      <ng-container
+                        *ngIf="path.key.length > 22; else normalText"
+                      >
+                        <span
+                          class="font-medium break-words text-sm"
+                          [pTooltip]="path.key"
+                          tooltipPosition="top"
+                        >
+                          {{ path.key | slice : 0 : 22 }}...
+                        </span>
+                      </ng-container>
+
+                      <ng-template #normalText>
+                        <span class="font-medium break-words text-sm">{{
+                          path.key
+                        }}</span>
+                      </ng-template>
+                    </div>
+                    <i
+                      #pathsChevron
+                      class="pi pi-chevron-down transform transition-transform duration-400"
+                    ></i>
+                  </p-button>
+
+                  <ul
+                    class="list-none py-0 w-full pr-0 m-0 overflow-y-hidden transition-all duration-[400ms] ease-in-out"
+                  >
+                    <li *ngFor="let method of path.value">
+                      <p-button
+                        [text]="
+                          selectedPath?.key === path.key &&
+                          selectedMethod?.method === method.method &&
+                          selectedSection === 'method'
+                            ? 'false'
+                            : 'true'
+                        "
+                        [severity]="
+                          selectedPath?.key === path.key &&
+                          selectedMethod?.method === method.method &&
+                          selectedSection === 'method'
+                            ? 'primary'
+                            : 'secondary'
+                        "
+                        class="w-full flex flex-col items-start text-left text-sm cursor-pointer pt-4 pb-4 pr-4 rounded rounded-border transition-colors duration-150"
+                        (click)="onMethodSelect(path.key, method.method)"
+                        (contextmenu)="
+                          onPathEndpointRightClick($event, path, method)
+                        "
+                      >
+                        <div class="flex items-center gap-1 w-full">
+                          <span
+                            class="text-white font-semibold text-xs px-1 py-1 rounded"
+                            [ngClass]="getMethodColor(method.method)"
+                            [style]="{
+                              color:
+                                selectedPath?.key === path.key &&
+                                selectedMethod?.method === method.method &&
+                                selectedSection === 'method'
+                                  ? 'var(--p-button-primary-color)'
+                                  : 'var(--p-button-secondary-color)'
+                            }"
+                          >
+                            {{ method.method.toUpperCase() }}
+                          </span>
+
+                          <ng-container
+                            *ngIf="
+                              (method.summary || path.key)?.length +
+                                (method.method?.length || 0) >
+                                23;
+                              else normalText
+                            "
+                          >
+                            <span
+                              class="font-medium break-words text-sm"
+                              [pTooltip]="method.summary || path.key"
+                              tooltipPosition="top"
+                            >
+                              {{
+                                method.summary || path.key
+                                  | slice
+                                    : 0
+                                    : 23 - (method.method?.length || 0)
+                              }}...
+                            </span>
+                          </ng-container>
+
+                          <ng-template #normalText>
+                            <span class="font-medium break-words text-sm">
+                              {{ method.summary || path.key }}
+                            </span>
+                          </ng-template>
+                        </div>
+                      </p-button>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="list-none p-4 m-0">
+            <li
+              class="border border-solid p-2 rounded"
+              style="
+                border-color: var(--p-inputtext-border-color);
+                background-color: var(--p-tabs-tab-background);
+                border-radius: var(--p-textarea-border-radius);
+              "
+            >
+              <div
+                pRipple
+                pStyleClass="@next"
+                enterFromClass="hidden"
+                enterActiveClass="animate-slidedown"
+                leaveToClass="hidden"
+                leaveActiveClass="animate-slideup"
+                class="mt-1"
+              >
+                <div class="flex items-center justify-between gap-1">
+                  <p-button
+                    pRipple
+                    [text]="true"
+                    severity="secondary"
+                    (click)="isModelsExpanded = !isModelsExpanded"
+                    [styleClass]="'w-full flex justify-start'"
+                    class="block w-full max-w-full items-center justify-start cursor-pointer rounded-md text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors"
+                  >
+                    <div class="w-full flex items-center justify-between">
+                      <span class="flex items-center gap-2">
+                        <i class="pi pi-folder"></i>
+                        {{ "SIDEBAR.MODELS.LABEL" | translate }}
+                      </span>
+                      <i
+                        [ngClass]="{
+                          'pi pi-chevron-down transform transition-transform duration-400': true,
+                          'rotate-180': !isModelsExpanded
+                        }"
+                      ></i>
+                    </div>
+                  </p-button>
+                  <p-button
+                    pRipple
+                    [text]="true"
+                    severity="secondary"
+                    (onClick)="createNewModel(); $event.stopPropagation()"
+                    pTooltip="{{ 'SIDEBAR.MODELS.ADD_MODEL' | translate }}"
+                    tooltipPosition="top"
+                    [styleClass]="
+                      'w-full flex justify-start items-center gap-2'
+                    "
+                    class=""
+                  >
+                    <i class="pi pi-plus"></i>
+                  </p-button>
+                </div>
+              </div>
+              <ul class="list-none p-0 m-0 overflow-hidden">
+                <p-divider *ngIf="hasModels()"></p-divider>
+
+                <li *ngFor="let model of models">
+                  <p-button
+                    pRipple
+                    [text]="
+                      selectedModel?.name === model.name &&
+                      selectedSection === 'model'
+                        ? 'false'
+                        : 'true'
+                    "
+                    [severity]="
+                      selectedModel?.name === model.name &&
+                      selectedSection === 'model'
+                        ? 'primary'
+                        : 'secondary'
+                    "
+                    class="w-full flex flex-col items-start text-left text-sm cursor-pointer p-4 rounded-border transition-colors duration-150"
+                    [styleClass]="'w-full flex justify-start'"
+                    (click)="selectModel(model)"
+                    (contextmenu)="onModelRightClick($event, model)"
+                  >
+                    <div class="flex items-center gap-2 w-full">
+                      <mat-icon
+                        aria-hidden="false"
+                        fontIcon="view_in_ar"
+                        class="text-surface-600 dark:text-surface-100"
+                      ></mat-icon>
+                      <span
+                        class="font-medium break-words text-sm"
+                        [pTooltip]="model.name.length > 18 ? model.name : null"
+                        tooltipPosition="top"
+                      >
+                        {{
+                          model.name.length > 18
+                            ? (model.name | slice : 0 : 18) + "..."
+                            : model.name
+                        }}
+                      </span>
+                    </div>
+                  </p-button>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="mt-auto">
+          <div
+            pRipple
+            class="m-2 flex items-center justify-between cursor-pointer p-4 gap-2 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple"
+          >
+            <div class="flex items-center gap-2">
+              <p-avatar
+                label="{{ avatarLabel }}"
+                styleClass="cursor-pointer"
+                size="large"
+                shape="circle"
+                (click)="toggleLogOutPop($event)"
+              ></p-avatar>
+              <p-popover #logOutPop>
+                <p-button (onClick)="logOut()">{{
+                  "LOG_OUT" | translate
+                }}</p-button>
+              </p-popover>
+              <span class="font-bold">{{ username }}</span>
+            </div>
+
+            <p-button
+              (onClick)="toggleDarkMode()"
+              [icon]="isDarkMode ? 'pi pi-moon' : 'pi pi-sun'"
+              variant="text"
+              class="!bg-[var(--card-background)] !text-[var(--text-color)]"
+              [rounded]="true"
+            ></p-button>
+          </div>
+        </div>
+      </div>
+      <p-contextmenu
+        [target]="referencesHeader"
+        [model]="referencesHeaderMenuItems"
+      />
+
+      <p-contextMenu #referencesContextMenu [model]="referencesMenuItems">
+        <ng-template #item let-item>
+          <a pRipple class="flex items-center p-contextmenu-item-link">
+            <span [class]="item.icon"></span>
+            <span class="ml-2">{{ item.label }}</span>
+          </a>
+        </ng-template>
+      </p-contextMenu>
+      <p-contextMenu #contextMenu [model]="contextMenuItems"></p-contextMenu>
+      <p-contextMenu
+        #pathMethodContextMenu
+        [model]="pathEndpointItems"
+      ></p-contextMenu>
+    </ng-template>
+  </p-drawer>
+
+  <div *ngIf="!isMobile && !visible" class="h-[100vh] overflow-auto">
+    <ng-container *ngTemplateOutlet="headless"></ng-container>
+  </div>
+</div>
+
+<p-dialog
+  [(visible)]="isExportDialogVisible"
+  [header]="'EXPORT_DIALOG.HEADER' | translate"
+  [modal]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '500px' }"
+  class="export-dialog"
+>
+  <div class="export-dialog-content">
+    <h4>{{ "EXPORT_DIALOG.FORMAT" | translate }}</h4>
+
+    <div class="flex flex-col gap-4 mt-4">
+      <div class="flex items-center gap-2">
+        <p-radioButton
+          name="format"
+          value="json"
+          [(ngModel)]="selectedFormat"
+          inputId="jsonFormat"
+        ></p-radioButton>
+        <label for="jsonFormat" class="text-surface-700 dark:text-surface-100">
+          {{ "EXPORT_DIALOG.JSON" | translate }}
+        </label>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p-radioButton
+          name="format"
+          value="yaml"
+          [(ngModel)]="selectedFormat"
+          inputId="yamlFormat"
+        ></p-radioButton>
+        <label for="yamlFormat" class="text-surface-700 dark:text-surface-100">
+          {{ "EXPORT_DIALOG.YAML" | translate }}
+        </label>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-6">
+      <p-button
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        [label]="'EXPORT_DIALOG.CANCEL' | translate"
+        (click)="isExportDialogVisible = false"
+      ></p-button>
+      <p-button
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        [label]="'EXPORT_DIALOG.SAVE_TO_FILE' | translate"
+        (click)="exportFile()"
+      ></p-button>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="isAddNewRefDialogVisible"
+  [header]="'EXPORT_DIALOG.SET_TITLE' | translate"
+  [closable]="true"
+  [dismissableMask]="true"
+  [modal]="true"
+  [style]="{ width: '400px' }"
+  class="export-dialog"
+>
+  <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-2">
+      <label for="openapi-title" class="text-surface-700 dark:text-surface-100">
+        {{ "EXPORT_DIALOG.TITLE_LABEL" | translate }}
+      </label>
+      <input
+        id="openapi-title"
+        type="text"
+        pInputText
+        class="p-inputtext w-full"
+        [(ngModel)]="newOpenApiTitle"
+        [placeholder]="'EXPORT_DIALOG.TITLE_PLACEHOLDER' | translate"
+        (keydown.enter)="confirmCreateNewOpenApi()"
+      />
+    </div>
+
+    <div class="flex justify-end gap-2 mt-6">
+      <p-button
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        [label]="'EXPORT_DIALOG.CREATE' | translate"
+        icon="pi pi-check"
+        (click)="confirmCreateNewOpenApi()"
+      ></p-button>
+      <p-button
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        [label]="'EXPORT_DIALOG.CANCEL' | translate"
+        icon="pi pi-times"
+        (click)="isAddNewRefDialogVisible = false"
+      ></p-button>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog
+  [header]="'SIDEBAR.PATHS.ADD_PATH' | translate"
+  [(visible)]="visibleAddPath"
+  [modal]="true"
+  [style]="{ width: '25rem' }"
+>
+  <div class="flex align-items-center gap-3 mb-3">
+    <label for="pathName" class="font-semibold w-6rem"
+      >{{ "SIDEBAR.PATHS.ADD_PATH" | translate }}:</label
+    >
+    <input
+      pInputText
+      id="pathName"
+      [(ngModel)]="newPathName"
+      autocomplete="off"
+      [placeholder]="'SIDEBAR.PATHS.ENTER_NEW_PATH_NAME' | translate"
+    />
+  </div>
+  <div class="flex justify-content-end gap-2">
+    <p-button
+      [label]="'SIDEBAR.COMMON.CANCEL' | translate"
+      severity="secondary"
+      (onClick)="visibleAddPath = false"
+    />
+    <p-button
+      [label]="'SIDEBAR.COMMON.SAVE' | translate"
+      (onClick)="saveNewPath()"
+      [disabled]="!newPathName || newPathName.trim().length === 0"
+    />
+  </div>
+</p-dialog>
+
+<p-dialog
+  [header]="'SIDEBAR.PATHS.RENAME_ENDPOINT' | translate"
+  [(visible)]="renameEndpointDialogVisible"
+  [modal]="true"
+  [style]="{ width: '25rem' }"
+>
+  <div class="flex align-items-center gap-3 mb-3">
+    <label for="methodName" class="font-semibold w-6rem"
+      >{{ "SIDEBAR.PATHS.NEW_METHOD" | translate }}:</label
+    >
+    <input
+      pInputText
+      id="methodName"
+      [(ngModel)]="newMethodKey"
+      autocomplete="off"
+      [placeholder]="'SIDEBAR.PATHS.ENTER_NEW_METHOD_NAME' | translate"
+    />
+  </div>
+  <div class="flex justify-content-end gap-2">
+    <p-button
+      [label]="'SIDEBAR.COMMON.CANCEL' | translate"
+      severity="secondary"
+      (onClick)="renameEndpointDialogVisible = false"
+    />
+    <p-button
+      [label]="'SIDEBAR.COMMON.SAVE' | translate"
+      (onClick)="saveRenamedEndpoint()"
+    />
+  </div>
+</p-dialog>
+
+<p-dialog
+  [header]="'SIDEBAR.MODELS.ADD_MODEL' | translate"
+  [(visible)]="visibleAddModel"
+  [modal]="true"
+  [style]="{ width: '25rem' }"
+>
+  <div class="flex align-items-center gap-3 mb-3">
+    <label for="modelName" class="font-semibold w-6rem"
+      >{{ "SIDEBAR.MODELS.ADD_MODEL" | translate }}:</label
+    >
+    <input
+      pInputText
+      id="modelName"
+      [(ngModel)]="newModelName"
+      autocomplete="off"
+      [placeholder]="'SIDEBAR.MODELS.ENTER_NEW_MODEL_NAME' | translate"
+    />
+  </div>
+  <div class="flex justify-content-end gap-2">
+    <p-button
+      [label]="'SIDEBAR.COMMON.CANCEL' | translate"
+      severity="secondary"
+      (onClick)="visibleAddModel = false"
+    />
+    <p-button
+      [label]="'SIDEBAR.COMMON.SAVE' | translate"
+      (onClick)="saveAndNavigate()"
+      [disabled]="!newModelName || newModelName.trim().length === 0"
+    />
+  </div>
+</p-dialog>
+
+<p-dialog
+  [header]="'SIDEBAR.MODELS.RENAME_MODEL' | translate"
+  [(visible)]="renameModelDialogVisible"
+  [modal]="true"
+  [style]="{ width: '25rem' }"
+>
+  <div class="flex flex-col gap-4">
+    <label for="newModelName" class="font-semibold"
+      >{{ "SIDEBAR.MODELS.NEW_MODEL_NAME" | translate }}:</label
+    >
+    <input
+      pInputText
+      id="newModelName"
+      [(ngModel)]="newModelNameInput"
+      autocomplete="off"
+      [placeholder]="'SIDEBAR.MODELS.ENTER_NEW_MODEL_NAME' | translate"
+    />
+    <div class="flex justify-end gap-2 mt-4">
+      <p-button
+        [label]="'SIDEBAR.COMMON.CANCEL' | translate"
+        severity="secondary"
+        (onClick)="renameModelDialogVisible = false"
+      />
+      <p-button
+        [label]="'SIDEBAR.COMMON.SAVE' | translate"
+        (onClick)="renamedModel()"
+        [disabled]="!newModelNameInput.trim()"
+      />
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog
+  [header]="'SIDEBAR.PATHS.RIGHTMENU.RENAME_PATH' | translate"
+  [(visible)]="renamePathDialogVisible"
+  [modal]="true"
+  [style]="{ width: '25rem' }"
+>
+  <div class="flex flex-col gap-4">
+    <label for="newPathName" class="font-semibold">
+      {{ "SIDEBAR.PATHS.MODIFY_PATH" | translate }}:
+    </label>
+    <input
+      pInputText
+      id="newPathName"
+      [(ngModel)]="newPathNameInput"
+      autocomplete="off"
+      [placeholder]="'SIDEBAR.PATHS.ENTER_NEW_PATH_NAME' | translate"
+    />
+    <div class="flex justify-end gap-2 mt-4">
+      <p-button
+        [label]="'SIDEBAR.COMMON.CANCEL' | translate"
+        severity="secondary"
+        (onClick)="renamePathDialogVisible = false"
+      />
+      <p-button
+        [label]="'SIDEBAR.COMMON.SAVE' | translate"
+        (onClick)="renamedPath()"
+        [disabled]="selectedPathName == newPathNameInput.trim()"
+      />
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog
+  [header]="'SIDEBAR.REFERENCES.RIGHTMENU.RENAME' | translate"
+  [(visible)]="renameReferenceDialogVisible"
+  [modal]="true"
+  [style]="{ width: '25rem' }"
+>
+  <div class="flex flex-col gap-4">
+    <label for="newReferenceName" class="font-semibold">
+      {{ "SIDEBAR.REFERENCES.MODIFY_REFERENCE" | translate }}:
+    </label>
+    <input
+      pInputText
+      id="newReferenceName"
+      [(ngModel)]="newReferenceNameInput"
+      autocomplete="off"
+      [placeholder]="'SIDEBAR.REFERENCES.ENTER_NEW_REFERENCE_NAME' | translate"
+    />
+    <div class="flex justify-end gap-2 mt-4">
+      <p-button
+        [label]="'SIDEBAR.COMMON.CANCEL' | translate"
+        severity="secondary"
+        (onClick)="renameReferenceDialogVisible = false"
+      ></p-button>
+      <p-button
+        [label]="'SIDEBAR.COMMON.SAVE' | translate"
+        (onClick)="confirmRenameReference()"
+        [disabled]="selectedItem == newReferenceNameInput.trim()"
+      ></p-button>
+    </div>
+  </div>
+</p-dialog>
