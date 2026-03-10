@@ -59,6 +59,32 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "standalone": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "5mb",
+                  "maximumError": "10MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "5mb",
+                  "maximumError": "7mb"
+                }
+              ],
+              "outputHashing": "all",
+              "browser": "src/main.standalone.ts",
+              "fileReplacements": [
+                {
+                  "replace": "src/app/app.config.ts",
+                  "with": "src/app/app.config.standalone.ts"
+                },
+                {
+                  "replace": "src/app/services/api-data.service.ts",
+                  "with": "src/app/services/api-data.service.standalone.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
