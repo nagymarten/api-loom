@@ -164,20 +164,20 @@ export class ApiDataService {
     localStorage.removeItem('selectedSwaggerKey');
   }
 
-  // Standalone mode: Backend methods are no-ops
-  saveSwaggerToDatabase(): void {
+  // Standalone mode: Backend methods are no-ops (accept params but do nothing)
+  saveSwaggerToDatabase(filename?: string, swaggerSpec?: ExtendedSwaggerSpec): void {
     console.info('📦 Standalone mode: Backend save disabled');
   }
 
-  deleteSwaggerSpecFromDatabase(): void {
+  deleteSwaggerSpecFromDatabase(id?: string): void {
     console.info('📦 Standalone mode: Backend delete disabled');
   }
 
-  renameSwaggerSpecInDatabase(): void {
+  renameSwaggerSpecInDatabase(id?: string, newFilename?: string): void {
     console.info('📦 Standalone mode: Backend rename disabled');
   }
 
-  updateSwaggerSpecInDatabase(): void {
+  updateSwaggerSpecInDatabase(id?: string, newSwagger?: string): void {
     console.info('📦 Standalone mode: Backend update disabled');
   }
 
@@ -193,7 +193,7 @@ export class ApiDataService {
     return {};
   }
 
-  getSwaggerSpecIdByKeyFromApi(): string | null {
+  getSwaggerSpecIdByKeyFromApi(key?: string): string | null {
     return null;
   }
 }
