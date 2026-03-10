@@ -13,7 +13,7 @@ import { HttpClient } from '@angular/common/http';
 import Keycloak from 'keycloak-js';
 
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 // Mock Keycloak instance for standalone mode
