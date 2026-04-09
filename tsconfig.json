@@ -21,15 +21,7 @@
     "module": "ES2022",
     "useDefineForClassFields": false,
     "lib": ["ES2022", "dom"],
-    "noUnusedLocals": false,
-    "paths": {
-      "@ingenimind/apiloom-api-client": [
-        "./node_modules/@ingenimind/apiloom-api-client/index.ts"
-      ],
-      "@ingenimind/apiloom-api-client/*": [
-        "./node_modules/@ingenimind/apiloom-api-client/*"
-      ]
-    }
+    "noUnusedLocals": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

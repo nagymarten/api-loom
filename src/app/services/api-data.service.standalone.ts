@@ -95,6 +95,7 @@ export class ApiDataService {
     if (allSpecs[key]) {
       delete allSpecs[key];
       localStorage.setItem('swaggerSpecs', JSON.stringify(allSpecs));
+
       this.swaggerSpecs = allSpecs;
     } else {
       console.warn(`Swagger spec with key '${key}' not found.`);
@@ -115,6 +116,7 @@ export class ApiDataService {
     }
 
     this.storeSwaggerSpec(key, updatedSwaggerSpec);
+
     this.setSelectedSwaggerSpec(key);
   }
 
@@ -142,7 +144,9 @@ export class ApiDataService {
 
   storeSwaggerSpec(key: string, swaggerSpec: ExtendedSwaggerSpec): void {
     const allSpecs = this.getAllSwaggerSpecs();
+
     allSpecs[key] = swaggerSpec;
+
     localStorage.setItem('swaggerSpecs', JSON.stringify(allSpecs));
     this.swaggerSpecs = this.getAllSwaggerSpecs();
   }
@@ -150,6 +154,7 @@ export class ApiDataService {
   clearCurrentSpec(): void {
     this.swaggerSpecSubject.next({ paths: {} } as ExtendedSwaggerSpec);
     this.selectedSwaggerSpecSubject.next({ paths: {} });
+
     localStorage.removeItem('swaggerSpec');
   }
 
@@ -159,15 +164,25 @@ export class ApiDataService {
     localStorage.removeItem('selectedSwaggerKey');
   }
 
-  saveSwaggerToDatabase(_filename?: string, _swaggerSpec?: ExtendedSwaggerSpec): void {}
+  // Standalone mode: Backend methods are no-ops (accept params but do nothing)
+  saveSwaggerToDatabase(filename?: string, swaggerSpec?: ExtendedSwaggerSpec): void {
+    console.info('📦 Standalone mode: Backend save disabled');
+  }
 
-  deleteSwaggerSpecFromDatabase(_id?: string): void {}
+  deleteSwaggerSpecFromDatabase(id?: string): void {
+    console.info('📦 Standalone mode: Backend delete disabled');
+  }
 
-  renameSwaggerSpecInDatabase(_id?: string, _newFilename?: string): void {}
+  renameSwaggerSpecInDatabase(id?: string, newFilename?: string): void {
+    console.info('📦 Standalone mode: Backend rename disabled');
+  }
 
-  updateSwaggerSpecInDatabase(_id?: string, _newSwagger?: string): void {}
+  updateSwaggerSpecInDatabase(id?: string, newSwagger?: string): void {
+    console.info('📦 Standalone mode: Backend update disabled');
+  }
 
   getAllSwaggerSpecsFromApi(): Observable<void> {
+    console.info('📦 Standalone mode: Backend sync disabled');
     return new Observable((observer) => {
       observer.next();
       observer.complete();
@@ -178,7 +193,7 @@ export class ApiDataService {
     return {};
   }
 
-  getSwaggerSpecIdByKeyFromApi(_key?: string): string | null {
+  getSwaggerSpecIdByKeyFromApi(key?: string): string | null {
     return null;
   }
 }

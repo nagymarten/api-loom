@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import {
@@ -10,16 +10,31 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
-import {
-  provideKeycloak,
-  AutoRefreshTokenService,
-  UserActivityService,
-  withAutoRefreshToken,
-} from 'keycloak-angular';
+import Keycloak from 'keycloak-js';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
+
+// Mock Keycloak instance for standalone mode
+const mockKeycloak = {
+  token: null,
+  tokenParsed: { sub: 'standalone-user', username: 'Standalone User' },
+  authenticated: false,
+  init: () => Promise.resolve(false),
+  login: () => Promise.resolve(),
+  logout: () => Promise.resolve(),
+  isLoggedIn: () => false,
+  loadUserProfile: () => Promise.resolve({
+    username: 'Standalone User',
+    email: 'standalone@localhost',
+    firstName: 'Standalone',
+    lastName: 'User',
+  }),
+  getUserRoles: () => [],
+  hasRealmRole: () => false,
+  hasResourceRole: () => false,
+} as unknown as Keycloak;
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,24 +42,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptorsFromDi()),
-    provideKeycloak({
-      config: {
-        url: 'http://localhost:38082',
-        realm: 'apiloom',
-        clientId: 'apiloom-fe',
-      },
-      initOptions: {
-        onLoad: 'login-required',
-        checkLoginIframe: false,
-      },
-      features: [
-        withAutoRefreshToken({
-          sessionTimeout: 900000,
-        }),
-      ],
-    }),
-    AutoRefreshTokenService,
-    UserActivityService,
+    { provide: Keycloak, useValue: mockKeycloak },
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
